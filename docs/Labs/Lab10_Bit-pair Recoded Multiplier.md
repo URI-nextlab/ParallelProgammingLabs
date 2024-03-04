@@ -783,11 +783,11 @@ For the value of ```start``` ```multiplican``` ```multiplier``` ports can be rea
 We need to download the design_1_wrapper.bit to the local machine. Go to Lab9/project_1/project_1.runs/impl_1, download design_1_wrapper.bit, and upload the file to the PYNQ. And we also need to upload the design_1.hwh  file which is in the Lab9/project_1/project_1.gen/sources_1/bd/design_1/hw_handoff.
 
 ```python
-    from pynq import Overlay
-    from pynq import Bitstream
-    bit = Bitstream("design_1.bit")
-    bit.download()
-    bit.bitfile_name
+from pynq import Overlay
+from pynq import Bitstream
+bit = Bitstream("design_1.bit")
+bit.download()
+bit.bitfile_name
 
 ```
 
@@ -829,6 +829,7 @@ representations = {
     '7': ('###', '  #', '  #', '  #', '  #'),
     '8': ('###', '# #', '###', '# #', '###'),
     '9': ('###', '# #', '###', '  #', '###'),
+    '-': ('   ', '   ', '###', '   ', '   '),
     '.': ('   ', '   ', '   ', '   ', '  #'),
 }
 
@@ -857,9 +858,25 @@ start_write.write(0x0,1)
 Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. And we need to press the button again and you can see the LED is off and we can see the result below:
 
 ```python
-seven_segment(product.read(0x0))
+# Decimal value
+decimal_value = product.read(0x0)
+
+# Convert the decimal value to an 8-bit binary string
+binary_str = format(decimal_value, '08b')
+
+# Convert to signed decimal
+if binary_str[0] == '1':  # Check if the number is negative in two's complement
+    # Invert the digits
+    inverted_str = ''.join('1' if bit == '0' else '0' for bit in binary_str)
+    # Convert to decimal and subtract 1 to get the magnitude
+    signed_decimal = -1 * (int(inverted_str, 2) + 1)
+else:
+    # If the number is positive, just convert directly
+    signed_decimal = int(binary_str, 2)
+
+seven_segment(signed_decimal)
 ```
-<div align=center><img src="imgs/v2/30.png" alt="drawing" width="400"/></div>
+<div align=center><img src="imgs/v2/35.png" alt="drawing" width="400"/></div>
 
 ```python
 DATA_OFFSET = 0X0
@@ -874,9 +891,25 @@ start_write.write(0x0,1)
 ```
 
 ```python
-seven_segment(product.read(0x0))
+# Decimal value
+decimal_value = product.read(0x0)
+
+# Convert the decimal value to an 8-bit binary string
+binary_str = format(decimal_value, '08b')
+
+# Convert to signed decimal
+if binary_str[0] == '1':  # Check if the number is negative in two's complement
+    # Invert the digits
+    inverted_str = ''.join('1' if bit == '0' else '0' for bit in binary_str)
+    # Convert to decimal and subtract 1 to get the magnitude
+    signed_decimal = -1 * (int(inverted_str, 2) + 1)
+else:
+    # If the number is positive, just convert directly
+    signed_decimal = int(binary_str, 2)
+
+seven_segment(signed_decimal)
 ```
-<div align=center><img src="imgs/v2/31.png" alt="drawing" width="400"/></div>
+<div align=center><img src="imgs/v2/35.png" alt="drawing" width="400"/></div>
 
 ```python
 DATA_OFFSET = 0X0
@@ -892,9 +925,25 @@ start_write.write(0x0,1)
 Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. And we need to press the button again and you can see the LED is off and we can see the result below:
 
 ```python
-seven_segment(product.read(0x0))#1111 0010 ----(-14)
+# Decimal value
+decimal_value = product.read(0x0)
+
+# Convert the decimal value to an 8-bit binary string
+binary_str = format(decimal_value, '08b')
+
+# Convert to signed decimal
+if binary_str[0] == '1':  # Check if the number is negative in two's complement
+    # Invert the digits
+    inverted_str = ''.join('1' if bit == '0' else '0' for bit in binary_str)
+    # Convert to decimal and subtract 1 to get the magnitude
+    signed_decimal = -1 * (int(inverted_str, 2) + 1)
+else:
+    # If the number is positive, just convert directly
+    signed_decimal = int(binary_str, 2)
+
+seven_segment(signed_decimal)
 ```
-<div align=center><img src="imgs/v2/32.png" alt="drawing" width="400"/></div>
+<div align=center><img src="imgs/v2/32_2.png" alt="drawing" width="400"/></div>
 
 ```python
 DATA_OFFSET = 0X0
@@ -910,9 +959,25 @@ start_write.write(0x0,1)
 Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. And we need to press the button again and you can see the LED is off and we can see the result below:
 
 ```python
-seven_segment(product.read(0x0))#1110 0100
+# Decimal value
+decimal_value = product.read(0x0)
+
+# Convert the decimal value to an 8-bit binary string
+binary_str = format(decimal_value, '08b')
+
+# Convert to signed decimal
+if binary_str[0] == '1':  # Check if the number is negative in two's complement
+    # Invert the digits
+    inverted_str = ''.join('1' if bit == '0' else '0' for bit in binary_str)
+    # Convert to decimal and subtract 1 to get the magnitude
+    signed_decimal = -1 * (int(inverted_str, 2) + 1)
+else:
+    # If the number is positive, just convert directly
+    signed_decimal = int(binary_str, 2)
+
+seven_segment(signed_decimal)
 ```
-<div align=center><img src="imgs/v2/33.png" alt="drawing" width="400"/></div>
+<div align=center><img src="imgs/v2/33_2.png" alt="drawing" width="400"/></div>
 
 ```python
 DATA_OFFSET = 0X0
@@ -929,7 +994,23 @@ start_write.write(0x0,1)
 Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. And we need to press the button again and you can see the LED is off and we can see the result below:
 
 ```python
-seven_segment(product.read(0x0))
+seven_segment(product.read(0x0))# Decimal value
+decimal_value = product.read(0x0)
+
+# Convert the decimal value to an 8-bit binary string
+binary_str = format(decimal_value, '08b')
+
+# Convert to signed decimal
+if binary_str[0] == '1':  # Check if the number is negative in two's complement
+    # Invert the digits
+    inverted_str = ''.join('1' if bit == '0' else '0' for bit in binary_str)
+    # Convert to decimal and subtract 1 to get the magnitude
+    signed_decimal = -1 * (int(inverted_str, 2) + 1)
+else:
+    # If the number is positive, just convert directly
+    signed_decimal = int(binary_str, 2)
+
+seven_segment(signed_decimal)```
 ```
-<div align=center><img src="imgs/v2/34.png" alt="drawing" width="400"/></div>
+<div align=center><img src="imgs/v2/35.png" alt="drawing" width="400"/></div>
 

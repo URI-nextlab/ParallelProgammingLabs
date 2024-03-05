@@ -2,7 +2,7 @@
 sort: 10
 ---
 
-# Lab10_Bit-pair Recoded Multiplie
+# Lab10_Bit-pair Recoded Multiplier
 
 ## Lab Overview
 

@@ -53,6 +53,7 @@ Now we can see the ```Schematic``` under the RTL ANALYSIS part like below:
 <div align=center><img src="imgs/v3/16.png" alt="drawing" width="700"/></div>
 
 Then we can run Simulation to check the code of the lab2_3_1 module.
+
 **tb.v**
 ```verilog
 // Define the testbench module with no ports as it's a top-level entity
@@ -93,13 +94,13 @@ Then we can click on the Run synthesis under the SYNTHESIS and Run implementatio
 
 <div align=center><img src="imgs/v3/28.png" alt="drawing" width="700"/></div>
 
-Generate the bitstream and program device like [Lab1]().
+Generate the bitstream and program device like [Lab1](https://uri-nextlab.github.io/ParallelProgammingLabs/Verilog_Labs/Lab1_Modeling_Concepts.html).
 
 Then you can press the button of the board and you can see the LED is on like below:
 
 <div align=center><img src="imgs/v3/29.jpg" alt="drawing" width="400"/></div>
 
-### Part lab2_3_1_rca_dataflow
+### Part lab2-3-2
 
  Create and add the Verilog module (called rca_dataflow) to the project with three inputs (a, b, cin)
 and two outputs (cout and s) instantiating full adder (FA) four times and connecting them as

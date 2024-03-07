@@ -6,27 +6,27 @@ sort: 3
 
 ## Introduction
 
-Boolean expressions are used to output a Boolean function of number of variables. Dataflow construct
-like assign can be used to model such functions. There are circuits which have multiple outputs and
-multiple inputs. In this lab you will design encoders, decoders, and read only memories.
+Boolean expressions are used to output a Boolean function of a number of variables. Dataflow constructs
+like assign can be used to model such functions. Some circuits have multiple outputs and
+multiple inputs. In this lab, you will design encoders and decoders and read-only memories.
 
 ## Multi-output Decoder Circuits
 
-Decoders are combinatorial circuits which have multiple outputs. They are widely used in memory chips
-to select one of the words addressed by the address input. For example, an 8-words memory will have
-three bit address input. The decoder will decode the 3-bit address and generate a select line for one of
+Decoders are combinatorial circuits that have multiple outputs. They are widely used in memory chips
+to select one of the words addressed by the address input. For example, an 8-word memory will have
+a three-bit address input. The decoder will decode the 3-bit address and generate a select line for one of
 the eight words corresponding to the input address. The 3-to-8 decoder symbol and the truth table are
 shown below. 
 
 <div align=center><img src="imgs/v1/2.png" alt="drawing" width="600"/></div>
 
-Such circuits, also known as binary decoders, and can be modeled using dataflow statements as only
+Such circuits, also known as binary decoders, can be modeled using dataflow statements as only
 each output is true for a unique input combination. 
 
 ### Part3-1-1
 
-Design a 3-to-8 line decoder. Let the input be through btn2-btn0 and
-output be on LED7-LED0. Use dataflow modeling constructs. 
+Design a 3-to-8-line decoder. Let the input be through btn2-btn0 and
+the output be on LED7-LED0. Use dataflow modeling constructs. 
 
 Create and add the Verilog module, naming it decoder_3to8_dataflow.v, that defines the 3-to-8
 line decoder with three-bit input x and 8-bit output y. Use dataflow modeling constructs. 
@@ -85,11 +85,11 @@ module decoder_3to8_dataflow_tb();
       
       // Loop through all possible inputs from 0 to 7
       for (k = 0; k < 8; k = k + 1) begin
-		#5 x = k; // Assign the value of k to x and wait for 5 time units
+		#5 x = k; // Assign the value of k to x and wait for 5-time units
       end
       #10; // Wait for 10 time units before ending the simulation
       
-      // Optional: Add $finish to explicitly end the simulation.
+      // Optional: Add $finish to end the simulation explicitly.
       // Some simulation environments automatically end when there are no more events,
       // but others require $finish to terminate the simulation.
       $finish;
@@ -105,13 +105,13 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v1/8.png" alt="drawing" width="800"/></div>
 
 
 
-Then we can click on the Run synthesis under the SYNTHESIS and Run implementation under the IMPLEMENTATION. And we should add the appropriate board related master XDC file to the project and edit it to include the related pins like below:
+Then, we can click on the Run synthesis under the SYNTHESIS and Run implementation under the IMPLEMENTATION. We should add the appropriate board-related master XDC file to the project and edit it to include the related pins like the below:
 
 <div align=center><img src="imgs/v1/3.png" alt="drawing" width="800"/></div>
 
@@ -119,7 +119,7 @@ Because the board has four LEDs, so we can also use the RGB LED(LD5 and LD4).
 
 <div align=center><img src="imgs/v1/4.png" alt="drawing" width="600"/></div>
 
-The click on the Generate Bitstream under the PROGRAM AND DEBUG, and when writing bitstream is complete, we can donwload the file to the board and verify the lab.
+Click on the Generate Bitstream under the PROGRAM AND DEBUG, and when writing bitstream is complete, we can donwload the file to the board and verify the lab.
 
 
 ### Part3-1-2
@@ -132,11 +132,11 @@ are given below.
 
 X = don’t care 
 
-Note that this is very similar to the one you had created in 1-1, It has additional control (Enable)
-signals G1, /G2A, and /G2B. These enable signals simplify decoding in some systems. 
+Note that this is very similar to the one you had created in 1-1; it has additional control (Enable)
+signals G1, /G2A, and /G2B. These enable signals to simplify decoding in some systems. 
 
 Create and add the Verilog module, named decoder_74138_dataflow, instantiating the model you
-had developed in 1-1. Add additional logic, by using the dataflow modeling constructs, to model
+had developed in 1-1. Add additional logic by using the dataflow modeling constructs to model
 the desired functionality.
 
 **lab3_1_2.v**
@@ -176,11 +176,11 @@ endmodule
 
 ```
 
-Then we can run Simulation to check the code of the lab3_1_2 module.
+Then, we can run Simulation to check the code of the lab3_1_2 module.
 
 **decoder_74138_dataflow_tb.v**
 ```verilog
-// Define the testbench module with no ports as it's a top-level entity
+// Define the testbench module with no ports, as it's a top-level entity
 module decoder_74138_dataflow_tb();
     
     // Declare input signals as reg type to drive them with procedural assignments
@@ -193,7 +193,7 @@ module decoder_74138_dataflow_tb();
     // Declare an integer for use in the for-loop
     integer k;
     
-    // Instantiate the Device Under Test (DUT) with named port mapping
+    // Instantiate the Device Under Test (DUT) with the named port mapping
     Lab3_1_2 DUT (.G1(g1), .G2A_n(g2a_n), .G2B_n(g2b_n), .x(x), .y(y));   
  
     // Initial block to define the sequence of test cases
@@ -238,7 +238,7 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v1/9.png" alt="drawing" width="1000"/></div>
 
@@ -246,13 +246,13 @@ We can run Simulation to check the code by clicking the Run Simulation under the
 
 ## Multi-output Encoder Circuits
 
-Encoder circuit converts information from one format (code) to another for the purposes of
-standardization, speed, secrecy, security, or saving space by shrinking size. In digital circuits, encoding information may reduce size and/or prioritize functions. Widely used encoder circuits examples include priority encoders, Huffman encoders, etc.
+The Encoder circuit converts information from one format (code) to another for 
+standardization, speed, secrecy, security, or saving space by shrinking size. In digital circuits, encoding information may reduce size and/or prioritize functions. Examples of widely used encoder circuits include priority encoders, Huffman encoders, etc.
 
 
 ### Part3-2-1
 
-Design an 8-to-3 priority encoder, whose truth table is given below. Use
+Design an 8-to-3 priority encoder whose truth table is given below. Use
 behavioral modeling. 
 
 <div align=center><img src="imgs/v1/5.png" alt="drawing" width="600"/></div>
@@ -402,7 +402,7 @@ For adding text file: Select "Add sources" from the Project Navigator > Add or c
 In the Add source file window select "File of type" as "All files".
 
 
-For the example, we can also run simulation to verify.
+For the example, we can also run a simulation to verify.
 
 **tb.v**
 ```verilog
@@ -413,7 +413,7 @@ module ROM_4x2_tb;
     reg [1:0] ROM_addr;          // Address lines for the ROM as input
     wire [1:0] ROM_data;         // Data lines from the ROM as output
 
-    // Instantiate the Device Under Test (DUT) with named port mapping
+    // Instantiate the Device Under Test (DUT) with the named port mapping
     Lab3_3_1 DUT(
         .ROM_data(ROM_data), 
         .ROM_addr(ROM_addr)

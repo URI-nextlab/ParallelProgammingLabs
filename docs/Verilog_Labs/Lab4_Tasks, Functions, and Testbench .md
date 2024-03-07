@@ -79,9 +79,9 @@ The system tasks are not synthesizable, i.e. they cannot be realized in real har
 
 ### Part4-1-1
 
-Write a task called add_two_values which will take two 4-bit parameters,
-add them, and output a 4-bit sum and a carry. Write a module, called
-add_two_values_task, that calls the task with the operands received via
+Write a task called ```add_two_values``` which will take two 4-bit parameters,
+add them, and output a 4-bit sum and a carry. Write a module called
+add_two_values_task that calls the task with the operands received via
 input ports and outputs the result. Simulate the design with the provided
 testbench, add_two_values_tb.v, and verify the functionality. 
 
@@ -101,7 +101,7 @@ module add_two_values_task(
 );
 
     // Internal registers to hold the sum and carry produced by the task
-    // These are necessary since tasks cannot directly assign to output ports
+    // These are necessary since tasks cannot be directly assign to output ports
     reg [3:0] internal_sum;
     reg internal_carry;
 
@@ -109,8 +109,8 @@ module add_two_values_task(
     assign sum = internal_sum;
     assign carry = internal_carry;
 
-    // Task for performing addition of two 4-bit numbers
-    // It takes two 4-bit inputs and returns a 4-bit sum and a carry out
+    // Task for performing the addition of two 4-bit numbers
+    // It takes two 4-bit inputs and returns a 4-bit sum and a carryout
     task add_two_values;
         input [3:0] in_a, in_b; // Input operands for the addition
         output [3:0] out_sum;   // Output sum from the addition
@@ -144,7 +144,7 @@ window.
 // Testbench for the add_two_values_task module
 module tb();
     reg [3:0] ain, bin; // Declare 4-bit input registers for the module under test
-    wire cout;          // Declare a single bit output wire for the carry output
+    wire cout;          // Declare a single-bit output wire for the carry output
     wire [3:0] sum;     // Declare a 4-bit output wire for the sum output
     integer k;          // Declare an integer for the loop index in the test sequence
 
@@ -179,11 +179,11 @@ We can run Simulation to check the code by clicking the Run Simulation under the
 
 ### Part4-1-2
 
-Write a task called calc_even_parity which will take an 8-bit number, and
-compute and return parity. Write a module, called calc_even_parity_task,
+Write a task called ```calc_even_parity``` which will take an 8-bit number and
+compute and return parity. Write a module called calc_even_parity_task,
 which calls the task with the operand received via the input port and
 outputs the result. Use the provided testbench, calc_even_parity_task_tb.v,
-that displays the result using $display system task. Simulate the design
+which displays the result using the $display system task. Simulate the design
 and verify the functionality. 
 
 
@@ -192,7 +192,7 @@ and verify the functionality.
 // Module for calculating the even parity of an 8-bit input
 module calc_even_parity_task (
     input [7:0] data,   // 8-bit input data for which to calculate parity
-    output parity       // Output parity bit, high if number of '1's in 'data' is even
+    output parity       // Output parity bit, high if the number of '1's in 'data' is even
 );
     // Internal register to hold the calculated parity
     reg internal_parity;
@@ -310,7 +310,7 @@ endmodule
 ```
 
 ### Part4-2-1
-Write a function called add_two_values which will take two 4-bit
+Write a function called ```add_two_values``` which will take two 4-bit
 parameters, add them, and return a 5-bit sum. Write a module, called
 add_two_values_function, with two 4-bit input ports and one 5-bit output
 port and calls the function. Simulate the design with the provided
@@ -337,7 +337,7 @@ function [4:0] add_two_values;
     begin
         // Perform addition and return the result
         // The function returns the sum of 'a' and 'b', where {carry, sum} is a 5-bit number
-        // 'a' and 'b' are zero-extended to 5 bits before adding to ensure correct carry out
+        // 'a' and 'b' are zero-extended to 5 bits before adding to ensure correct carryout
         add_two_values = a + b;
     end
 endfunction
@@ -387,14 +387,14 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v1/23.png" alt="drawing" width="600"/></div>
 
 ### Part4-2-2
 
-Write a task called calc_ones which will take an 8-bit number, and calculate
-and return number of ones. Write a module, called calc_ones_function,
+Write a task called ```calc_ones```, which will take an 8-bit number and calculate
+and return a number of ones. Write a module, called calc_ones_function
 with one 8-bit input port and one 3-bit output port and calls the function.
 Simulate the design with the provided testbench, calc_ones_function_tb.v,
 and verify the functionality.

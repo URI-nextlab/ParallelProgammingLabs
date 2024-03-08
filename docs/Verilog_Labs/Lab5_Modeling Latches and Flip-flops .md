@@ -237,6 +237,35 @@ pins, assigning S input to BTN0, R input to BTN1  E input to BTN2, Q to LED0, an
 
 <div align=center><img src="imgs/v2/21.png" alt="drawing" width="600"/></div>
 
+For the constraints file, please add the code as below:
+```verilog
+# Map the reset input 'R' to pin L19 and set its I/O standard to 3.3V LVCMOS
+set_property PACKAGE_PIN L19 [get_ports R]
+set_property IOSTANDARD LVCMOS33 [get_ports R]
+
+# Map the set input 'S' to pin L20 and set its I/O standard to 3.3V LVCMOS
+set_property PACKAGE_PIN L20 [get_ports S]
+set_property IOSTANDARD LVCMOS33 [get_ports S]
+
+# Map the output 'Q' to pin M14 and set its I/O standard to 3.3V LVCMOS
+set_property PACKAGE_PIN M14 [get_ports Q]
+set_property IOSTANDARD LVCMOS33 [get_ports Q]
+
+# Map the complementary output 'Qbar' to pin N16 and set its I/O standard
+set_property PACKAGE_PIN N16 [get_ports Qbar]
+set_property IOSTANDARD LVCMOS33 [get_ports Qbar]
+
+# Map the enable input 'E' to pin D19 and set its I/O standard to 3.3V LVCMOS
+set_property PACKAGE_PIN D19 [get_ports E]
+set_property IOSTANDARD LVCMOS33 [get_ports E]
+
+# Allow combinational loops for 'Q' and 'Qbar' outputs, acknowledging potential design risks
+set_property ALLOW_COMBINATORIAL_LOOPS TRUE [get_nets Q_OBUF]
+set_property ALLOW_COMBINATORIAL_LOOPS TRUE [get_nets Qbar_OBUF]
+```
+
+
+
 Generate the bitstream and program device like [Lab1](https://uri-nextlab.github.io/ParallelProgammingLabs/Verilog_Labs/Lab1_Modeling_Concepts.html).
 
 Then you can press the button of the board and you can see the LED is on like below:

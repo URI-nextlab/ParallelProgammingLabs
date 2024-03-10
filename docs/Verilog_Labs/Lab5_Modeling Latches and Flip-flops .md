@@ -46,7 +46,7 @@ test (see waveform below) and validate the design. Simulate the design.
 Assign S input to BTN0 and R input to BTN1. Assign Q to LED0 and Qbar to
 LED1. Implement the design and verify the functionality in hardware. 
 
-<div align=center><img src="imgs/v1/30.png" alt="drawing" width="600"/></div>
+<div align=center><img src="imgs/v1/30.png" alt="drawing" width="800"/></div>
 
 * view the schematic of the synthesized design
 
@@ -142,7 +142,7 @@ Qbar to LED1. Implement the design and verify the functionality in the
 hardware. 
 
 
-<div align=center><img src="imgs/v1/33.png" alt="drawing" width="600"/></div>
+<div align=center><img src="imgs/v1/33.png" alt="drawing" width="900"/></div>
 
 **lab5_1_2.v**
 ```verilog
@@ -235,7 +235,7 @@ We can run Simulation to check the code by clicking the Run Simulation under the
 * Add the appropriate board related master XDC file to the project and edit it to include the related
 pins, assigning S input to BTN0, R input to BTN1  E input to BTN2, Q to LED0, and Qbar to LED1. 
 
-<div align=center><img src="imgs/v2/21.png" alt="drawing" width="600"/></div>
+<div align=center><img src="imgs/v2/21.png" alt="drawing" width="1200"/></div>
 
 For the constraints file, please add the code as below:
 ```verilog

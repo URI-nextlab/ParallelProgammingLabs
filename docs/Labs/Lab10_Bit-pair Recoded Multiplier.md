@@ -384,9 +384,35 @@ module CTRL #(
             tick <= 1'b0;  // No tick signal.
         end else begin
             case (state)
-                RESET: begin  // In RESET state...
-                    loadReg <= (start == 1'b1);  // Load data if start is high
+              RESET: 
+		begin		
+			if (start == 1'b1)
+				loadReg 	<= 1'b1;
+			else
+				loadReg 	<= 1'b0;
+			addReg 	<= 1'b0;
+			shiftReg <= 1'b0;
+			tick 	<= 1'b0;					
+		end
+		COUNT: 
+		begin
+			loadReg 	<= 1'b0;
+			addReg 	<= 1'b1;
+			shiftReg <= 1'b1;
+			tick 	<= ~clk;
+		end
+		default: 
+			begin
+			loadReg 	<= 1'b0;
+			addReg 	<= 1'b0;
+			shiftReg <= 1'b0;
+			tick 	<= 1'b0;
+			end
+	endcase	
+	end
+end
 
+endmodule
 ```
 
 **MUX_recoded.v**

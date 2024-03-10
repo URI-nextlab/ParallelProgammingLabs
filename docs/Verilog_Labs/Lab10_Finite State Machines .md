@@ -335,15 +335,17 @@ module moore_sequence_detector (
         endcase
     end
 
-    // Sequential always block to set output based on current state, implementing Moore machine characteristics
+    // Output logic based on the state
     always @(posedge clk) begin
-        if (current_state == TOGGLE)
-            yout <= ~yout; // Toggle the output if in TOGGLE state
-        else if (current_state == SEQ_01)
-            yout <= 0; // Set output to 0 if '01' sequence was completed
-        else if (current_state == SEQ_11)
-            yout <= 1; // Set output to 1 if '11' sequence was completed
-        // No need to explicitly handle SEQ_10 or IDLE state here as they don't directly affect the output
+        if (reset)
+            yout <= 0;
+        else 
+            case (current_state)
+                SEQ_01: yout <= 0;
+                SEQ_11: yout <= 1;
+                SEQ_10: yout <= ~yout; // Toggle output
+                default: yout <= yout; // Retain the old value
+            endcase
     end
 
 endmodule

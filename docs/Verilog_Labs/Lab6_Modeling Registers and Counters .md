@@ -448,6 +448,9 @@ We can run Simulation to check the code by clicking the Run Simulation under the
 <div align=center><img src="imgs/v2/9.png" alt="drawing" width="600"/></div>
 
 ### Part6_1_5
+Write a model for a 4-bit serial in parallel out shift register. Develop a
+testbench and simulate the design. Assign Clk, ShiftEn, ShiftIn, ParallelOut,
+and ShiftOut. 
 
 **lab6_1_5.v**
 ```verilog
@@ -531,7 +534,7 @@ endmodule
 ```
 We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
 
-<div align=center><img src="imgs/v2/12.png" alt="drawing" width="600"/></div>
+<div align=center><img src="imgs/v2/12.png" alt="drawing" width="800"/></div>
 
 
 ## Counters

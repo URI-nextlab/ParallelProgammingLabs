@@ -25,8 +25,7 @@ each output is true for a unique input combination.
 
 ### Part3-1-1
 
-Design a 3-to-8-line decoder. Let the input be through btn2-btn0 and
-the output be on LED7-LED0. Use dataflow modeling constructs. 
+Design a 3-to-8-line decoder. Use dataflow modeling constructs. 
 
 Create and add the Verilog module, naming it decoder_3to8_dataflow.v, that defines the 3-to-8
 line decoder with three-bit input x and 8-bit output y. Use dataflow modeling constructs. 
@@ -255,7 +254,7 @@ standardization, speed, secrecy, security, or saving space by shrinking size. In
 Design an 8-to-3 priority encoder whose truth table is given below. Use
 behavioral modeling. 
 
-<div align=center><img src="imgs/v1/5.png" alt="drawing" width="600"/></div>
+<div align=center><img src="imgs/v1/6.png" alt="drawing" width="600"/></div>
 
 Create and add the Verilog module with *v* and *en_in_n* input; *y*, *en_out*, and *gs* output. The *v*
 input will be 8-bit data inputs (labeled 0 to 7 in the table), *en_in_n* input will be one bit (E1), *y*

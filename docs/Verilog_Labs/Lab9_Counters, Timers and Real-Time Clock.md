@@ -86,14 +86,14 @@ in some other directory path
 
 ### Part9-1-1
 
-**Design a carry-look-ahead adder similar to that you designed in Part 4-1 of
+Design a carry-look-ahead adder similar to that you designed in Part 4-1 of
 Lab 2 but using gate-level modeling. Define 2 units delay for each kind of
 gate that you use in the full-adder circuit using the parameter statements.
 When creating hierarchical models, use 1 unit delay for inverters, 3 units
 delay for and and or gates, and 4 units delay for xor gates. Use the module
 instance parameter value assignment statement method. Develop a
 testbench to verify the functionality and to see the delays propagated
-through the hierarchy. **
+through the hierarchy. 
 
 **lab9_1_1.v**
 ```verilog
@@ -188,10 +188,10 @@ We can run Simulation to check the code by clicking the Run Simulation under the
 
 ### Part9-1-2
 
-**Modify the carry-look-ahead adder of 1-1 using the defparam statements,
+Modify the carry-look-ahead adder of 1-1 using the defparam statements,
 changing the values of the delays from the testbench. Perform the
 behavioral modeling simulation and observe the delays propagated
-through the hierarchy.**
+through the hierarchy.
 
 **lab9_1_2.v**
 ```verilog

@@ -636,16 +636,13 @@ import numpy as np
 import pynq
 from pynq import MMIO
 hw = pynq.Overlay('design_1.bit')
-
 ```
 
 
 
 ```python
-
 s2mm = hw.axi_dma_0.sendchannel
 mm2s = hw.axi_dma_0.recvchannel
-
 ```
 
 #### Allocate DMA memory address size
@@ -668,7 +665,6 @@ s2mm.transfer(oBuf_0)
 mm2s.transfer(iBuf_0)
 s2mm.wait()
 mm2s.wait()
-
 ```
 
 We will see:
@@ -685,6 +681,7 @@ Example C++ code for implementing an AXI array to stream with no side channels.
 void example(int A[50], int B[50]) {
 #pragma HLS INTERFACE axis port = A
 #pragma HLS INTERFACE axis port = B
+#pragma HLS INTERFACE ap_ctrl_none port=return
 
     int i;
 
@@ -740,9 +737,9 @@ int main() {
 ```
 #### Create the Vivado project
 
-The configure block design can use reference materials [here](https://uri-nextlab.github.io/ParallelProgammingLabs/HLS_Labs/Lab1.html). And we need to choose the number of the DMA according to the number of the interface.
+The configure block design can use reference materials [here](https://uri-nextlab.github.io/ParallelProgammingLabs/HLS_Labs/Lab1.html). We also need to choose the number of the DMA according to the number of the interface. We also need middle_data IP to provide the last and keep the signal. [Ref](https://uri-nextlab.github.io/ParallelProgammingLabs/HLS_Labs/Lab5.html)
 
-<div align=center><img src="Images/13/4.png" alt="drawing" width="1000"/></div>
+<div align=center><img src="Images/13/4_2.png" alt="drawing" width="1000"/></div>
 
 #### Run synthesis,  Implementation, and generate bitstream
 

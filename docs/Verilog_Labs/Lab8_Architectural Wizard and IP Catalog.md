@@ -196,8 +196,6 @@ top_module uut(
 initial begin
     $monitor("Time=%t | Reset=%b | One Second Pulse=%b", $time, tb_reset, tb_one_sec_pulse);
 end
-
-
 endmodule
 
 ```
@@ -236,8 +234,6 @@ tab, titled Basic, include:
 
 The second tab, titled Control, include
 Synchronous Clear, Clock Enable and various other settings.
-
-
 
 The designer can select the desired functionality and click on OK to generate the IP. 
 

@@ -187,9 +187,6 @@ module tb_sequence_detector_mealy();
         #40; // Apply reset
 
         reset = 0; // Release reset
-//        repeat (9) begin // Generate a sequence of '1's
-//            #20 ain = ~ain;
-//        end
         ain = 1;
         #40;
         ain = 0;
@@ -292,64 +289,74 @@ model through a behavioral simulation.
 
 **lab10_2_1.v**
 ```verilog
-module moore_sequence_detector (
-    input wire clk,           // Clock input for synchronizing state transitions
-    input wire reset,         // Asynchronous reset input to initialize or reset the state machine
-    input wire [1:0] ain,     // 2-bit input to determine sequence behavior
-    output reg yout           // Output of the sequence detector
+// This module implements a Moore sequence detector. The sequence detector monitors
+// the input 'ain' for specific patterns and changes the output 'yout' accordingly.
+// The specific patterns detected are:
+// 1. Sequence 01 followed by 00 sets 'yout' to 0.
+// 2. Sequence 11 followed by 00 sets 'yout' to 1.
+// 3. Sequence 10 followed by 00 toggles 'yout'.
+module moore_sequence_detector(
+    input wire clk, // Clock signal for synchronizing the state transitions.
+    input wire reset, // Asynchronous reset signal to initialize the state machine.
+    input wire [1:0] ain, // 2-bit input signal for detecting patterns.
+    output reg yout // Output signal that changes based on detected sequences.
 );
 
-    // State encoding using local parameters for better readability and maintenance
+    // Define state codes using local parameters for readability.
     localparam [2:0] 
-        IDLE = 3'd0,    // Default state, waiting for specific input sequences
-        SEQ_01 = 3'd1,  // State indicating the sequence '01' has been detected
-        SEQ_11 = 3'd2,  // State indicating the sequence '11' has been detected
-        SEQ_10 = 3'd3,  // State indicating the sequence '10' has been detected
-        TOGGLE = 3'd4;  // State indicating a toggle action should be executed
+        IDLE = 3'b000, // Idle state, waiting for a sequence to start.
+        SEQ_01 = 3'b001, // Not used, as detection happens in WAIT_00_FROM_* states.
+        SEQ_11 = 3'b010, // Not used, as detection happens in WAIT_00_FROM_* states.
+        SEQ_10 = 3'b011, // Not used, as detection happens in WAIT_00_FROM_* states.
+        WAIT_00_FROM_01 = 3'b100, // State indicating 01 has been detected, waiting for 00.
+        WAIT_00_FROM_11 = 3'b101, // State indicating 11 has been detected, waiting for 00.
+        WAIT_00_FROM_10 = 3'b110; // State indicating 10 has been detected, waiting for 00.
 
-    reg [2:0] current_state, next_state; // Registers to hold current and next state
+    // Registers for holding the current and next state of the state machine.
+    reg [2:0] current_state, next_state;
 
-    // Sequential always block to update the current state at each positive clock edge or asynchronous reset
+    // Sequential logic block for state transition.
+    // On each positive clock edge or when reset is asserted, the state machine updates its current state.
     always @(posedge clk or posedge reset) begin
         if (reset)
-            current_state <= IDLE; // Reset to initial state
+            current_state <= IDLE; // On reset, initialize to IDLE state.
         else
-            current_state <= next_state; // Transition to next state
+            current_state <= next_state; // Otherwise, transition to the next state.
     end
 
-    // Combinatorial always block to determine next state based on current state and input signals
+    // Combinational logic block to determine the next state based on the current state and input signals.
     always @(*) begin
         case (current_state)
-            IDLE: 
+            IDLE: // In the IDLE state, check the input to determine which sequence might be starting.
                 case (ain)
-                    2'b01: next_state = SEQ_01;
-                    2'b11: next_state = SEQ_11;
-                    2'b10: next_state = SEQ_10;
-                    default: next_state = IDLE;
+                    2'b01: next_state = WAIT_00_FROM_01; // If input is 01, move to WAIT_00_FROM_01 state.
+                    2'b11: next_state = WAIT_00_FROM_11; // If input is 11, move to WAIT_00_FROM_11 state.
+                    2'b10: next_state = WAIT_00_FROM_10; // If input is 10, move to WAIT_00_FROM_10 state.
+                    default: next_state = IDLE; // For any other input, remain in IDLE.
                 endcase
-            SEQ_01: next_state = (ain == 2'b00) ? IDLE : SEQ_01;
-            SEQ_11: next_state = (ain == 2'b00) ? IDLE : SEQ_11;
-            SEQ_10: next_state = (ain == 2'b00) ? TOGGLE : SEQ_10;
-            TOGGLE: next_state = IDLE;
-            default: next_state = IDLE; // Safe state in case of unexpected conditions
+            // In WAIT_00_FROM_* states, transition back to IDLE upon receiving 00, staying otherwise.
+            WAIT_00_FROM_01: next_state = (ain == 2'b00) ? IDLE : WAIT_00_FROM_01;
+            WAIT_00_FROM_11: next_state = (ain == 2'b00) ? IDLE : WAIT_00_FROM_11;
+            WAIT_00_FROM_10: next_state = (ain == 2'b00) ? IDLE : WAIT_00_FROM_10;
+            default: next_state = IDLE; // Fallback to IDLE for any undefined states.
         endcase
     end
 
-    // Output logic based on the state
+    // Output logic to update 'yout' based on current state and detected sequences.
+    // This block ensures that the output changes only at specific points in the sequence.
     always @(posedge clk) begin
         if (reset)
-            yout <= 0;
+            yout <= 0; // Reset output to 0.
         else 
             case (current_state)
-                SEQ_01: yout <= 0;
-                SEQ_11: yout <= 1;
-                SEQ_10: yout <= ~yout; // Toggle output
-                default: yout <= yout; // Retain the old value
+                // Set 'yout' based on the specific sequence detected and completed.
+                WAIT_00_FROM_01: yout <= 0; // Sequence 01, 00 detected.
+                WAIT_00_FROM_11: yout <= 1; // Sequence 11, 00 detected.
+                WAIT_00_FROM_10: yout <= ~yout; // Sequence 10, 00 detected, toggle output.
+                default: yout <= yout; // No change in output for other states.
             endcase
     end
-
 endmodule
-
 ```
 
 **tb.v**
@@ -398,7 +405,7 @@ endmodule
 ```
 And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
 
-<div align=center><img src="imgs/v2/60.png" alt="drawing" width="900"/></div>
+<div align=center><img src="imgs/v4/13.png" alt="drawing" width="900"/></div>
 
 ## Mealy FSM Using ROM 
 

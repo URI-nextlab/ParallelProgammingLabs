@@ -63,7 +63,7 @@ endmodule
 
 Model a 4-bit register with synchronous reset and load using the model
 provided above. Develop a testbench and simulate the design. Assign Clk,
-D input, reset, load, and output Q. Verify the design in hardware. 
+D input, reset, load, and output Q. 
 
 **lab6_1_1.v**
 ```verilog
@@ -145,8 +145,7 @@ control signal, called set, is used. Typically, in such registers, reset will ha
 set will have a higher priority over load control signal.
 
 Model a 4-bit register with synchronous reset, set, and load signals.
-Assign Clk, D input, reset, set, load, and output Q. Verify the design in
-hardware. 
+Assign Clk, D input, reset, set, load, and output Q.
 
 
 **lab6_1_2.v**
@@ -556,8 +555,7 @@ Design a 8-bit counter using T flip-flops, extending the above structure to
 8-bits. Your design needs to be hierarchical, using a T flip-flop in
 behavioral modeling, and rest either in dataflow or gate-level modeling.
 Develop a testbench and validate the design. Assign Clock input, Clear_n,
-Enable, and Q. Implement the design and verify the functionality in
-hardware.
+Enable, and Q. 
 
 
 **lab6_2_1.v**
@@ -778,8 +776,7 @@ reg [3:0] count;
 Model a 4-bit down-counter with synchronous load, enable, and clear as
 given in the code above. Develop a testbench (similar to the waveform
 shown below) and verify the design works. Assign Clock input, Clear,
-Enable, Load, and Q. Implement the design and verify the functionality in
-hardware. 
+Enable, Load, and Q. 
 
 <div align=center><img src="imgs/v2/18.png" alt="drawing" width="600"/></div>
 
@@ -878,3 +875,7 @@ endmodule
 We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/20.png" alt="drawing" width="600"/></div>
+
+## Conclusion
+In this lab, you learned how various kinds of registers and counters work. You modeled and verified the
+functionality of these components. These components are widely used in a processor system design. 

@@ -49,8 +49,7 @@ always
 ```
 
 In the above example, the statement will execute after every 5 units of time specified in the Verilog code,
-inverting the signal value every time it executes, thus generating a clock of 10 units period. The``` #5 CLK= ~CLK``` statement is considered a delay control, meaning the time delay between the statement encountered and actually executed is 5 time units. When the delay appears on the left side (as in above case), it is also considered as an inter-statement delay where the statement is blocked for that much time then gets evaluated and the result is assigned to the target. Below is the example that illustrates the
-effect of the inter-statement delay: 
+inverting the signal value every time it executes, thus generating a clock of 10 units period. The``` #5 CLK= ~CLK``` statement is considered a delay control, meaning the time delay between the statement encountered and actually executed is 5 time units. When the delay appears on the left side (as in above case), it is also considered as an inter-statement delay where the statement is blocked for that much time then gets evaluated and the result is assigned to the target. Below is the example that illustrates the effect of the inter-statement delay: 
 
 ```verilog
 initial
@@ -108,8 +107,8 @@ operator. The right hand side expression is evaluated when encountered, but the 
 is only assigned after the stated delay. 
 
 ### Part7-1-1
-**Write a testbench using inter-statement delays to produce the following
-waveform for the port named PORT_A.**
+Write a testbench using inter-statement delays to produce the following
+waveform for the port named PORT_A.
 
 <div align=center><img src="imgs/v2/22.png" alt="drawing" width="600"/></div>
 
@@ -193,8 +192,8 @@ end
 
 <div align=center><img src="imgs/v2/25.png" alt="drawing" width="400"/></div>
 
-**Write a testbench using intra-statement delays to produce the following
-waveform.**
+Write a testbench using intra-statement delays to produce the following
+waveform.
 
 <div align=center><img src="imgs/v2/26.png" alt="drawing" width="600"/></div>
 
@@ -212,29 +211,17 @@ initial begin
     STREAM = #10 0;
     // First toggle
     STREAM = #2 1;
-
-
     // First toggle back to 0
     STREAM =#5 0;
-
-
     // Second toggle to 1
     STREAM =#3 1;
-
-
     // Second toggle back to 0
     STREAM =#4 0;
-
-
     // Third toggle to 1
     STREAM =#2 1;
-
-
     // Third toggle back to 0
     STREAM =#5 0;
-
     STREAM =#3 1;
-
     // End of simulation
     $finish;
 end
@@ -276,16 +263,13 @@ if (CLK)
  Q <= 0;
  else
  Q <= D;
-
 ```
 
 The ```if``` statement is commonly used to create a priority structure, giving higher priority to the condition
 listed first. 
 
-**Write a behavioral model to design a 1-bit 4-to-1 mux using the if-else-if
-statement. Develop a testbench to verify the design.** 
-
-
+Write a behavioral model to design a 1-bit 4-to-1 mux using the if-else-if
+statement. Develop a testbench to verify the design.
 
 **lab7_1_3.v**
 ```verilog
@@ -380,7 +364,7 @@ casex or casez statement instead of case. In the **casez** statement, the value 
 case_expression and case_item_expr is considered as don’t care. In the **casex** statement, both the
 values x and z are considered as don’t care 
 
-**Design a gray code generator using the case statement.** 
+Design a gray code generator using the case statement. 
 
 **lab7_1_4.v**
 ```verilog
@@ -471,11 +455,11 @@ for (K=0; K < COUNT_LIMIT; K = K+1)
  SUM = SUM + K; 
 ```
 
-**Write a model of a counter which counts in the sequence mentioned below.
+Write a model of a counter which counts in the sequence mentioned below.
 The counter should use behavioral modeling and a case statement.
 Develop a testbench to test it. The testbench should display the counter
 output in the simulator console output. Simulate using the clock period of
-10 units for 200 ns. 000, 001, 011, 101, 111, 010, (repeat 000).**
+10 units for 200 ns. 000, 001, 011, 101, 111, 010, (repeat 000).
 
 ```verilog
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets { clk }]; 
@@ -487,7 +471,6 @@ module sequence_counter(
     input reset,
     output reg [2:0] out
 );
-
 
   localparam   S0    = 3'b000,    // State definitions for readability.
                S1    = 3'b001,

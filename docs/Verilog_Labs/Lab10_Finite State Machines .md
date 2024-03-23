@@ -6,38 +6,37 @@ sort: 10
 
 ## Introduction
 
-Finite State Machines (FSM) are sequential circuit used in many digital systems to control the behavior of systems and dataflow paths. Examples of FSM include control units and sequencers. This lab introduces the concept of two types of FSMs, Mealy and Moore, and the modeling styles to develop such machines. 
+Finite State Machines (FSM) are sequential circuits used in many digital systems to control the behavior of systems and dataflow paths. Examples of FSM include control units and sequencers. This lab introduces the concept of two types of FSMs, Mealy and Moore, and the modeling styles to develop such machines. 
 
 ## Mealy FSM
-A finite-state machine (FSM) or simply a state machine is used to design both computer programs and
+A finite-state machine (FSM) or a state machine designs computer programs and
 sequential logic circuits. It is conceived as an abstract machine that can be in one of a finite number of
 user-defined states. The machine is in only one state at a time; the state it is in at any given time is called
 the current state. It can change from one state to another when initiated by a triggering event or condition;
-this is called a transition. A particular FSM is defined by a list of its states, and the triggering condition for
+this is called a transition. A particular FSM is defined by a list of its states and the triggering condition for
 each transition.
 
 The behavior of state machines can be observed in many devices in modern society performing a
-predetermined sequence of actions depending on a sequence of events with which they are presented.
+predetermined sequence of actions depending on the sequence of events with which they are presented.
 Simple examples are vending machines which dispense products when the proper combination of coins
 are deposited, elevators which drop riders off at upper floors before going down, traffic lights which
-change sequence when cars are waiting, and combination locks which require the input of combination
+change sequence when cars are waiting, and combination locks, which require the input of combination
 numbers in the proper order.
 
 The state machines are modeled using two basic types of sequential networks- Mealy and Moore. In a
-Mealy machine, the output depends on both the present (current) state and the present (current) inputs.
-In Moore machine, the output depends only on the present state.
+The mealy machine's output depends on the present (current) state and the present (current) inputs.
+In Moore's machine, the output depends only on the present state.
 
 A general model of a Mealy sequential machine consists of a combinatorial network, which generates the
-outputs and the next state, and a state register which holds the present state as shown below. The state
+outputs and the next state, and a state register, which holds the present state, as shown below. The state
 register is normally modeled as D flip-flops. The state register must be sensitive to a clock edge. The
 other block(s) can be modeled either using the always procedural block or a mixture of the always
 procedural block and dataflow modeling statements; the always procedural block will have to be
-sensitive to all inputs being read into the block and must have all output defined for every branch in order
-to model it as a combinatorial block. The two blocks Mealy machine can be viewed as 
+sensitive to all inputs being read into the block and must have all output defined for every branch to model it as a combinatorial block. The two blocks of the Mealy machine can be viewed as 
 
 <div align=center><img src="imgs/v2/51.png" alt="drawing" width="400"/></div>
 
-Here are the state diagram of a parity checker Mealy machine and the associated model. 
+Here is the state diagram of a parity checker Mealy machine and the associated model. 
 
 <div align=center><img src="imgs/v2/52.png" alt="drawing" width="400"/></div>
 
@@ -46,20 +45,20 @@ module mealy_2processes(
     input clk,           // Clock input for synchronous logic
     input reset,         // Asynchronous reset input, resets the machine state
     input x,             // Input signal to the Mealy machine
-    output reg parity    // Output signal from the Mealy machine, represents parity
+    output reg parity    // Output signal from the Mealy machine represents parity
 );
 
-    reg state, nextstate;    // 'state' holds current state, 'nextstate' for the next state after clock edge
+    reg state, nextstate;    // 'state' holds the current state, 'next state' for the next state after the clock edge
     parameter S0 = 0, S1 = 1; // Define state encoding for readability: S0 and S1 represent the states
 
-    // Sequential logic block: updates the current state at the rising edge of clock or reset
+    // Sequential logic block: updates the current state at the rising edge of a clock or reset
     always @(posedge clk or posedge reset)
     if (reset)
         state <= S0;       // If reset is high, force state to S0
     else
         state <= nextstate; // Else, transition to next state
 
-    // Combinatorial logic block: computes the next state and the output based on current state and input
+    // Combinatorial logic block: computes the next state and the output based on the current state and input
     always @(state or x)
     begin
         parity = 1'b0; // Default output for parity, assume it's 0 unless set to 1 below
@@ -83,19 +82,19 @@ module mealy_2processes(
 endmodule
 
 ```
-The state assignments can be of one-hot, binary, gray-code, and other types. Usually, the synthesis tool
-will determine the type of the state assignment, but user can also force a particular type by changing the
+The state assignments can be one-hot, binary, gray-code, or other types. Usually, the synthesis tool
+will determine the type of the state assignment, but the user can also force a particular type by changing the
 synthesis property as shown below. The state assignment type will have an impact on the number of bits
-used in the state register; one-hot encoding using maximum number of bits but decodes very fast to
-compact (binary) encoding using smallest number of bits but taking longer to decode.
+used in the state register; one-hot encoding using the maximum number of bits but decodes very fast to
+Compact (binary) encoding uses the smallest number of bits but takes longer to decode.
 
 <div align=center><img src="imgs/v2/54.png" alt="drawing" width="600"/></div>
 
 ### Part10-1-1
 Design a sequence detector implementing a Mealy state machine using
 three always blocks. The Mealy state machine has one input (ain) and one
-output (yout). The output yout is 1 if and only if the total number of 1s
-received is divisible by 3 (hint: 0 is inclusive, however, reset cycle(s) do not
+output (yout). The output yout is one if and only if the total number of 1s
+received is divisible by 3 (hint: 0 is inclusive; however, reset cycle(s) do not
 count as 0- see in simulation waveform time=200). Develop a testbench and
 verify the model through a behavioral simulation.
 
@@ -108,7 +107,7 @@ module sequence_detector_mealy (
     input wire clk,          // Clock input
     input wire reset,        // Asynchronous reset
     input wire ain,          // Input signal
-    output reg yout,         // Output signal (1 when total number of '1's is divisible by 3)
+    output reg yout,         // Output signal (1 when the total number of '1's is divisible by 3)
     output reg [3:0] count   // Counter for the number of '1's received
 );
 
@@ -122,7 +121,7 @@ module sequence_detector_mealy (
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             current_state <= S0;
-            count <= 0; // Reset count when system is reset
+            count <= 0; // Reset count when the system is reset
         end else begin
             current_state <= next_state;
             if (ain) count <= count + 1; // Increment count with each '1' received
@@ -206,19 +205,19 @@ module tb_sequence_detector_mealy();
 endmodule
 ```
 
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/56.png" alt="drawing" width="900"/></div>
 
 ## Moore FSM
 A general model of a Moore sequential machine is shown below. Its output is generated from the state
 register block. The next state is determined using the present (current) input and the present (current)
-state. Here the state register is also modeled using D flip-flops. Normally Moore machines are described
-using three blocks, one of which must be a sequential and the other two can be modeled using ```always``` blocks or a combination of ```always``` and dataflow modeling constructs.
+state. Here, the state register is also modeled using D flip-flops. Normally, Moore machines are described
+using three blocks, one of which must be sequential, and the other two can be modeled using ```always``` blocks or a combination of ```always``` and dataflow modeling constructs.
 
 <div align=center><img src="imgs/v2/57.png" alt="drawing" width="400"/></div>
 
-Here is the state graph of the same parity checker to be modeled as a Moore machine. The associate model is shown below
+Here is the state graph of the same parity checker to be modeled as a Moore machine. The associate model is shown below.
 
 <div align=center><img src="imgs/v2/58.png" alt="drawing" width="400"/></div>
 
@@ -236,12 +235,12 @@ module moore_3processes(
     parameter S0 = 0, S1 = 1;
 
     // Sequential always block for state updating
-    // This block responds to the positive edge of the clock or the positive edge of the reset.
+    // This block responds to the clock's positive edge or the reset's positive edge.
     always @(posedge clk or posedge reset) begin
         if (reset)
             state <= S0; // On reset, go to state S0
         else
-            state <= nextstate; // On clock, move to the next state
+            state <= nextstate; // On the clock, move to the next state
     end
 
     // Combinational always block to determine the output based on the current state
@@ -253,7 +252,7 @@ module moore_3processes(
         endcase
     end
 
-    // Combinational always block to compute the next state based on the current state and input
+    // Combinational always blocks to compute the next state based on the current state and input
     always @(state or x) begin
         nextstate = S0; // Default next state is S0
         case(state)
@@ -267,7 +266,7 @@ module moore_3processes(
 endmodule
 
 ```
-The output block when it is simple, as in this example, can be modeled using dataflow modeling constructs. The following code can be used instead of the always block. You also need to change the output type from reg to wire.
+The output block, when it is simple, as in this example, can be modeled using dataflow modeling constructs. The following code can be used instead of the always block. You also need to change the output type from reg to wire.
 
 ```verilog
 assign parity = (state==S0) ? 1'b0: 1'b1; 
@@ -312,7 +311,7 @@ module moore_sequence_detector(
         WAIT_00_FROM_11 = 3'b101, // State indicating 11 has been detected, waiting for 00.
         WAIT_00_FROM_10 = 3'b110; // State indicating 10 has been detected, waiting for 00.
 
-    // Registers for holding the current and next state of the state machine.
+    // Registers are used to hold the current and next state of the state machine.
     reg [2:0] current_state, next_state;
 
     // Sequential logic block for state transition.
@@ -338,11 +337,11 @@ module moore_sequence_detector(
             WAIT_00_FROM_01: next_state = (ain == 2'b00) ? IDLE : WAIT_00_FROM_01;
             WAIT_00_FROM_11: next_state = (ain == 2'b00) ? IDLE : WAIT_00_FROM_11;
             WAIT_00_FROM_10: next_state = (ain == 2'b00) ? IDLE : WAIT_00_FROM_10;
-            default: next_state = IDLE; // Fallback to IDLE for any undefined states.
+            default: next_state = IDLE; // Fallback to IDLE for undefined states.
         endcase
     end
 
-    // Output logic to update 'yout' based on current state and detected sequences.
+    // Output logic to update 'yout' based on the current state and detected sequences.
     // This block ensures that the output changes only at specific points in the sequence.
     always @(posedge clk) begin
         if (reset)
@@ -403,13 +402,13 @@ module tb_moore_sequence_detector();
 endmodule
 
 ```
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v4/13.png" alt="drawing" width="900"/></div>
 
 ## Mealy FSM Using ROM 
 
-A Mealy sequential machine can also be implemented using a ROM memory as shown below. The ROM
+A Mealy sequential machine can also be implemented using ROM memory as shown below. The ROM
 memory holds the next state and output content. The external inputs and the current state form the
 address input to the ROM. The ROM typically is implemented using LUTs instead of BlockRAM since
 LUTs give a better utilization ratio resulting from a smaller number of states in a design. 
@@ -433,7 +432,7 @@ module specific_counter_mealy (
     input enable,    // Enable signal for counting
     output [2:0] out // Output representing the current count
 );
-    // ROM storage for state transitions based on current state
+    // ROM storage for state transitions based on the current state
     // Since the sequence has 6 unique states, use a 3-bit representation
     reg [2:0] state_rom[0:5]; // 6 states, represented by 3 bits each
     reg [2:0] state;          // Current state
@@ -470,7 +469,7 @@ module specific_counter_mealy (
         endcase
     end
 
-    // Output logic (since this is a Mealy machine, output could depend on current state and input, but here it's simply the state)
+    // Output logic (since this is a Mealy machine, output could depend on the current state and input, but here it's simply the state)
     assign out = state;
 endmodule
 ```
@@ -504,7 +503,7 @@ module tb_specific_counter_mealy();
         enable = 1; // Start the counter
 
         // Monitor the output
-        #600; // Run long enough to see repeating sequence
+        #600; // Run long enough to see a repeating sequence
         $finish;
     end
 
@@ -514,12 +513,12 @@ module tb_specific_counter_mealy();
 
 endmodule
 ```
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/63.png" alt="drawing" width="900"/></div>
 
 
 ## Conclusion 
 
-In this lab, you learned Mealy and Moore state machine modeling methodologies. You designed and implemented sequence detector, a sequence generator, and code converters using the two and three always blocks styles. 
+In this lab, you learned Mealy and Moore state machine modeling methodologies. You designed and implemented a sequence detector, a sequence generator, and code converters using the two and three always blocks styles. 
 

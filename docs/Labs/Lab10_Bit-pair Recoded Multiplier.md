@@ -6,17 +6,16 @@ sort: 10
 
 ## Lab Overview
 
-In this lab you will implement a Bit-pair Recoded fixed point multiplier in Verilog. The top-level entity should be a structural design, and all lower-level components should be kept completely modular and use Verilog parameters. The processor should be tested in Vivado Simulator with appropriate testbench(es) that that test for all cases (+/-
-and varying ranges) in an 8-bit multiplier. You will map your top-level entity to the board which will use a shortened
-4-bit version of the multiplier.
+In this lab, you will implement a Bit-pair Recoded fixed point multiplier in Verilog. The top-level entity should be a structural design, and all lower-level components should be kept completely modular and use Verilog parameters. The processor should be tested in Vivado Simulator with appropriate testbench(es) that test for all cases (+/-
+and varying ranges) in an 8-bit multiplier. You will map your top-level entity to the board using a shortened 4-bit version of the multiplier.
 
 ## Multiplier Design
 
 You are to design an N-bit shift-add multiplier using bit-pair recoding. Each
-component in the design should be a separate module that you will connect in your top-level structural entity. You will be required to set the design to 4-bits to program it to the board and 8-bits when performing test bench
+component in the design should be a separate module that you will connect to your top-level structural entity. You must set the design to 4 bits to program it to the board and 8 bits when performing test bench
 simulations.
 
-Model your design based on the figure below. Multiplication will begin when the start signal is high and the busy signal is low (note, busy and done are set by the state machine, **Ctrl**). The system will multiply through the following steps:
+Model your design based on the figure below. Multiplication will begin when the start signal is high, and the busy signal is low (note, busy and done are set by the state machine, **Ctrl**). The system will multiply through the following steps:
 
 * 1) Load the *multiplicand* and *multiplier* into their corresponding registers and activate the *busy* signal. 
 
@@ -37,15 +36,15 @@ iteratively performing (multiply => add => shifts) until all the digits of the m
 
 Moving to binary multiplication there are a few things we need to consider.
 
-* 1) Recoding – Rather than directly multiplying by the binary digit we use booth encoding to determine the
+* 1) Recoding – Rather than directly multiplying by the binary digit, we use booth encoding to determine the
 digit (-2, -1, 0, 1, 2) to multiply by.
 
-* 2) Shift – Shift by two binary digits rather than one, this implies N/2 iterations of the algorithm rather than N.
+* 2) Shift – Shift by two binary digits rather than one. This implies N/2 iterations of the algorithm rather than N.
 
-* 3) Signs – The sign of a binary number is indicated by the leading digit, rather than a `-` sign. Be careful to
-ensure the sign of your values are preserved while performing shifts and additions. For example, in the 2nd
-add, the addition of 2 negative number should never be positive; however, if we do not sign extend
-properly our leading bit will be 0. This is a common issue.
+* 3) Signs – The sign of a binary number is indicated by the leading digit rather than a `-` sign. 
+Ensure that your values are preserved while performing shifts and additions. For example, in the 2nd
+Add, adding 2 negative numbers should never be positive; however, if we do not sign the extension
+properly, our leading bit will be 0. This is a common issue.
 
 
 ## Implementation Details
@@ -55,14 +54,13 @@ Most of the components in this design should be fairly familiar to you by now. H
 ### Multiplication
 
 This design decomposes the multiplier into a
-series of {-2, -1, 0, 1, 2} that represents it. The reason we do this
-is that multiplying any binary number by these values is super
+series of {-2, -1, 0, 1, 2} representing it. We do this because multiplying any binary number by these values is super
 easy to implement. All these implementation requires are shift
 (<<), NOT, sign extends, and +1 operations. Of these, the most
 difficult to perform is the +1. Luckily, since we already have an
 adder in our design, we can absorb this +1 operation into it. We
-do this by passing that +1 in as the carry in bit of the adder when
-the partial product is added. Se the figure for more details.
+do this by passing that +1 in as the carry-in bit of the adder when
+the partial product is added. See the figure for more details.
 
 <div align=center><img src="imgs/v2/20.png" alt="drawing" width="300"/></div>
 
@@ -70,23 +68,23 @@ the partial product is added. Se the figure for more details.
 
 The product register is optimized to store the product, partial
 product, and multiplier at different times during the multiplication operation.
-The accompanying figure attempts to depict how each flip-flop in the register
-is mapped to the other components. Upon starting a new multiplication the
+The accompanying figure depicts how each flip-flop in the register
+is mapped to the other components. Upon starting a new multiplication, the
 system will initialize the most significant N+2 bits and the least significant
 bits of this register with 0’s and bits 1 to N with the multiplier. 
 
 <div align=center><img src="imgs/v2/21.png" alt="drawing" width="300"/></div>
 
-Then, the 3 least significant bits will be used to determine the first partial
-product. This will be added to the running partial product contained in bits N+1 to 2N+1 and stored in bits N+1 to 2N+2. Then, each of the will be shifted rightward in the register copying the sign bit for the top two bits. This will occuer N/2 times until the multiplication is complete. The product will be contained in bits 1 to 2N after completion.
-In the figure below is an example of how data would move through the Product Register as the product -6 x -5 is computed.
+Then, the three least significant bits will be used to determine the first partial
+product. This will be added to the running partial product contained in bits N+1 to 2N+1 and stored in bits N+1 to 2N+2. Then, each of the will be shifted rightward in the register, copying the sign bit for the top two bits. This will occur N/2 times until the multiplication is complete. The product will be contained in bits 1 to 2N after completion.
+The figure below shows how data would move through the Product Register as the product -6 x -5 is computed.
 
 <div align=center><img src="imgs/v2/22.png" alt="drawing" width="600"/></div>
 
 ### Ctrl and TimerReg
 
- Similar to the previous lab the control unit drive the control signals of the other components to
-orchestrate the multiplication. However, this time it also comes with a TimerReg. This is because we know exactly how many add/shift cycles week need to complete to compute and fixed width multiplication (N/2). This TimerReg, works as an alarm that signals to the control unit that it is finished and needs to stop the add shift cycle. There are many ways to implement this alarm. But, one of the easiest is to utilize another shift register. When the multiplier starts an operation, this register is initialized to a specific N-bit value such as “100…00” then after each cycle is completed you shift the bits by 1, “010…00”. After N cycles the 1 will have shifted all the way to the right, “000…01”, which can be easily used to send a signal to the controller to tell it to conclude the operation.
+ Similar to the previous lab, the control unit drives the control signals of the other components to
+orchestrate the multiplication. However, this time, it also comes with a TimerReg. This is because we know exactly how many add/shift cycles a week need to be completed to compute fixed width multiplication (N/2). This TimerReg is an alarm that signals the control unit is finished and needs to stop the added shift cycle. There are many ways to implement this alarm. But, one of the easiest is to utilize another shift register. When the multiplier starts an operation, this register is initialized to a specific N-bit value such as “100…00” then, after each cycle is completed you shift the bits by 1, “010…00”. After N cycles, the one will have shifted to the right, “000…01”, which can be easily used to send a signal to the controller to tell it to conclude the operation.
 
 
 
@@ -106,7 +104,7 @@ module shift_reg #(
     input shift,                   // Shift control: if high, perform a right shift on the register content.
     input [1:0] shift_in,          // 2-bit input value to be shifted into the register from the left.
     input [N-1:0] din,             // Data input: value to load into the register when 'set' is high.
-    output reg [N-1:0] dout        // Data output: current value of the shift register.
+    output reg [N-1:0] dout        // Data output: the current value of the shift register.
 );
     
     // Sequential logic block triggered by the rising edge of the clock.
@@ -117,7 +115,7 @@ module shift_reg #(
         end 
         else if (shift == 1'b1) begin
             // When 'shift' is high, perform a right shift of the register content by two bits,
-            // and insert 'shift_in' at the leftmost two bits.
+            // and insert 'shift_in' in the two bits on the leftmost side.
             dout <= {shift_in, dout[N-1:2]};  // Correct for a 2-bit right shift
         end
     end
@@ -185,7 +183,7 @@ module adder #(parameter N = 8)(
         if (x0[N-1] == 1'b1 & x1[N-1] == 1'b1)
             extend <= 1'b1;  // Both MSBs are 1, indicating potential overflow for positive numbers.
         else if (x0[N-1] == 1'b0 & x1[N-1] == 1'b0)
-            extend <= 1'b0;  // Both MSBs are 0, no overflow for positive numbers.
+            extend <= 1'b0;  // Both MSBs are 0, with no overflow for positive numbers.
         else if (x0[N-1] == 1'b1 & x1[N-1] == 1'b0)
             extend <= y[N-1];  // Mixed MSBs, check MSB of result for overflow indication.
         else if (x0[N-1] == 1'b0 & x1[N-1] == 1'b1)
@@ -195,9 +193,6 @@ module adder #(parameter N = 8)(
     end
 
 endmodule
-
-
-
 ```
 
 
@@ -210,7 +205,7 @@ module RESET #(
 )(
 	input s,                // Reset signal: when high, output follows input; when low, output is cleared.
 	input [N-1:0] x1,       // Data input: value to be loaded into the register when 's' is high.
-	output reg [N-1:0] y    // Data output: current value of the register.
+	output reg [N-1:0] y    // Data output: the current value of the register.
 );
 
     // The always block triggers on any change of inputs.
@@ -239,7 +234,7 @@ module MultiReg #(
     input shift,                  // Shift control: if high, perform a shift operation on the register content.
     input [1:0] shift_in,         // 2-bit input value to be shifted into the register from the left.
     input [N-1:0] din,            // Data input: value to load into the register when 'set' is high.
-    output reg [N-1:0] dout       // Data output: current value of the register.
+    output reg [N-1:0] dout       // Data output: the current value of the register.
 );
     
     // Sequential logic block triggered by the rising edge of the clock.
@@ -258,8 +253,6 @@ module MultiReg #(
     end
 
 endmodule
-
-
 ```
 
 
@@ -294,7 +287,6 @@ module Counter #(
     assign done = count[0];
 
 endmodule
-
 ```
 
 **CTRL.v**
@@ -445,13 +437,11 @@ module MUX_recoded(
             // Represents a return to zero or no operation needed at the end of a cycle.
             3'b111: recoded_data <= 3'b000; // +0
             
-            // Default case can be added if required, especially for handling unexpected inputs.
+            // Default cases can be added if required, especially for handling unexpected inputs.
             // default: recoded_data <= 3'bxxx; // Undefined or X state for illegal inputs.
         endcase    
     end
 endmodule
-
-
 ```
 
 **Bitpair_Mult.v**
@@ -501,7 +491,7 @@ module Bitpair_Mult #(
         .clk(clk),
         .set(load),
         .shift(shift),
-        .shift_in(product_1[1:0]),  // Feed back lower bits of product for Booth encoding.
+        .shift_in(product_1[1:0]),  //Feedback lower bits of product for Booth encoding.
         .din({multiplier,1'b0}),    // Initialize with multiplier and an added zero bit.
         .dout(product_0)
     );	
@@ -597,7 +587,7 @@ endmodule
 ```
 
 
-We will map ```clk``` port to button, so we also need the debouncing module like below:
+We will map ```clk``` port to the button, so we also need the debouncing module like below:
 
 **btn_lab4.v**
 ```verilog
@@ -668,8 +658,6 @@ integer i;
     );
     
 endmodule
-
-
 ```
 
 Now we can see the ```Schematic``` under the RTL ANALYSIS part like below:
@@ -682,7 +670,7 @@ For the system module, we can see:
 
 ### Creating a testbench
 
-Then we can run Simulation to check the code of the ```Bitpair_Mult``` module.
+Then we can run a Simulation to check the code of the ```Bitpair_Mult``` module.
 
 **tb.v**
 ```verilog
@@ -728,7 +716,7 @@ module BitPairMult_tst();
     // Clock generation block
     initial begin
         clk <= 1'b0; // Initialize the clock to 0
-        // Toggle clock every 5 time units to create a clock signal
+        // Toggle clock every 5-time units to create a clock signal
         repeat (2*(2 + max_i * max_j * 3 + 3)) begin
             #5 clk <= ~clk;
         end
@@ -761,36 +749,29 @@ module BitPairMult_tst();
         #4;                      // Wait two clock cycles
         start <= 1'b0;           // Deassert start to simulate single pulse
         #4;                      // Wait two more clock cycles for results
-
-
-
-    end
-
-    
+    end   
 endmodule
-
-
 ```
 
 
 
-And we can run Simulation to check the code by clicking the ```Run Simulation``` under the ```SIMULATION``` and choose the first ```Run Behavioral Simulation```. Here, the function of the ```clk``` is the same as the ```submit``` of the lab8.
+We can run a Simulation to check the code by clicking the ```Run Simulation``` under ```SIMULATION``` and choosing the first ```Run Behavioral Simulation```. Here, the function of the ```clk``` is the same as the ```submit``` of the lab8.
 
 <div align=center><img src="imgs/v2/25.png" alt="drawing" width="1000"/></div>
 
-The multipican is 4 and the multipier is -7, then the result is -28.
+The multiplicand is 4 and the multiplier is -7, then the result is -28.
 
 <div align=center><img src="imgs/v2/26.png" alt="drawing" width="1000"/></div>
 
-The multipican is -2 and the multipier is 7, then the result is -14.
+The multiplicand is -2 and the multiplier is 7, then the result is -14.
 
 <div align=center><img src="imgs/v2/27.png" alt="drawing" width="1000"/></div>
 
-The multipican is 6 and the multipier is 5, then the result is 00111110, which is equal to the 30.
+The multiplicand is 6 and the multiplier is 5, then the result is 00111110, which is equal to the 30.
 
 <div align=center><img src="imgs/v2/28.png" alt="drawing" width="1000"/></div>
 
-The multipican is -6 and the multipier is -5, then the result is 30.
+The multiplicand is -6 and the multiplier is -5, then the result is 30.
 
 
 ### Implementation
@@ -881,7 +862,7 @@ multiplier.write(DATA_OFFSET,DATA_1)
 start_write.write(0x0,1)
 ```
 
-Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. And we need to press the button again and you can see the LED is off and we can see the result below:
+Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. We need to press the button again and you can see the LED is off we can see the result below:
 
 ```python
 # Decimal value
@@ -897,7 +878,7 @@ if binary_str[0] == '1':  # Check if the number is negative in two's complement
     # Convert to decimal and subtract 1 to get the magnitude
     signed_decimal = -1 * (int(inverted_str, 2) + 1)
 else:
-    # If the number is positive, just convert directly
+    # If the number is positive, just convert it directly
     signed_decimal = int(binary_str, 2)
 
 seven_segment(signed_decimal)
@@ -948,7 +929,7 @@ multiplier.write(DATA_OFFSET,DATA_1)
 ```python
 start_write.write(0x0,1)
 ```
-Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. And we need to press the button again and you can see the LED is off and we can see the result below:
+Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. We need to press the button again and you can see the LED is off we can see the result below:
 
 ```python
 # Decimal value
@@ -964,7 +945,7 @@ if binary_str[0] == '1':  # Check if the number is negative in two's complement
     # Convert to decimal and subtract 1 to get the magnitude
     signed_decimal = -1 * (int(inverted_str, 2) + 1)
 else:
-    # If the number is positive, just convert directly
+    # If the number is positive, just convert it directly
     signed_decimal = int(binary_str, 2)
 
 seven_segment(signed_decimal)
@@ -982,7 +963,7 @@ multiplier.write(DATA_OFFSET,DATA_1)
 ```python
 start_write.write(0x0,1)
 ```
-Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. And we need to press the button again and you can see the LED is off and we can see the result below:
+Then we need to press the button(L19) until you can see the LED(M14) is on which means the process is done. We need to press the button again and you can see the LED is off we can see the result below:
 
 ```python
 # Decimal value
@@ -1033,7 +1014,7 @@ if binary_str[0] == '1':  # Check if the number is negative in two's complement
     # Convert to decimal and subtract 1 to get the magnitude
     signed_decimal = -1 * (int(inverted_str, 2) + 1)
 else:
-    # If the number is positive, just convert directly
+    # If the number is positive, just convert it directly
     signed_decimal = int(binary_str, 2)
 
 seven_segment(signed_decimal)```

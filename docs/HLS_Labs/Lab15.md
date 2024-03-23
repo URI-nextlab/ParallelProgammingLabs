@@ -47,7 +47,6 @@ typedef int dio_t;
 void pointer_arith(dio_t* d);
 
 #endif
-
 ```
 **pointer_arith.cpp**
 ```c++
@@ -62,7 +61,6 @@ void pointer_arith (dio_t *d) {
    *(d+i) = acc;
  }
 }
-
 ```
 
 The following code example shows the test bench that supports this example. Because the loop to perform the accumulations is now inside function ```pointer_arith```, the test bench populates the address space specified by array ```d[5]``` with the appropriate values.
@@ -92,7 +90,6 @@ int main() {
   }
 
 }
-
 ```
 When simulated, this results in the following output:
 
@@ -118,8 +115,6 @@ void pointer_basic(dio_t *d) {
   acc += *d;
   *d = acc;
 }
-
-
 ```
 **pointer_basic.h**
 ```c++
@@ -133,7 +128,6 @@ typedef int dio_t;
 void pointer_basic(dio_t* d);
 
 #endif
-
 ```
 **poingter_basic_tb.cpp**
 ```c++
@@ -151,7 +145,6 @@ int main() {
   }
 
 }
-
 ```
 C and RTL simulation verify the correct operation (although not all possible cases) with this simple data set:
 
@@ -176,8 +169,6 @@ typedef bool sel_t;
 dout_t pointer_multi(bool sel, din_t pos);
 
 #endif
-
-
 ```
 **pointer_multi.cpp**
 ```c++
@@ -195,8 +186,6 @@ dout_t pointer_multi(sel_t sel, din_t pos) {
 
   return ptr[pos];
 }
-
-
 ```
 **pointer_multi_tb.cpp**
 ```c++
@@ -213,10 +202,7 @@ int main() {
     idx = idx + 1;
     mem_sel = !mem_sel;
   }
-
-
 }
-
 ```
 
 The C simulation report is shown below:
@@ -259,7 +245,6 @@ data_t pointer_cast_native(data_t index, data_t A[N]) {
   }
   return result;
 }
-
 ```
 
 **pointer_cast_native_tb.cpp**
@@ -344,8 +329,6 @@ void pointer_stream_better(volatile dout_t* d_o, volatile din_t* d_i);
 void pointer_stream_bad ( dout_t *d_o,  din_t *d_i);
 
 #endif
-
-
 ```
 **pointer_stream_better.cpp**
 ```c++
@@ -359,7 +342,6 @@ void pointer_stream_better(volatile dout_t *d_o, volatile din_t *d_i) {
   acc += *d_i;
   *d_o = acc;
 }
-
 ```
 To support multi-access pointers on the interface you should take the following steps:
 
@@ -411,7 +393,6 @@ typedef int dout_t;
 void pointer_stream_good(volatile dout_t* d_o, volatile din_t* d_i);
 
 #endif
-
 ```
 **pointer_stream_good.cpp**
 ```c++
@@ -427,7 +408,6 @@ void pointer_stream_good(volatile dout_t *d_o, volatile din_t *d_i) {
   acc += *(d_i + 3);
   *(d_o + 1) = acc;
 }
-
 ```
 **pointer_stream_good_tb.cpp**
 ```c++
@@ -437,8 +417,6 @@ int main() {
   din_t d_i[4];
   dout_t d_o[4];
   int i, retval = 0;
-
-
   // Create input data
   for (i = 0; i < 4; i++) {
     d_i[i] = i;
@@ -450,10 +428,7 @@ int main() {
   {
 	  printf("d_i is %d, d_o is %d\r\n",d_i[j],d_o[j]);
   }
-
-
 }
-
 ```
 The test bench validates the algorithm with the following results, showing that:
 
@@ -483,7 +458,6 @@ typedef int data_t;
 data_t pointer_double(data_t pos, data_t x, data_t* flag);
 
 #endif
-
 ```
 
 **pointer_double.cpp**
@@ -515,7 +489,6 @@ data_t pointer_double(data_t pos, data_t x, data_t *flag) {
   // Pass same index (as pos) as pointer to another function
   return sub(array, 10, &ptrFlag);
 }
-
 ```
 
 **pointer_double_tb.h**
@@ -536,7 +509,6 @@ int main() {
   }
 
 }
-
 ```
 
 ## basic_loops_primer
@@ -562,7 +534,6 @@ typedef ap_uint<5> dsel_t;
 dout_t test(din_t A[N]);
 
 #endif
-
 ```
 
 **test_1.cpp**
@@ -582,7 +553,6 @@ LOOP_1:
 
     return out_accum;
 }
-
 ```
 The synthesis report is shown below:
 
@@ -591,7 +561,6 @@ The synthesis report is shown below:
 The scheduling view is shown below:
 
 <div align=center><img src="Images/15/9.png" alt="drawing" width="600"/></div>
-
 
 You can unroll loops to create multiple independent operations rather than a single collection of operations. The UNROLL pragma transforms loops by creating multiple copies of the loop body in the RTL design, which allows some or all loop iterations to occur in parallel. [Ref](https://docs.xilinx.com/r/en-US/ug1399-vitis-hls/pragma-HLS-unroll)
 
@@ -616,7 +585,6 @@ LOOP_1:
 
     return out_accum;
 }
-
 ```
 The synthesis report is shown below:
 
@@ -680,7 +648,6 @@ int main() {
 
 
 }
-
 ```
 ## fixed_point_sqrt
 
@@ -707,7 +674,6 @@ typedef ap_ufixed<OUT_BW, OUT_IW> out_data_t;
 out_data_t fxp_sqrt_top(in_data_t& in_val);
 
 #endif // FXP_SQRT_TOP_H_ not defined
-
 ```
 
 **fxp_sqrt.h**
@@ -758,7 +724,6 @@ void fxp_sqrt(ap_ufixed<W2, IW2>& result, ap_ufixed<W1, IW1>& in_val) {
 }
 
 #endif //__FXP_SQRT_H__ not defined
-
 ```
 
 **fxp_sqrt_top.cpp**
@@ -770,13 +735,10 @@ out_data_t fxp_sqrt_top(in_data_t& in_val) {
     fxp_sqrt(result, in_val);
     return result;
 }
-
 ```
 
 **fxp_sqrt_test.h**
 ```c++
-
-
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -858,7 +820,6 @@ int main(int argc, char* argv[]) {
     else
         return 0;
 }
-
 ```
 ## Demonstrate
 

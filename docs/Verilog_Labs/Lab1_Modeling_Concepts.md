@@ -12,14 +12,14 @@ behavioral modeling is used for both combinatorial and sequential circuits.
 
 ## Gate-level Modeling
 
-Verilog HDL supports built-in primitive gates modeling. The gates supported are multiple-input, multipleoutput, tristate, and pull gates. The multiple-input gates supported are: **and**, **nand**, **or**, **nor**, **xor**, and
-**xnor** whose number of inputs are two or more, and has only one output. The multiple-output gates
-supported are **buf** and **not** whose number of output is one or more, and has only one input. The
+Verilog HDL supports built-in primitive gates modeling. The gates supported are multiple-input, multiple-output, tristate, and pull gates. The multiple-input gates supported are: **and**, **nand**, **or**, **nor**, **xor**, and
+**xnor** whose number of inputs is two or more and has only one output. The multiple-output gates
+supported are **buf** and **not**, whose output number is one or more and has only one input. The
 language also supports modeling of tri-state gates which include **bufif0**, **bufif1**, **notif0**, and
-**notif1**. These gates have one input, one control signal, and one output. The pull gates supported are
+**notif1**. These gates have one input, one control signal, and one output. The pull gates are
 **pullup** and **pulldown** with a single output (no input) only.
 
-The basic syntax for each type of gates with zero delays is as follows:
+The basic syntax for each type of gate with zero delays is as follows:
 **and** | **nand** | **or** | **nor** | **xor** | **xnor** [instance name] (out, in1, …, inN); // [] is optional and | is
 selection
 **buf** | **not** [instance name] (out1, out2, …, out2, input);
@@ -30,21 +30,21 @@ One can also have multiple instances of the same type of gate in one construct s
 such as
 **and** [inst1] (out11, in11, in12), [inst2] (out21, in21, in22, in23), [inst3] (out31, in31, in32, in33);
 The language also allows the delays to be expressed when instantiating gates. The delay expressed is
-from input to output. The delays can be expressed in form of rise, fall, and turn-off delays; one, two, or all
-three types of delays can be expressed in a given instance expression. The turn-off delay is applicable to
+from input to output. The delays can be expressed in the form of rise, fall, and turn-off delays; one, two, or all
+three types of delays can be expressed in a given instance expression. The turn-off delay applies to
 gates whose output can be turned OFF(.e.g. notif1). 
 
 For example, 
 
 ```verilog
 and #5 A1(Out, in1, in2); // the rise and fall delays are 5 units
-and #(2,5) A2(out2, in1, in2); // the rise delay is 2 unit and the fall delay is 5 units
+and #(2,5) A2(out2, in1, in2); // the rise delay is 2 units and the fall delay is five units
 notif1 #(2, 5, 4) A3(out3, in2, ctrl1); //the rise delay is 2, the fall delay is 5, and the turnoff delay is 4 unit 
 
 ```
 
-The gate-level modeling is useful when a circuit is a simple combinational, as an example a multiplexer.
-Multiplexer is a simple circuit which connects one of many inputs to an output. In this part, you will create
+Gate-level modeling is useful when a circuit is a simple combination, such as a multiplexer.
+A multiplexer is a simple circuit which connects one of many inputs to an output. In this part, you will create
 a simple 2-to-1 multiplexer and extend the design to multiple bits. 
 
 ### Part 1-1-1
@@ -91,13 +91,13 @@ Now we can see the ```Schematic``` under the RTL ANALYSIS part like below:
 
 <div align=center><img src="imgs/v3/2.png" alt="drawing" width="700"/></div>
 
-Then we can click on the Run synthesis under the ```SYNTHESIS``` and Run implementation under the ```IMPLEMENTATION```. And we should  add the appropriate board related master XDC file to the project and edit it to include the related pins. Assign *x* to **L20**, *y* to **D20**, and the *s* to **L19** and *m* to **R14** 
+Then we can click on the Run synthesis under ```SYNTHESIS``` and Run implementation under ```IMPLEMENTATION```. We should  add the appropriate board-related master XDC file to the project and edit it to include the related pins. Assign *x* to **L20**, *y* to **D20**, and the *s* to **L19** and *m* to **R14** 
 
 <div align=center><img src="imgs/v3/24.png" alt="drawing" width="700"/></div>
 
-The click on the Generate Bitstream under the ```PROGRAM AND DEBUG```, and when writing bitstream is complete, we can donwload the file to the board and verify the lab. Here, you have two ways.
+Click on the Generate Bitstream under the ```PROGRAM AND DEBUG```, and when writing bitstream is complete, we can download the file to the board and verify the lab. Here, you have two ways.
 
-First, you can click on the ```Open Hardware Manager``` under the ```PROGRAM AND DEBUG``` and click on the ```Open Target``` to auto connect to your board. But you need connect your board to your computer use the USB cable. Then you will the green words like below:
+First, you can click on the ```Open Hardware Manager``` under the ```PROGRAM AND DEBUG``` and click on the ```Open Target``` to auto-connect to your board. But you need to connect your board to your computer using the USB cable. Then you will the green words like below:
 
 <div align=center><img src="imgs/v3/25.png" alt="drawing" width="700"/></div>
 
@@ -105,7 +105,7 @@ We don't need to debug, we just need to ```Program device``` like below:
 
 <div align=center><img src="imgs/v3/26.png" alt="drawing" width="700"/></div>
 
-Then you can press the button of the board and you can see the LED is on like below:
+Then you can press the button on the board and you can see the LED is on like below:
 
 <div align=center><img src="imgs/v3/27.png.jpg" alt="drawing" width="400"/></div>
 
@@ -114,7 +114,7 @@ The second way that you can refer to the [Soc_labs](https://uri-nextlab.github.i
 
 ### Part 1-1-2
 
-Create a two-bit wide 2-to-1 multiplexer using gate-level modeling. Create and add the Verilog module with two 2-bit inputs (*x[1:0]*, *y[1:0]*), a one bit select input (s),
+Create a two-bit wide 2-to-1 multiplexer using gate-level modeling. Create and add the Verilog module with two 2-bit inputs (*x[1:0]*, *y[1:0]*), a one-bit select input (s),
 and two-bit output (*m[1:0]*) using gate-level modeling.
 
 **lab1_1_2.v**
@@ -133,7 +133,7 @@ module lab1_1_2(
     wire [1:0] x_and_not_s;
     wire [1:0] y_and_s;
 
-    // Invert the select signal for use with both bits
+    // Invert the selected signal for use with both bits
     not u0(not_s, s);
 
     // Implementing the 2-to-1 MUX for the least significant bit (LSB)
@@ -163,16 +163,16 @@ The syntax of a continuous assignment is
 ```verilog
 assign [delay] LHS_net = RHS_expression;
 ```
-Where LHS_net is a destination net of one or more bit, and RHS_expression is an expression consisting
+Where LHS_net is a destination net of one or more bits, and RHS_expression is an expression consisting
 of various operators. The statement is evaluated at any time any of the source operand value changes
-and the result is assigned to the destination net after the delay unit. The gate level modeling examples
+and the result is assigned to the destination net after the delay unit. The gate-level modeling examples
 listed in Part 1 can be described in dataflow modeling using the continuous assignment. For example, 
 
 ```verilog
 assign out1 = in1 & in2; // perform and function on in1 and in2 and assign the result to out1
 assign out2 = not in1;
 assign #2 z[0] = ~(ABAR & BBAR & EN); // perform the desired function and assign the result
-after 2 units 
+after two units 
 ```
 
 The target in the continuous assignment expression can be one of the following:
@@ -182,12 +182,12 @@ The target in the continuous assignment expression can be one of the following:
 4. Constant part-select of a vector
 5. Concatenation of any of the above 
 
-Let us take another set of examples in which a scalar and vector nets are declared and used
+Let us take another set of examples in which scalar and vector nets are declared and used
 
 ```verilog
 wire COUNT, CIN; // scalar net declaration
 wire [3:0] SUM, A, B; // vector nets declaration
-assign {COUT,SUM} = A + B + CIN; // A and B vectors are added with CIN and the result is
+assign {COUT,SUM} = A + B + CIN; // A and B vectors are added with CIN, and the result is
  // assigned to a concatenated vector of a scalar and vector nets 
 
 ```
@@ -234,7 +234,7 @@ endmodule
 ## Behavioral Modeling
 
 Behavioral modeling is used to describe complex circuits. It is primarily used to model sequential circuits, but can also be used to model pure combinatorial circuits. The mechanisms (statements) for modeling the
-behavior of a design are:
+the behavior of a design are:
 
 ```initial``` Statements
 
@@ -266,7 +266,7 @@ where a procedural_statement is one of:
 
 The **initial** statement is non-synthesizable and is normally used in testbenches. The **always**
 statement is synthesizable, and the resulting circuit can be a combinatorial or sequential circuit. In order for the model to generate a combinatorial circuit, the **always** block (i) should not be edge sensitive, (ii)
-every branch of the conditional statement should define all output, and (iii) every case of case statement
+every branch of the conditional statement should define all output, and (iii) every case of the case statement
 should define all output and must have a default case. More detailed coverage of this topic is covered in
 Lab 7. The destination (LHS) should be of **reg** type; either scalar or vector. For example,
 
@@ -293,7 +293,7 @@ end
 Create and add the Verilog module with three inputs (x, y, s) and one output (m) using behavioral
 modeling.
 
-To declare a register, putting reg after the declaration of input/output and before the port name. 
+To declare a register, put reg after the declaration of input/output and before the port name. 
 
 **lab1_3_1.v**
 ```verilog
@@ -302,7 +302,7 @@ module lab1_3_1(
     input x,  // First input of the multiplexer
     input y,  // Second input of the multiplexer
     input s,  // Select signal for the multiplexer
-    output reg m  // Output of the multiplexer, declared as reg since it's driven by always block
+    output reg m  // Output of the multiplexer declared as reg since it's driven by always block
 );
 
     // Behavioral modeling using always block
@@ -379,18 +379,18 @@ wire [3:0] sum; // vector net
 
 In absence of size, the net is assumed to be the scalar type. 
 
-As an example of a mixed-style modeling, following diagram shows how one can build a 3-to1 multiplexer
-using multiple instances of 2-to-1 multiplexer. It also shows the symbol and the truth table. 
+As an example of mixed-style modeling, the following diagram shows how one can build a 3-to-1 multiplexer
+using multiple instances of a 2-to-1 multiplexer. It also shows the symbol and the truth table. 
 
 <div align=center><img src="imgs/v3/5.png" alt="drawing" width="700"/></div>
 
-In the above diagram, u, v, w are data inputs whereas S0, S1 are select signals, and the output is m. It
-uses two instances of 2-to-1 multiplexer. 
+In the above diagram, u, v, and w are data inputs whereas S0, and S1 are select signals, and the output is m. It
+uses two instances of a 2-to-1 multiplexer. 
 
 ### Part 1-4-1
 
 Create a top-level Verilog module with three data inputs (u, y, w), two select inputs (s0, s1), and
-one bit output (m) using the previously defined 2-to-1 multiplexer. You can use any style
+one-bit output (m) using the previously defined 2-to-1 multiplexer. You can use any style
 designed 2-to-1 multiplexer (1-1, 2-1, or 3-1). Wire them up as shown in the above diagram. 
 
 **lab1_4_1**
@@ -401,14 +401,14 @@ module lab1_4_1(
     input u,       // First input of the 4-to-1 multiplexer.
     input v,       // Second input of the 4-to-1 multiplexer.
     input w,       // Third input of the 4-to-1 multiplexer.
-    input s0,      // First select line for the multiplexer.
+    input s0,      // First select the line for the multiplexer.
     input s1,      // Second select line for the multiplexer.
     output m       // Output of the 4-to-1 multiplexer.
 );
     wire temp;     // Intermediate wire to hold the output from the first 2-to-1 multiplexer.
 
     // First 2-to-1 multiplexer instance (sel0).
-    // Selects between 'u' and 'v' based on 's0'.
+    //Select between 'u' and 'v' based on 's0'.
     lab1_3_1 sel0(
         .s(s0),    // Select signal for this 2-to-1 multiplexer.
         .x(u),     // First input connected to 'u'.
@@ -417,7 +417,7 @@ module lab1_4_1(
     );
       
     // Second 2-to-1 multiplexer instance (sel1).
-    // Selects between 'temp' and 'w' based on 's1'.
+    //Select between 'temp' and 'w' based on 's1'.
     lab1_3_1 sel1(
         .s(s1),    // Select signal for this 2-to-1 multiplexer.
         .x(temp),  // First input connected to 'temp' (output of sel0).
@@ -450,7 +450,7 @@ module lab1_4_2(
     output reg [3:0] an  // Four anode signals to control which display is active
 );
 
-    // Seven segment decoder expressions
+    //Seven-segment decoder expressions
     // Each line corresponds to one segment of the seven-segment display.
     // These logical expressions determine whether a specific segment should be on or off
     // based on the current value of the 4-bit input 'x'.
@@ -470,9 +470,6 @@ module lab1_4_2(
     end
 
 endmodule
-
-
-
 ```
 
 

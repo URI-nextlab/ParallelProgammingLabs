@@ -55,7 +55,6 @@ typedef hls::stream<data_t_pack> d_stream;
 void matrix_cyclic_block(d_stream &stream_in,d_stream &stream_out, d_stream &stream_in2);
 
 #endif
-
 ```
 
 **matrix_cyclic_block.cpp**
@@ -116,7 +115,6 @@ Matrix_Loop:
 
 
 }
-
 ```
 **matrix_cyclic_block_tb.cpp**
 ```c++
@@ -152,7 +150,6 @@ matrix_cyclic_block(datain,dataout,datain2);
 	}
 
 }
-
 ```
  Then we should add the ```matrix_cyclic_block``` as the top function like below:
 
@@ -263,7 +260,6 @@ $$
 
 
 ```c++
-
 	int A[N][N];
 	int B[N][N];
 #pragma HLS ARRAY_PARTITION variable=A type=cyclic dim=1 factor=4
@@ -286,13 +282,10 @@ After reading a matrix through the AXIS stream interface in the form of a one-di
 The default operation is to split the array into its individual elements. This corresponds to resolving a memory into registers.
 
 ```c++
-
 	int A[N][N];
 	int B[N][N];
 #pragma HLS ARRAY_PARTITION variable=A type=complete dim=0
 #pragma HLS ARRAY_PARTITION variable=B type=complete dim=0 
-
-
 ```
 
 ## Simulation
@@ -422,7 +415,6 @@ We can use the ```?``` to check the IP dictionary.
 We can create three DMA objects using the labels for the DMAs listed above.
 
 ```python
-
 s2mm_0=hw.axi_dma_0.sendchannel
 s2mm_1=hw.axi_dma_1.sendchannel
 mm2s = hw.axi_dma_2.recvchannel
@@ -451,8 +443,6 @@ Print the value of input_buffer, you will see:
 s2mm_0.transfer(oBuf_0)
 s2mm_1.transfer(oBuf_1)
 mm2s.transfer(iBuf)
-
-
 ```
 
 We will see:

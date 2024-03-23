@@ -173,10 +173,8 @@ overlay?
 
 
 ```python
-
 top_ip = overlay.example_0
 top_ip.signature
-
 ```
 
 ```python
@@ -279,10 +277,8 @@ overlay?
 
 
 ```python
-
 top_ip = overlay.example_0
 top_ip.signature
-
 ```
 
 ```python
@@ -468,7 +464,6 @@ void example(hls::stream<trans_pkt>& inStreamTop, ap_uint<64> outTop[1024]) {
     getinstream(inStreamTop, buf, count);
     streamtoparallelwithburst(buf, count, outTop);
 }
-
 ```
 The synthesis report is shown below:
 
@@ -502,7 +497,6 @@ int main() {
    example(inStream_t, out_t);
     return err;
 }
-
 ```
 And the export IP is shown below and the ```inStreamTop``` port is ```axis``` port and the ```m_axi_gmem_0``` port is ```m_axi``` port.
 
@@ -548,8 +542,6 @@ b_buffer = pynq.allocate((N),np.int64)
 # initialize input
 for i in range(0,1024):
     a_buffer[i]=i
-    
-
 ```
 
 ```python
@@ -562,7 +554,6 @@ top_ip.register_map
 
 mm2s.transfer(a_buffer)
 mm2s.wait()
-
 ```
 
 We will see:
@@ -590,7 +581,6 @@ This example illustrates how to define and use an array of streams in the interf
 extern void dut(hls::stream<int> s_in[M], hls::stream<int> s_out[M],int *sum);
 
 #endif
-
 ```
 
 **example.cpp**
@@ -646,7 +636,6 @@ int main() {
 
     return 0;
 }
-
 ```
 
 And the export IP is shown below and the ports are ```axis``` port and they have't ```last``` signal.
@@ -703,7 +692,6 @@ for i in range(N):
     oBuf_0[i]= i
     oBuf_1[i]= i
     oBuf_2[i]= i
-
 ```
 
 ```python
@@ -720,7 +708,6 @@ dma2.sendchannel.wait()
 dma0.recvchannel.wait()
 dma1.recvchannel.wait()
 dma2.recvchannel.wait()
-
 ```
 
 We will see:

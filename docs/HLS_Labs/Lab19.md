@@ -220,7 +220,6 @@ void cordic (
     COS_SIN_TYPE current_cos = INIT_X;
     COS_SIN_TYPE current_sin = 0.0;
 
-
 ROTATION_LOOP:
     for (int j = 0; j < NUM_ITERATIONS; j++){
         COS_SIN_TYPE cos_shift = current_cos >> j;
@@ -247,14 +246,9 @@ ROTATION_LOOP:
     sin_temp.last = theta_t_pack_temp.last;
 
     sin_stream << sin_temp;
-    cos_stream << cos_temp;
-   
+    cos_stream << cos_temp;  
 }
 ```
-
-
-
-
 
 Testbench
 
@@ -406,7 +400,6 @@ Pre-process:
 
 ```c++
 ......
-
 static THETA_TYPE cordic_phase[NUM_ITERATIONS] = {
     		0.125000000000000000,    		0.073791808825216645,    		0.038989565188684662,    		0.019791712080282773,
     		0.009934262152770421,    		0.004971973911794637,    		0.002486593639475207,    		0.001243372696834870,
@@ -416,7 +409,6 @@ static THETA_TYPE cordic_phase[NUM_ITERATIONS] = {
     		0.000000151781981556,    		0.000000075890990778,    		0.000000037945495389,    		0.000000018972747694,
     		0.000000009486373847,    		0.000000004743186924,    		0.000000002371593462,    		0.000000001185796731
     };
-
 
 ......
     bool inv_sin = false;

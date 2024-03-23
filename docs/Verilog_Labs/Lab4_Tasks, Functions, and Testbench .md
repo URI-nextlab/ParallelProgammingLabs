@@ -6,24 +6,23 @@ sort: 4
 
 ## Introduction
 
-Verilog lets you define sub-programs using tasks and functions. They are used to improve the readability
-and to exploit re-usability code. Functions are equivalent to combinatorial logic and cannot be used to
-replace code that contains event or delay control operators (as used in a sequential logic). Tasks are
-more general than functions, and may contain timing controls. Testbench is a program or model written in
-any language for the purposes of exercising and verifying the functional correctness of a hardware model
-during the simulation. Verilog is primarily a means for hardware modeling (simulation), the language
+Verilog lets you define sub-programs using tasks and functions. They are used to improve readability
+and exploit re-usability code. Functions are equivalent to combinatorial logic and cannot replace code containing event or delay control operators (as used in sequential logic). Tasks are
+more general than functions and may contain timing controls. Testbench is a program or model written in
+any language to exercise and verify the functional correctness of a hardware model
+during the simulation. Verilog is primarily a means for hardware modeling (simulation). The language
 contains various resources for formatting, reading, storing, allocating dynamically, comparing, and writing
 simulation data, including input stimulus and output results. 
 
-In this lab, you will learn how to write tasks, functions, and testbenches. You will learn about the
+This lab will teach you how to write tasks, functions, and testbenches. You will learn about the
 components of a testbench, and language constructs available to verify the correctness of the underlying
 hardware model.
 
 ## Tasks
 
-A task is like a procedure which provides the ability to execute common pieces of code from several
-different places in a model. A task can contain timing controls, and it can call other tasks and functions
-(described in next part). A task is defined, within a module definition, as: 
+A task is like a procedure that can execute common pieces of code from several
+different places in a model. A task can contain timing controls and call other tasks and functions
+(described in the next part). A task is defined, within a module definition, as: 
 
 ```verilog
 task task_id;
@@ -55,14 +54,14 @@ endmodule
 
 ```
 
-Verilog HDL also provides few system tasks. The system task name is preceded with a $. For example, 
+Verilog HDL also provides a few system tasks. The system task name is preceded by a $. For example, 
 
 ```$display``` –Print the specified information to standard output with an end-of-line character.
 
 e.g. **$display**(“At Simulation time %t, the x_var is %d”); will print x_var value in
-decimal format and time in current time format.
+decimal format and time in the current time format.
 
-```$write``` –Similar to the display task except it does not print an end-of-line character.
+```$write``` –Similar to the display task, except it does not print an end-of-line character.
 
 ```$monitor``` –Monitors the argument continuously. Whenever there is a change of value in an argument
 list, the entire argument list is displayed. 
@@ -71,8 +70,8 @@ list, the entire argument list is displayed.
 initial
  $monitor(“At %t, D= %d, CLK = %d”, $time, D, CLK, “and Q is %b”, Q); 
 ```
-Note that the argument list values are printed in ```$display``` task whenever it is called, whereas in the
-```$monitor``` task it gets printed whenever value of one of the arguments change. 
+Note that the argument list values are printed in the ```$display``` task whenever it is called, whereas in the
+```$monitor``` task gets printed whenever the value of one of the arguments changes. 
 
 The system tasks are not synthesizable, i.e. they cannot be realized in real hardware.
 
@@ -101,7 +100,7 @@ module add_two_values_task(
 );
 
     // Internal registers to hold the sum and carry produced by the task
-    // These are necessary since tasks cannot be directly assign to output ports
+    // These are necessary since tasks cannot be directly assigned to output ports
     reg [3:0] internal_sum;
     reg internal_carry;
 
@@ -160,7 +159,7 @@ module tb();
       
       // Loop to change inputs and observe the output changes
       for (k = 0; k < 5; k = k + 1) begin
-          #5 ain = ain + k; bin = bin + k; // Increment 'ain' and 'bin' by 'k' after every 5 time units
+          #5 ain = ain + k; bin = bin + k; // Increment 'ain' and 'bin' by 'k' after every 5-time units
           // Display updated values and the outputs after each change
           $display("ain=%b, bin=%b, cout=%b, sum=%b at time=%t", ain, bin, cout, sum, $time);
       end
@@ -172,14 +171,14 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v1/21.png" alt="drawing" width="600"/></div>
 
 
 ### Part4-1-2
 
-Write a task called ```calc_even_parity``` which will take an 8-bit number and
+Write a task called ```calc_even_parity```to take an 8-bit number and
 compute and return parity. Write a module called calc_even_parity_task,
 which calls the task with the operand received via the input port and
 outputs the result. Use the provided testbench, calc_even_parity_task_tb.v,
@@ -241,7 +240,7 @@ endmodule
 // Define testbench module
 module tb();
     reg [7:0] ain;     // 8-bit input register for the module under test
-    wire parity;       // Single bit output wire for the module under test
+    wire parity;       //Single-bit output wire for the module under test
     integer k;         // Loop variable for test iteration
 
     // Instantiate the Device Under Test (DUT) with named port mappings
@@ -267,7 +266,7 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v1/22.png" alt="drawing" width="600"/></div>
 
@@ -286,8 +285,8 @@ are used if all of the following conditions are true:
 
 * There are no non-blocking assignments
 
-In short, functions may implement only combinatorial behavior, i.e. they compute a value on the basis of
-the present value of the input arguments and return a single value. They are used in the right hand side
+In short, functions may implement only combinatorial behavior, i.e. they compute a value based on
+the present value of the input arguments and return a single value. They are used in the right-hand side
 of an assignment statement. Here is an example of a function definition and call. 
 
 ```verilog
@@ -311,13 +310,13 @@ endmodule
 
 ### Part4-2-1
 Write a function called ```add_two_values``` which will take two 4-bit
-parameters, add them, and return a 5-bit sum. Write a module, called
+parameters, add them and return a 5-bit sum. Write a module called
 add_two_values_function, with two 4-bit input ports and one 5-bit output
-port and calls the function. Simulate the design with the provided
+port and call the function. Simulate the design with the provided
 testbench, add_two_values_function_tb.v, and verify the functionality. 
 
-Create and add a Verilog module, called add_two_values_function, which defines a function
-called add_two_values that takes two 4-bit parameters, add them, and return a 5-bit sum. The
+Create and add a Verilog module called add_two_values_function, which defines a function
+called add_two_values that takes two 4-bit parameters, adds them, and returns a 5-bit sum. The
 module will have two 4-bit input ports and one 5-bit output port. It will call the function.
 
 
@@ -372,13 +371,13 @@ module tb();
       
       // Generate additional test cases using a for loop
       for (k = 0; k < 5; k = k + 1) begin
-          #5 ain = ain + k; bin = bin + k; // Increment 'ain' and 'bin' by 'k' every 5 time units
+          #5 ain = ain + k; bin = bin + k; // Increment 'ain' and 'bin' by 'k' every five time units
           
           // Display updated values after each increment
           $display("ain=%b, bin=%b, sum=%b at time=%t", ain, bin, sum, $time);
       end
       
-      // Print a message once simulation is complete
+      // Print a message once the simulation is complete
       $display("Simulation Done");
     end
     
@@ -387,15 +386,15 @@ endmodule
 
 ```
 
-We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v1/23.png" alt="drawing" width="600"/></div>
 
 ### Part4-2-2
 
 Write a task called ```calc_ones```, which will take an 8-bit number and calculate
-and return a number of ones. Write a module, called calc_ones_function
-with one 8-bit input port and one 3-bit output port and calls the function.
+and return several ones. Write a module called calc_ones_function
+with one 8-bit input port and one 3-bit output port and call the function.
 Simulate the design with the provided testbench, calc_ones_function_tb.v,
 and verify the functionality.
 
@@ -468,7 +467,7 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v1/24.png" alt="drawing" width="600"/></div>
 
@@ -486,15 +485,15 @@ The major components of a testbench are:
 
 * Stimuli generation: Write statements to create stimulus and procedural block
 
-* Response monitoring and comparing: Self-testing statements that will report values, error, and warnings; $display, $write, $strobe, and/or $monitor system tasks 
+* Response monitoring and comparing: Self-testing statements that will report values, errors, and warnings; $display, $write, $strobe, and/or $monitor system tasks 
 
 Verilog supports two types of delay modeling: (i) inertial and (ii) transport. The inertial delay is the delay
 that a gate or circuit may experience due to the physical nature of the gate or circuit. Depending on the
 technology used, it can be in ps or ns. The inertial delay is also used to determine if the input has an
-effect on the gate or circuit. If the input does not remain changed at least for the initial delay then the
-input change is ignored. For example, inertial delay of 5 ns means whenever input changes it should
-remain changed at least for 5 ns to have it considered as changed otherwise the change is ignored
-(considered noise spike). The transport delay is the time-of-flight of a signal travelling a wire of a circuit.
+effect on the gate or circuit. If the input does not remain changed, at least for the initial delay then the
+input change is ignored. For example, an inertial delay of 5 ns means whenever the input changes, it should
+remain changed at least for 5 ns to be considered as changed otherwise the change is ignored
+(considered noise spike). The transport delay is the time-of-flight of a signal traveling a wire of a circuit.
 Here are some examples of transport and inertial delays: 
 
 ```verilog
@@ -502,7 +501,7 @@ wire #2 a_long_wire; // transport delay of 2 units is modeled
 xor #1 M1(sum, a, b); // inertial delay of 1 unit exerted by xor gate 
 ```
 
-The ```initial``` statements are used in testbench to generate stimuli and control simulation execution.
+The ```initial``` statements are used in the testbench to generate stimuli and control simulation execution.
 Here is an example of it: 
 
 ```verilog
@@ -695,5 +694,5 @@ endmodule
 ## Conclusion
 
 In this lab, you learned how to write functions, tasks, and testbenches. You also learned the differences
-between functions and tasks, both in their definitions and in usage. You saw how function can be used in
+between functions and tasks, both in their definitions and in usage. You saw how a function can be used in
 a testbench to compute expected output. 

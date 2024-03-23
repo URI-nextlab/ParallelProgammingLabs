@@ -21,13 +21,13 @@ sort: 25
 
 ## Convolution for Object Detection
 
-At the core of almost every object detection model is a convolution neural network (CNN) such as VGG-16, ResNet50, Xception, YOLO, MobileNet, etc. These are essentailly feature extraction networks. They "look" at images and extract salient features such as edges, shapes, and so on. The convolutional layer in convolutional neural networks systematically applies filters to an input and creates output feature maps. Although the convolutional layer is very simple, it is capable of achieving sophisticated and impressive results. Nevertheless, it can be challenging to develop an intuition for how the shape of the filters impacts the shape of the output feature map and how related configuration hyperparameters such as padding and stride should be configured.
+At the core of almost every object detection model is a convolution neural network (CNN) such as VGG-16, ResNet50, Xception, YOLO, MobileNet, etc. These are essentially feature extraction networks. They "look" at images and extract salient features such as edges, shapes, etc. The convolutional layer in convolutional neural networks systematically applies filters to input and creates output feature maps. Although the convolutional layer is very simple, it can achieve sophisticated and impressive results. Nevertheless, it can be challenging to develop an intuition for how the shape of the filters impacts the shape of the output feature map and how related configuration hyperparameters such as padding and stride should be configured.
 
 ### Motivation - ResNet-50 for HD Inputs
 
 ResNet-50 is a popular convolutional neural network (CNN) that is 50 layers deep. At its core, ResNet-50 is a feature extraction network. Based on how it is used in a deep learning model, ResNet-50 can act as an image classifier or as a feature extractor for object detection/tracking.
 
-We are interested in implementing this convolution layer of ResNet-50 with the above HD input image. Suppose that the input image (feature map) is described by a 3D tensor ```X(ID, IH, IW)```. We use a filter ```W``` with 64 kernels, each of dimensions ```(ID, KH, KW)``` where ```KH``` and ```KW``` are kernel window heights and widths. The resulting output feature map can be described by another 3D tensor ```Y(OD, OH, OW)```. The output feature map dimesions are a function of the stride ```S``` and padding size ```P``` chosen. For the first layer of ResNet-50, the values of these parameters are described in the table below.
+We want to implement this convolution layer of ResNet-50 with the above HD input image. Suppose that the input image (feature map) is described by a 3D tensor ```X(ID, IH, IW)```. We use a filter ```W``` with 64 kernels, each of dimensions ```(ID, KH, KW)``` where ```KH``` and ```KW``` are kernel window heights and widths. The resulting output feature map can be described by another 3D tensor, ```Y(OD, OH, OW)```. The output feature map dimensions are a function of the stride ```S``` and padding size ```P``` chosen. For the first layer of ResNet-50, the values of these parameters are described in the table below.
 
 | Layer Parameters |  Layer Values |
 | ---------------- | ----------------- |
@@ -38,25 +38,25 @@ We are interested in implementing this convolution layer of ResNet-50 with the a
 | Padding (P) | 1	|	
 | Output Feature Map (OD, OH, OW) | (64, 184, 320) |
 
-If these values do not make any sense to you in the first glance, don't worry. You can learn these concepts easily through this well-written [CNN cheatsheet](https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks). 
+If these values do not make any sense to you at first glance, don't worry. You can learn these concepts easily through this well-written [CNN cheatsheet](https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks). 
 
-There are a few caveats in handling border pixels that you would need to keep in mind while writing your convolution code. This [article](https://sharc-knowledgebase.netlify.app/articles/cnn/tiling-based_convolution_for_hls/) from last year's assignment explaining 3 x 3 convolution may be useful. Most of the concepts are extensible to 7 x 7 convolution. 
+There are a few caveats in handling border pixels that you must keep in mind while writing your convolution code. This [article](https://sharc-knowledgebase.netlify.app/articles/cnn/tiling-based_convolution_for_hls/) from last year's assignment explaining 3 x 3 convolution may be useful. Most of the concepts are extensible to 7 x 7 convolution. 
 
 ### Convolution Layer
 
-In a convolutional neural network, a convolutional layer is responsible for systematically applying one or more filters to an input.
+In a convolutional neural network, a convolutional layer systematically applies one or more filters to an input.
 
-The multiplication of the filter to the input image results in a single output. The input is typically three-dimensional images (e.g. rows, columns and channels), and in turn, the filters are also three-dimensional with the same number of channels and fewer rows and columns than the input image. As such, the filter is repeatedly applied to each part of the input image, resulting in a two-dimensional output map of activations called a feature map.
+The multiplication of the filter to the input image results in a single output. The input is typically three-dimensional images (e.g. rows, columns and channels). In turn, the filters are also three-dimensional, with the same number of channels and fewer rows and columns than the input image. As such, the filter is repeatedly applied to each part of the input image, resulting in a two-dimensional output map of activations called a feature map.
 
 Keras provides an implementation of the convolutional layer called Conv2D.
 
 It requires that you specify the expected shape of the input images in terms of rows (height), columns (width), and channels (depth) or [rows, columns, channels].
 
-The filter contains the weights that must be learned during the training of the layer. The filter weights represent the structure or feature that the filter will detect, and the strength of the activation indicates the degree to which the feature was detected.
+The filter contains the weights that must be learned during the layer training. The filter weights represent the structure or feature that the filter will detect, and the strength of the activation indicates the degree to which the feature was detected.
 
-The layer requires that both the number of filters and the shape of the filters be specified.
+The layer requires that the number of filters and the shape of the filters be specified.
 
-We can demonstrate this with a small example. In this example, we define a single input image or sample that has one channel and is an eight-pixel by eight-pixel square with all 0 values and a two-pixel wide vertical line in the center.
+We can demonstrate this with a small example. In this example, we define a single input image or sample with one channel: an eight-pixel by eight-pixel square with all 0 values and a two-pixel wide vertical line in the center.
 
 ```python
 # define input data
@@ -70,23 +70,20 @@ data =  [[0, 0, 0, 1, 1, 0, 0, 0],
 	[0, 0, 0, 1, 1, 0, 0, 0]]
 data = asarray(data)
 data = data.reshape(1, 8, 8, 1)
-
 ```
 
 Next, we can define a model that expects input samples to have the shape (8, 8, 1) and has a single hidden convolutional layer with a single filter with the shape of three pixels by three pixels.
 
 ```python
-
 # create model
 model = Sequential()
 model.add(Conv2D(1, (3,3), input_shape=(8, 8, 1)))
 # summarize model
 model.summary()
-
 ```
 The filter is initialized with random weights as part of the initialization of the model. We will overwrite the random weights and hard code our own 3×3 filter that will detect vertical lines.
 
-That is the filter will strongly activate when it detects a vertical line and weakly activate when it does not. By applying this filter across the input image, we expect that the output feature map will show that the vertical line was detected.
+That is, the filter will strongly activate when it detects a vertical line and weakly activate when it does not. By applying this filter across the input image, we expect the output feature map to show that the vertical line was detected.
 
 ```python
 # define a vertical line detector
@@ -96,7 +93,6 @@ detector = [[[[0]],[[1]],[[0]]],
 weights = [asarray(detector), asarray([0.0])]
 # store the weights in the model
 model.set_weights(weights)
-
 ```
 
 Next, we can apply the filter to our input image by calling the predict() function on the model.
@@ -133,7 +129,6 @@ Moved right one pixel:
 0, 1, 1   0, 1, 0
 0, 1, 1 . 0, 1, 0 = 3
 0, 1, 1   0, 1, 0
-
 ```
 Moved right one pixel:
 ```
@@ -152,7 +147,6 @@ Moved right one pixel:
 0, 0, 0   0, 1, 0
 0, 0, 0 . 0, 1, 0 = 0
 0, 0, 0   0, 1, 0
-
 ```
 
 That gives us the first row and each column of the output feature map:
@@ -161,7 +155,7 @@ That gives us the first row and each column of the output feature map:
 0.0, 0.0, 3.0, 3.0, 0.0, 0.0
 ```
 
-The reduction in the size of the input to the feature map is referred to as border effects. It is caused by the interaction of the filter with the border of the image.
+The reduction in the size of the input to the feature map is called the border effect. It is caused by the filter's interaction with the image's border.
 This is often not a problem for large images and small filters but can be a problem with small images. It can also become a problem once a number of convolutional layers are stacked.
 For example, if the size of the input feature image is 8×8 and it has two stacked convolutional layers, this means that a 3×3 filter is applied to the 8×8 input image to result in a 6×6 feature map as in the previous section. A 3×3 filter is then applied to the 6×6 feature map.
 
@@ -176,11 +170,11 @@ The first is a filter with the size of 1×1 pixels, and the output feature map h
 
 ### Fix the Border Effect Problem with Padding
 
-By default, a filter starts at the left of the image with the left-hand side of the filter sitting on the far left pixels of the image. The filter is then stepped across the image one column at a time until the right-hand side of the filter is sitting on the far right pixels of the image.
+By default, a filter starts at the left of the image, with the left-hand side of the filter sitting on the far left pixels of the image. The filter is then stepped across the image one column at a time until the right-hand side of the filter is sitting on the far right pixels of the image.
 An alternative approach to applying a filter to an image is to ensure that each pixel in the image is given an opportunity to be at the center of the filter.
 By default, this is not the case, as the pixels on the edge of the input are only ever exposed to the filter's edge. By starting the filter outside the frame of the image, it gives the pixels on the border of the image more of an opportunity for interacting with the filter, more of an opportunity for features to be detected by the filter, and in turn, an output feature map that has the same shape as the input image.
 
-For example, when applying a 3×3 filter to the 8×8 input image, we can add a border of one pixel around the outside of the image. This has the effect of artificially creating a 10×10 input image. When the 3×3 filter is applied, it results in an 8×8 feature map. The added pixel values could have the value zero value that has no effect on the dot product operation when the filter is applied.
+For example, when applying a 3×3 filter to the 8×8 input image, we can add a border of one pixel around the outside of the image. This has the effect of artificially creating a 10×10 input image. When the 3×3 filter is applied, it results in an 8×8 feature map. The added pixel values could have a zero value that does not affect the dot product operation when the filter is applied.
 
 ```
 x, x, x   0, 1, 0
@@ -194,7 +188,7 @@ The ‘padding‘ value of ‘same‘ calculates and adds the padding required t
 
 ### Downsample Input With Stride
 
-The filter is moved across the image from left to right, top to bottom, with a one-pixel column change on the horizontal movements, and then a one-pixel row change on the vertical movements.
+The filter is moved across the image from left to right, top to bottom, with a one-pixel column change on the horizontal movements and then a one-pixel row change on the vertical movements.
 The amount of movement between applications of the filter to the input image is referred to as the stride, and it is almost always symmetrical in height and width dimensions.
 The default stride or strides in two dimensions is (1,1) for the height and the width movement, performed when needed. And this default works well in most cases.
 
@@ -206,26 +200,25 @@ We can demonstrate this with an example using the 8×8 image with a vertical lin
 0, 0, 0   0, 1, 0
 0, 0, 0 . 0, 1, 0 = 0
 0, 0, 0   0, 1, 0
-
 ```
 
-Moved right two pixels:
+Moved two pixels right:
 ```
 0, 1, 1   0, 1, 0
 0, 1, 1 . 0, 1, 0 = 3
 0, 1, 1   0, 1, 0
 ```
-Moved right two pixels:
+Moved two pixels right:
 ```
 1, 0, 0   0, 1, 0
 1, 0, 0 . 0, 1, 0 = 0
 1, 0, 0   0, 1, 0
 ```
 
-We can see that there are only three valid applications of the 3×3 filters to the 8×8 input image with a stride of two. This will be the same in the vertical dimension.
+We can see only three valid applications of the 3×3 filters to the 8×8 input image with a stride of two. This will be the same in the vertical dimension.
 This has the effect of applying the filter in such a way that the normal feature map output (6×6) is down-sampled so that the size of each dimension is reduced by half (3×3), resulting in 1/4 the number of pixels (36 pixels down to 9).
 
-And we can also get the height and the width of the output feature map according to the size of the input feature map and stride. For example, if the kernel size is 3×3, and the input feature map is 3×27×21, and the stride is 2, then we can see the output size is (27-3)/2+1 and (21-3)/2+1, which is 13×10. And it is (input_height-kernel_size)/stride+1.
+We can also get the height and the width of the output feature map according to the size of the input feature map and stride. For example, if the kernel size is 3×3, the input feature map is 3×27×21, and the stride is 2, then we can see the output size is (27-3)/2+1 and (21-3)/2+1, which is 13×10. And it is (input_height-kernel_size)/stride+1.
 
 
 The values of these parameters are described in the table below for our example:
@@ -234,7 +227,7 @@ The values of these parameters are described in the table below for our example:
 
 
 
-We need to add the four files as the source file ```gradient.h```, ```io.h```, ```utils.h```, ```tile_conv.cpp``` and two bin files. You can find these file in [here](https://github.com/jia1217/ParallelProgammingLabs/tree/patch-2/Labs/Lab25_1).
+We need to add the four files as the source file ```gradient.h```, ```io.h```, ```utils.h```, ```tile_conv.cpp``` and two bin files. You can find these files in [here](https://github.com/jia1217/ParallelProgammingLabs/tree/patch-2/Labs/Lab25_1).
 
 
 We need to change the ```Uncertainty``` like below:
@@ -259,7 +252,7 @@ The configure block design can use reference materials [here](https://uri-nextla
 
 #### Run synthesis,  Implementation, and generate bitstream
 
-It may show some errors about I/O Ports, please fix them.
+It may show some errors about I/O ports, so please fix them.
 
 #### Download the bitstream file to PYNQ
 
@@ -267,7 +260,6 @@ It may show some errors about I/O Ports, please fix them.
 
 
 ```python
-
 from pynq import (allocate, Overlay)
 import numpy as np
 import pynq
@@ -287,7 +279,6 @@ for i in range (3):
     for j in range (32):
         for k in range (32):
             in_buffer[i][j][k]=1
-
 ```
 
 ```python
@@ -299,8 +290,6 @@ with open("conv_layer1_weights.bin", "rb") as f:
 # Bias
 with open("conv_layer1_bias.bin", "rb") as f:
     conv_layer_bias = struct.unpack("{}f".format(32), f.read())
-
-
 ```
 
 
@@ -339,7 +328,6 @@ def from_fixed_point(src, *, width=None, iwidth, signed=True):
 #Perform data type conversion
 to_fixed_point(w_buffer,conv_layer_weights,iwidth=3)
 to_fixed_point(b_buffer,conv_layer_bias,iwidth=3)
-
 ```
 
 ```python
@@ -356,7 +344,6 @@ top_ip.write(0x34, bptr)
 
 top_ip.write(0x00, 1)
 isready = top_ip.read(0x00)
-
 
 out_float= from_fixed_point(out_buffer,iwidth=3)
 print(out_float.shape)
@@ -376,7 +363,6 @@ plt.title("Image from conv_tile_output_feature_map.bin")
 
 # Display the plot
 plt.show()
-
 ```
 
 We will see the input image:
@@ -396,7 +382,6 @@ plt.title("Image from conv_tile_input_feature_map.bin")
 
 # Display the plot
 plt.show()
-
 ```
 <div align=center><img src="Images/21/4.png" alt="drawing" width="400"/></div>
 
@@ -419,7 +404,7 @@ The configure block design can use reference materials [here](https://uri-nextla
 
 #### Run synthesis,  Implementation, and generate bitstream
 
-It may show some errors about I/O Ports, please fix them.
+It may show some errors about I/O ports, so please fix them.
 
 #### Download the bitstream file to PYNQ
 
@@ -446,7 +431,6 @@ for i in range (3):
     for j in range (32):
         for k in range (32):
             in_buffer[i][j][k]=1
-
 ```
 
 ```python
@@ -505,14 +489,12 @@ to_fixed_point(b_buffer_2,conv_layer_bias_2,iwidth=3)
 ```
 
 ```python
-
 inptr = in_buffer.physical_address
 wptr1 = w_buffer_1.physical_address
 bptr1 = b_buffer_1.physical_address
 wptr2 = w_buffer_2.physical_address
 bptr2 = b_buffer_2.physical_address
 outptr = out_buffer.physical_address
-
 
 top_ip.write(0x10, inptr)
 top_ip.write(0x1c, outptr)
@@ -538,7 +520,6 @@ plt.title("Image from conv_tile_output_feature_map.bin")
 
 # Display the plot
 plt.show()
-
 ```
 
 We can see the image like below:
@@ -558,7 +539,10 @@ plt.title("Image from conv_tile_input_feature_map.bin")
 
 # Display the plot
 plt.show()
-
 ```
 
 <div align=center><img src="Images/21/4.png" alt="drawing" width="400"/></div>
+
+## Demonstrate
+
+Please finish the ```tile_conv``` example and implement it on the PYNQ-Z2 board.

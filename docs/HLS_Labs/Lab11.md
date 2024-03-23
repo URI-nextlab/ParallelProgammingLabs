@@ -68,7 +68,6 @@ dout_t lookup_math(din1_t inval, din2_t idx) {
     init_sin_table(sin_table);
     return (int)inval * (int)sin_table[idx];
 }
-
 ```
 
 The function ```init_sin_table``` precomputes a sine table for efficient lookup of sine values and stores the scaled value in the ```sin_table```.
@@ -78,9 +77,6 @@ The ```sin_table``` array is declared a regular array, but its contents are init
 This read-only behavior aligns with ```ROM``` characteristics.
 
 <div align=center><img src="Images/11_17.png" alt="drawing" width="600"/></div>
-
-
-
 
 **lookup_math_test.cpp**
 ```c++
@@ -346,7 +342,6 @@ The synthesis report is shown below.
 
 **example_tb.cpp**
 ```c++
-
 #include <stdio.h>
 
 void example(volatile int* a);
@@ -411,24 +406,18 @@ overlay?
 The first step is to allocate the buffer. pynq allocate will be used to allocate the buffer, and NumPy will be used to specify the type of the buffer.
 
 ```python
-
-
 top_ip = overlay.example_0
 top_ip.signature
-
 a_buffer = pynq.allocate((50), np.int32)
-
 
 # initialize input
 for i in range (0, 50):
     a_buffer[i] = i+1
-
 ```
 
 
 ```python
 aptr = a_buffer.physical_address
-
 top_ip.register_map
 ```
 
@@ -439,7 +428,6 @@ top_ip.register_map
 top_ip.write(0x10, aptr)
 # start the HLS kernel
 top_ip.write(0x00, 1)
-
 ```
 
 We will see:

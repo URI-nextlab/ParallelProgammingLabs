@@ -34,7 +34,7 @@ The multiplexer can be described by the following *Data Flow* Verilog statement:
 
 m <= (NOT (s) AND x) OR (s AND y);
 
-1. Design a Verilog module that implements an 8-bit wide 2-to-1 multiplexer. This multiplexer should take two 8-bit inputs, X and Y, and select between them based on a single-bit selector, s. The output of the multiplexer, M, will be one of the two inputs depending on the state of s: when s = 0, M should equal X; and when s = 1, M should equal Y.
+1. Design a Verilog module that implements an 8-bit wide 2-to-1 multiplexer. This multiplexer should take two 8-bit inputs, X and Y, and select between them based on a single-bit selector, s. The output of the multiplexer, M, will be one of the two inputs depending on the state of s: when s = 0, M should equal X, and when s = 1, M should equal Y.
 
 2. Simulate with a test bench.
 
@@ -53,7 +53,7 @@ module part_1(
     output reg [7:0] y      // Declare an 8-bit output 'y' and make it a reg type to allow procedural assignments
 );
 
-    // Define a combinational always block that triggers on any change of inputs
+    // Define a combinational always block that triggers any change of inputs
     always @(*) begin
         if(sel == 1'b0)     // Check if the selection input 'sel' is 0
             y = a;          // If 'sel' is 0, assign the value of 'a' to 'y'
@@ -86,7 +86,7 @@ module tb_part1;
         .y(y)           // Connect the DUT 'y' to the testbench 'y'
     );
 
-    // Begin the initial block for test stimulus
+    // Begin the initial block for the test stimulus
     initial begin
         // Test case 1: select input 'a'
         sel = 0;        // Set 'sel' to 0 to select input 'a'
@@ -113,12 +113,12 @@ endmodule // End of testbench module tb_part1
 
 ```
 
-We can run a Simulation to check the code by clicking the ```Run Simulation``` under ```SIMULATION``` and choose the first ```Run Behavioral Simulation```. 
+We can run a Simulation to check the code by clicking the ```Run Simulation``` under ```SIMULATION``` and choosing the first ```Run Behavioral Simulation```. 
 
 <div align=center><img src="imgs/v1/11.png" alt="drawing" width="1000"/></div>
 
 ## Part II
-Create a circuit that accepts a four-bit input and outputs a single bit. This circuit will output logic high if the input bits are valid Fibonacci numbers (0, 1, 2, 3, 5, 8, 13), and logic is low otherwise.
+Create a circuit that accepts a four-bit input and outputs a single bit. This circuit will output a logic high if the input bits are valid Fibonacci numbers (0, 1, 2, 3, 5, 8, 13), and logic is low otherwise.
 
 1. Write the Verilog module as described.
 
@@ -245,7 +245,7 @@ Ensure you follow each step to properly transfer the bitstream file from your de
     bit = Bitstream("design_1_wrapper.bit")
     bit.download()
 # Download the bitstream to the FPGA.
-# This method programs the FPGA with the hardware design specified by the bitstream.
+# This method programs the FPGA using the hardware design specified by the bitstream.
     bit.bitfile_name
 
 ```
@@ -271,7 +271,7 @@ Design a digital circuit that receives a four-bit binary input and produces a fi
   
 * The circuit recognizes and processes inputs up to "1101" (13 in decimal), outputting "10101" (21 in decimal) for this input.
 
-* For any input that does not correspond to a recognized number in this modified Fibonacci sequence, the circuit will output "11111"
+* For any input that does not correspond to a recognized number in this modified Fibonacci sequence, the circuit will output "11111."
 
 1. Write the Verilog module as described.
 

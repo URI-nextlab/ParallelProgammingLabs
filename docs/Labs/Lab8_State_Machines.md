@@ -6,7 +6,7 @@ sort: 8
 
 ## Lab Overview
 
-The purpose of this lab is to implement a state machine that acts as a lock. The requirements of this
+This lab aims to implement a state machine that acts as a lock. The requirements of this
 The lab consists of understanding the design requirements for implementing the Verilog design.
 
 ## Background
@@ -17,18 +17,18 @@ might be a traffic signal at an intersection. The `state` describes how the ligh
 time. The status will change regularly after fixed time intervals for simple timed lights. The same lights could be made
 more intelligent by incorporating sensor inputs that detect whether cars are waiting, causing the state to change
 differently. That might be from a radar detector or magnetic coil in the road. Additional lights could incorporate a
-pedestrian crossing, and so a pedestrian crosswalk request button could be another input.
+pedestrian crossing, so a pedestrian crosswalk request button could be another input.
 
 Every state machine must have some initial state to ensure everything begins properly and a reset signal to return
 to that initialization. There are two main categories of state machines, ```Moore``` and ```Mealy```. A Moore machine is a state machine whose output values are determined only by its current state. A ```Mealy``` machine is defined as a state
-machine whose output values are determined by both its current state and current inputs. 
+machine whose output values are determined by its current state and current inputs. 
 
 <div align=center><img src="imgs/v2/FSMs.png" alt="drawing" width="600"/></div>
 
 
 ## Part I(Design Requirements)
 
-You are to design a ```Moore``` state machine that controls a digital lock. Your lock
+You must design a ```Moore``` state machine that controls a digital lock. Your lock
 should have three inputs: a reset, a submit (clock) bit, and a decimal digit (4-bit) input. The decimal digit input will encode the
 decimal digits 0-9 in the standard unsigned binary encoding. You will input 3-digit codes by setting the decimal
 digit input to a number and activating the submit bit three times in a row. To unlock your device, it should
@@ -83,7 +83,7 @@ module digital_lock(
         if(!reset)
             state <= idle;  // Reset to initial state
         else
-            state <= next_state;   // Move to the next state on submit press
+            state <= next_state;   // Move to the next state on the submit press
     end
     
     // Combinational logic for state transitions and output controls
@@ -139,7 +139,7 @@ module digital_lock(
                 end
             unlocked:
                     begin
-                        // Lock is unlocked, stay in this state until reset
+                        // Lock is unlocked. Stay in this state until reset
                         ready = 1'b0;
                         locked = 1'b0;  // Lock remains unlocked
                         next_state = unlocked; // Stay in this state
@@ -518,7 +518,7 @@ When writing `6` to the input, see the board below:
 
 <div align=center><img src="imgs/v2/2.jpg" alt="drawing" width="200"/></div>
 
-The blue LED is on showing it's locked.
+The blue LED is on, showing it's locked.
 
 And then you need to press the ```submit ``` button like below:
 

@@ -7,9 +7,9 @@ sort: 8
 ## Introduction
 
 Today’s Xilinx FPGAs contain many more resources than basic LUT, CLB, IOB, and routing. The FPGAs
-are now being used to implement much more complex digital circuits compared to glue logic when they
+are now being used to implement much more complex digital circuits than glue logic when they
 were invented. Some complex architectural resources, such as clocking, must be configured and
-instantiated instead of inferred. There are also commonly used complex circuits, such as the ReedSolomon decoder are provided by tools so that a designer does not have to “reinvent the wheel.” This lab
+instantiated instead of inferred. There are also commonly used complex circuits, such as the ReedSolomon decoder, provided by tools so that a designer does not have to “reinvent the wheel.” This lab
 introduces the Architectural Wizard and the IP generator tools available through the IP Catalog
 
 
@@ -17,8 +17,8 @@ introduces the Architectural Wizard and the IP generator tools available through
 ## Architectural Wizard 
 
 Some specialized and advanced architectural resources can efficiently be utilized when configured and
-instantiated properly instead of inferring them. Depending on the FPGA family being used, the number
-and types of such resources vary. In the Artix-7 family, clocking, SelectIO, soft error mitigation, and
+instantiated properly instead of inferring them. The number
+and types of such resources vary depending on the FPGA family being used. In the Artix-7 family, clocking, SelectIO, soft error mitigation, and
 XADC resources are supported by the architectural wizard. These resources are accessed under the
 FPGA Features and Design folder of the IP Catalog tool. 
 
@@ -31,7 +31,7 @@ include:
 
 • Accepts up to two input clocks and up to seven output clocks per clock network
 
-• Automatically chooses correct clocking primitive for a selected device
+• Automatically chooses the correct clocking primitive for a selected device
 
 • Automatically configures clocking primitive based on user-selected clocking features
 
@@ -44,7 +44,7 @@ The functionality of the generated core can be viewed as:
 
 <div align=center><img src="imgs/v2/31.png" alt="drawing" width="600"/></div>
 
-Suppose we want to generate a 5MHz clock which is in phase with 100 MHz input clock. Follow the steps
+Suppose we want to generate a 5MHz clock in phase with a 100 MHz input clock. Follow the steps
 below to achieve that: 
 
 Double-click on the Clocking Wizard entry. When the wizard opens, you will notice that there are five
@@ -52,20 +52,20 @@ tabs.
 
 <div align=center><img src="imgs/v2/32.png" alt="drawing" width="600"/></div>
 
-The first tab, titled Clocking Options, has parameters related to input clock and clocking features, the
-input frequency value and range. Since the actual clock source is 100 MHz, we will keep the value to
+The first tab, Clocking Options, has parameters related to the input clock and clocking features, the
+input frequency value and the range. Since the clock source is 100 MHz, we will keep the value to
 default.
 
-The second tab, titled Output Clocks, has parameters which are related to the output clocks and desired
+The second tab, Output Clocks, has parameters related to the output clocks and desired
 frequencies. Change the Requested Output Frequency to 1.000 MHz and notice that it shows the
-frequency in red indicating something is wrong. Move the mouse over the same and you will see a popup indicating that the actual frequency range for this device is 4.687 MHz to 800 Mhz. Change it to 5.000
+frequency in red, indicating something is wrong. Move the mouse over the same, and you will see a popup indicating that the actual frequency range for this device is 4.687 MHz to 800 MHz. Change it to 5.000
 MHz for now. We will unclick the **RESET** from the output clock and create an asynchronous reset.
 
 The third tab, titled MMCM Settings, shows the calculated settings. You can check the box and override
-the values as long as you know what they will do and how they will affect the design. We like to see when
+the values if you know what they will do and how they will affect the design. We like to see when
 the clock is stable.
 
-The fourth tab, titled Port Renaming, allows you to change the port names. We will use the default
+The fourth tab, Port Renaming, allows you to change the port names. We will use the default
 names.
 
 The fifth and last tab, titled Summary, shows you the summary.
@@ -91,7 +91,7 @@ of the .veo file content.
 ### Part8-1-1
 Design a one-millisecond pulse generator. Use the clocking wizard to generate
 5 MHz clock, dividing it further by a clock divider (written in behavioral
-modeling) to generate one second period signal. The steps on using the
+modeling) to generate one a period signal. The steps for using the
 Clocking Wizard described above (and the resultant instantiation template)
 can be used for this exercise.
 
@@ -119,7 +119,7 @@ clk_wiz_0 clk_wizard_inst(
 clock_divider clk_divider_inst(
     .clk_in(clk_5MHz), // 5 MHz clock input from the clock wizard
     .reset(reset),     // Global reset
-    .clk_out(one_sec_pulse) // Output clock with a one-second period
+    .clk_out(one_sec_pulse) // Output clock with one second
 );
 
 endmodule
@@ -152,7 +152,7 @@ end
 endmodule
 
 ```
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/33.png" alt="drawing" width="900"/></div>
 
@@ -200,7 +200,7 @@ endmodule
 
 ```
 
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation. We need to change the simulation time to 2ms.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation. We need to change the simulation time to 2ms.
 
 <div align=center><img src="imgs/v2/34.png" alt="drawing" width="900"/></div>
 
@@ -208,21 +208,21 @@ And we can run Simulation to check the code by clicking the Run Simulation under
 ## IP Catalog
 
 The IP Catalog of the Vivado tool allows you to configure and generate various functional cores. In IP
-Catalog, the cores are grouped according to functionality which varies from simple basic cores such as an
+The cores are grouped according to functionality in the catalog, varying from simple basic cores such as an
 adder to quite complex cores such as the MicroBlaze processor. It also covers cores of various
 application areas ranging from Automotive to Video and Image Processing.
 
 The process of configuring and generating the cores is similar to the Architectural Wizard. The cores will
-use various resources including LUT, CLB, DSP48, BRAM etc. as needed. Let us look at how to
-configure and generate a counter core. 
+use various resources, including LUT, CLB, DSP48, BRAM etc., as needed. Let us look at how to
+configure and generate a counter-core. 
 
 The Binary Counter core generation can be started by double-clicking the Binary Counter entry under the
-Counters sub-folder located under the Basic Elements branch of the IP catalog. 
+The counters sub-folder is located under the Basic Elements branch of the IP catalog. 
 
 <div align=center><img src="imgs/v2/35.png" alt="drawing" width="600"/></div>
 
-When invoked, you will see two tabs configuration. The configuration parameters of the core on the first
-tab, titled Basic, include: 
+When invoked, you will see a tabs configuration. The configuration parameters of the core on the first
+tab, titled Basic, includes: 
 
 * Implement Using: Fabric or DSP48
 
@@ -232,18 +232,18 @@ tab, titled Basic, include:
 
 * Loadable, Restrict Count, Count Mode (Up, Down, UPDPWN), Threshold
 
-The second tab, titled Control, include
+The second tab, titled Control, includes
 Synchronous Clear, Clock Enable and various other settings.
 
-The designer can select the desired functionality and click on OK to generate the IP. 
+The designer can select the desired functionality and click OK to generate the IP. 
 
 ### Part8-2-1
 
-Use the IP Catalog to generate a simple 4-bit counter core which counts up
+Use the IP Catalog to generate a simple 4-bit countercore that counts 
 from 0 to 9. (Hint: Use Threshold output when configuring the counter core). 
-Instantiate it two times to create a two digit BCD counter which counts up
+Instantiate it two times to create a two-digit BCD counter, which counts up
 every one second. Use Architectural Wizard to generate a 5 MHz clock and
-then use behavioral modeling to generate 1000 Hz precise signal to drive the
+then use behavioral modeling to generate a 1000 Hz precise signal to drive the
 counters.
 
 <div align=center><img src="imgs/v2/37.png" alt="drawing" width="600"/></div>
@@ -261,7 +261,7 @@ module two_digit_bcd_counter_top(
     wire clk_1Hz;    // 1 Hz clock from clock wizard
     wire locked;     // Locked output from clock wizard
     wire tens_thresh0; // Threshold signal for tens counter
-    wire ones_thresh0; // Threshold signal for ones counter
+    wire ones_thresh0; // Threshold signal for one's counter
 
     // Instantiate the clock wizard
     clock_divider_1hz clk_gen (
@@ -278,7 +278,7 @@ module two_digit_bcd_counter_top(
       .THRESH0(tens_thresh0),  // output wire THRESH0
       .Q(tens)              // output wire [3 : 0] Q
     );
-    // Instantiate the ones counter
+    // Instantiate the one's counter
     c_counter_binary_0 ones_counter (
         .CLK(clk_1Hz),  
         .CE(1'b1), 
@@ -367,7 +367,7 @@ module two_digit_bcd_counter_top_tb;
 endmodule
 ```
 
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation. We need to change the simulation time to 500ms.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation. We need to change the simulation time to 500ms.
 
 <div align=center><img src="imgs/v2/38.png" alt="drawing" width="900"/></div>
 
@@ -375,4 +375,4 @@ And we can run Simulation to check the code by clicking the Run Simulation under
 
 In this lab, you learned about the architectural wizard and the IP Catalog of the Vivado tool. You used the
 architectural wizard to generate a 5 MHz clock and the IP Catalog to generate a counter. The IP catalog
-is a powerful tool providing various functional blocks enabling higher productivity. 
+is a powerful tool that provides various functional blocks that enable higher productivity. 

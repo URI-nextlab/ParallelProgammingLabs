@@ -70,8 +70,6 @@ void example(hls::stream<pkt>& A, hls::stream<pkt>& B,int num) {
     }
     B.write(t1);
 }
-
-
 ```
 After synthesis, both arguments are implemented with a data port (TDATA) and the standard AXI4-Stream protocol ports, TVALID, TREADY, TKEEP, TLAST, and TSTRB, as shown in the following figure.
 
@@ -89,7 +87,6 @@ using namespace std;
 
 void example(hls::stream<pkt>& A, hls::stream<pkt>& B,int num);
 
-
 int main() {
     int num = 100;
     hls::stream<pkt> A, B;
@@ -105,10 +102,7 @@ int main() {
     	 B.read(tmp2);
     	 printf("tmp2[%d] is %d\r\n",j,tmp2.data);
     }
-
-
 }
-
 ```
 #### Create the Vivado project
 
@@ -136,10 +130,8 @@ hw?
 
 
 ```python
-
 s2mm = hw.axi_dma_0.sendchannel
 mm2s = hw.axi_dma_0.recvchannel
-
 ```
 
 #### Allocate DMA memory address size
@@ -166,7 +158,6 @@ s2mm.transfer(oBuf_0)
 mm2s.transfer(iBuf_0)
 s2mm.wait()
 mm2s.wait()
-
 ```
 
 We will see:
@@ -274,7 +265,6 @@ int main() {
     cout << "Success: results match" << endl;
     return 0;
 }
-
 ```
 ### using_axi_stream_with_custom_side_channel_data_2
 
@@ -310,7 +300,6 @@ void example(hls::stream<packet>& A, hls::stream<packet>& B) {
 
     B.write(tmp);
 }
-
 ```
 The synthesis report is shown below:
 
@@ -370,7 +359,6 @@ typedef ap_axis<32, 2, 5, 6> packet;
 #define SIZE 5
 
 void example(hls::stream<packet>& A, hls::stream<packet>& B);
-
 ```
 
 **example.cpp**
@@ -399,7 +387,6 @@ void example(hls::stream<packet>& A, hls::stream<packet>& B) {
     }
     B.write(tmp);
 }
-
 ```
 
 The synthesis report is shown below:
@@ -445,7 +432,6 @@ int main() {
     cout << "Success: results match" << endl;
     return 0;
 }
-
 ```
 After Run the cosimulation, we can see the wave viewer to confirm the ```last``` signal as shown below:
 
@@ -476,16 +462,13 @@ import numpy as np
 import pynq
 from pynq import MMIO
 hw = pynq.Overlay('design_1.bit')
-
 ```
 
 
 
 ```python
-
 s2mm = hw.axi_dma_0.sendchannel
 mm2s = hw.axi_dma_0.recvchannel
-
 ```
 
 #### Allocate DMA memory address size
@@ -504,7 +487,6 @@ s2mm.transfer(oBuf_0)
 mm2s.transfer(iBuf_0)
 s2mm.wait()
 mm2s.wait()
-
 ```
 
 We will see:
@@ -605,7 +587,6 @@ int main() {
     printf("Success HW and SW results match\n");
     return 0;
 }
-
 ```
 After Running the cosimulation, we can see the wave viewer to confirm the ```last``` signal as shown below:
 
@@ -689,7 +670,6 @@ void example(int A[50], int B[50]) {
         B[i] = A[i] + 5;
     }
 }
-
 ```
 
 The synthesis report is shown below:
@@ -733,7 +713,6 @@ int main() {
     printf("Success HW and SW results match\n");
     return 0;
 }
-
 ```
 #### Create the Vivado project
 
@@ -761,10 +740,8 @@ hw?
 
 
 ```python
-
 s2mm = hw.axi_dma_0.sendchannel
 mm2s = hw.axi_dma_0.recvchannel
-
 ```
 
 #### Allocate DMA memory address size
@@ -784,7 +761,6 @@ s2mm.transfer(oBuf_0)
 mm2s.transfer(iBuf_0)
 s2mm.wait()
 mm2s.wait()
-
 ```
 
 We will see:

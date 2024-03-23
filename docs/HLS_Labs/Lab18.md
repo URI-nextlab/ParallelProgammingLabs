@@ -37,7 +37,6 @@ The following code shows a highly unoptimized version of the FIR filter in HLS. 
 
 **fir.h**
 ```c++
-
 /*
 Filename: fir.h
 	Header file
@@ -65,7 +64,6 @@ void fir (
 );
 
 #endif
-
 ```
 
 
@@ -123,7 +121,6 @@ Clear_Loop:
         }
     }
 }
-
 ```
 The synthesis report is shown below:
 
@@ -157,7 +154,6 @@ With the new implementation, the II of the "Shift_Accum_Loop" becomes 1, and the
 There are two operations in the Shift_Accum_Loop; one is moving the shift_reg, and the other is performing the multiplication and accumulation (MAC). Loop fission refers to separating the operations into independent loops. In this case, the code becomes:
 
 ```c++
-
 TDL:
     for (i = N - 1; i > 0;i--){
         shift_reg[i] = shift_reg[i-1];
@@ -168,7 +164,6 @@ MAC:
     for (i = N - 1; i >= 0;i--){
         acc += shift_reg[i] * c[i];
     }
-
 ```
 
 The synthesis report is shown below:
@@ -182,7 +177,6 @@ In the above code, the label "TDL" stands for tapped delay line, which is implem
 Optimization 2 doesn't make the design faster but makes further optimizations possible. The HLS sequentially executes the loops, which means only one circuit instance of the loop body. Essentially, loop unrolling creates multiple running instances for the loop body. A manual unrolling TDL loop is shown below:
 
 ```c++
-
 TDL:
     for (i = N - 1; i > 1;i= i - 2){
         shift_reg[i] = shift_reg[i-1];
@@ -192,7 +186,6 @@ TDL:
         shift_reg[1] = shift_reg[0];
     }
     shift_reg[0] = x_temp.data;
-
 ```
 The synthesis report is shown below:
 
@@ -201,17 +194,13 @@ The synthesis report is shown below:
 ``` if (i == 1)``` is added to support even N. The unrolling reduces the trip count and increases the hardware required. The same reason in the original code causes this. "In the unrolled code, each iteration requires that we read two values from the shift reg array and write two values to the same array. Thus, if we wish to execute both statements in parallel, we must be able to perform two read operations and two write operations from the shift reg array in the same cycle."([Ref](https://kastner.ucsd.edu/hlsbook/)) In most cases, RAM only provides one read port and one write port simultaneously. To solve this problem, the shift_array is required to be partitioned, which means saving the value in a different memory (or even registers) instead of saving all the values in one single memory. This is called array_partition. HLS provides pragma to do this in the background, this syntax is in [Ref](https://docs.xilinx.com/r/en-US/ug1399-vitis-hls/pragma-HLS-array_partition):
 
 ```
-
 #pragma HLS array_partition variable=<variable name> type=<cyclic, block, complete> factor=<int> dim=<int>
-
 ```
 
 Since we know that the shift_reg should be implemented as shift registers on hardware, we can simply use:
 
 ```
-
 #pragma HLS array_partition variable=shift_reg type=complete dim=1
-
 ```
 
 With this pragma, the HLS should be able to implement TDL with II=1, which reduces the total II of the module by 1/2.
@@ -239,7 +228,6 @@ As for the MAC loop, though the accumulator acc seems to have a loop carry depen
 
 ```c++
 #include "fir.h"
-
 // Unrolling and array partition
 
 void fir(d_stream& y, d_stream& x){
@@ -284,7 +272,6 @@ Clear_Loop:
         }
     }
 }
-
 ```
 The synthesis report is shown below:
 
@@ -331,7 +318,6 @@ To pipeline the loop, we can simply add a pragma to the source file (under the f
 The II determines the throughput of the module. Mostly, we want the II=1, which means the module (loop) can receive new data every clock. In this case, we just tell the tool to pipeline the fir function and the code becomes:
 
 ```c++
-
 #include "fir.h"
 
 // pipelining
@@ -379,14 +365,10 @@ Clear_Loop:
         }
     }
 }
-
-
-
 ```
 The synthesis report is shown below:
 
 <div align=center><img src="Images/17/20.png" alt="drawing" width="1000"/></div>
-
 
 According to the synthesis report, now the II of the entire module becomes 1 and 1306 FFs and 796 LUTs are required.  
 
@@ -512,7 +494,6 @@ Clear_Loop:
         }
     }
 }
-
 ```
 
 ## Simulation
@@ -674,7 +655,6 @@ start_time = time.time()
 s2mm.transfer(iBuf)
 mm2s.transfer(oBuf)
 mm2s.wait()
-
 s2mm.wait()
 finish_time = time.time()
 

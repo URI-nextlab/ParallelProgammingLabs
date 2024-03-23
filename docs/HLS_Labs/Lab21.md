@@ -268,17 +268,12 @@ void butterfly(cplx& y_l, cplx& y_h,cplx x_l, cplx x_h, dtype wr, dtype wi);
 void fft_stage(cplx x_in[N], cplx x_out[N], int stage);
 void FFT(cplx_stream& x_in, cplx_stream& y_out);
 
-
-
 #endif
-
 ```
 
 **fft.cpp**
 ```c++
 #include "fft.h"
-
-
 
 idx_type idx_reverse(idx_type idx_in){
 #pragma HLS INLINE
@@ -289,7 +284,6 @@ idx_type idx_reverse(idx_type idx_in){
     }
     return idx_out;
 }
-
 
 void bit_reverse(cplx x_in[N],cplx x_out[N]){
     for (int i = 0; i < N;i++){
@@ -372,9 +366,6 @@ void FFT(cplx_stream& x_in, cplx_stream& y_out){
         y_out << temp;
     }
 }
-
-
-
 ```
 
 The synthesis report is shown below:
@@ -440,7 +431,6 @@ int main(int argc, char* argv[]){
 	printf("Pass!\n");
     return 0;
 }
-
 ```
 If you see the message ```Pass```, you can know you are right.
 
@@ -478,7 +468,6 @@ N = 1024
 ibuf = allocate((N,), dtype='csingle')
 obuf = allocate((N,), dtype='csingle')
 
-
 idx = np.arange(0,1024)
 ibuf[:] = np.cos(0.25 * np.pi * idx) + 0.5 * np.cos(0.125 * np.pi * idx) + 0.25 * np.cos(0.3765 * np.pi * idx)
 
@@ -491,7 +480,6 @@ plt.stem(nm_freq,np.abs(obuf[0:512])/N,use_line_collection=True)
 plt.xlim([0,1])
 plt.xlabel('Normalzied frequency (0~1)')
 plt.ylabel('Magnitude')
-
 ```
 
 We will see:

@@ -201,8 +201,6 @@ write_y_loop:
 **mvm_tb.cpp**
 
 ```c++
-
-
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -323,10 +321,8 @@ typedef int mat;
 
 typedef hls::stream <mat,16> Mat_stream;
 
-
 void mvm_ctrl(Mat_stream &x_in,Mat_stream &A_in,Mat_stream &y_out);
 void matrix_buffer(Mat_stream &matrix_data,Mat_stream A_buffter[N]);
-
 
 template <int K>
 void PE_module(Mat_stream &x_in,Mat_stream &A_in,Mat_stream &x_next, Mat_stream &y_out)
@@ -357,9 +353,7 @@ void PE_module(Mat_stream &x_in,Mat_stream &A_in,Mat_stream &x_next, Mat_stream 
 
 
 }
-
 #endif
-
 ```
 
 **mvm_ctrl.cpp**
@@ -391,9 +385,6 @@ void matrix_buffer(Mat_stream &matrix_data,Mat_stream A_buffter[N])
 			A_buffter[num].write(temp);
 			counter++;
 		}
-
-
-
 }
 
 void mvm_ctrl(Mat_stream &x_in,Mat_stream &A_in,Mat_stream &y_out)
@@ -437,12 +428,7 @@ Load_y:for(int i=0;i<N;i++)
 			y_out.write(temp);
 
 		}
-
-
 }
-
-
-
 ```
 
 The synthesis report is shown below:
@@ -486,10 +472,7 @@ int main()
 	printf("acc[%d] is %d\r\n",i,acc);
 
 	}
-
-
 }
-
 ```
 And you will see the result below:
 
@@ -546,7 +529,6 @@ void PE_module(Mat_stream &x_in,Mat_stream &A_in,Mat_stream &x_next, Mat_stream 
 
 
 }
-
 #endif
 ```
 
@@ -596,11 +578,8 @@ void mvm_mixed(Mat_stream &x_in,Mat_stream &A_in,Mat_stream &y_out)
 					mat temp;
 					temp=acc[i].read();
 					y_out.write(temp);
-
 				}
-
 }
-
 ```
 The synthesis report is shown below:
 
@@ -647,9 +626,7 @@ int main()
 		acc=y_out.read();
 	printf("acc[%d] is %d\r\n",i,acc);
 	}
-
 }
-
 ```
 And you will see the result below:
 
@@ -676,19 +653,16 @@ It may show some errors about I/O Ports, please fix them.
 from pynq import Overlay
 from pynq import allocate
 import numpy as np
-
 ```
 
 
 
 ```python
-
 hw = Overlay('design_1.bit')
 
 mm2s_x = hw.axi_dma_0.sendchannel
 mm2s_A = hw.axi_dma_1.sendchannel
 s2mm_y = hw.axi_dma_2.recvchannel
-
 ```
 
 #### Allocate DMA memory address size
@@ -712,7 +686,6 @@ mm2s_A.transfer(A)
 mm2s_x.wait()
 mm2s_A.wait()
 s2mm_y.wait()
-
 ```
 
 We will see:

@@ -108,8 +108,6 @@ We can run Simulation to check the code by clicking the Run Simulation under the
 
 <div align=center><img src="imgs/v1/8.png" alt="drawing" width="800"/></div>
 
-
-
 Then, we can click on the Run synthesis under the SYNTHESIS and Run implementation under the IMPLEMENTATION. We should add the appropriate board-related master XDC file to the project and edit it to include the related pins like the below:
 
 <div align=center><img src="imgs/v1/3.png" alt="drawing" width="800"/></div>
@@ -118,8 +116,11 @@ Because the board has four LEDs, so we can also use the RGB LED(LD5 and LD4).
 
 <div align=center><img src="imgs/v1/4.png" alt="drawing" width="600"/></div>
 
-Click on the Generate Bitstream under the PROGRAM AND DEBUG, and when writing bitstream is complete, we can donwload the file to the board and verify the lab.
+Click on the Generate Bitstream under the PROGRAM AND DEBUG, and when writing bitstream is complete, we can download the file to the board and verify the lab.
 
+<div align=center><img src="imgs/v4/1.jpg" alt="drawing" width="200"/></div>
+
+<div align=center><img src="imgs/v4/2.jpg" alt="drawing" width="200"/></div>
 
 ### Part3-1-2
 
@@ -228,7 +229,7 @@ module decoder_74138_dataflow_tb();
     end
 
     // Optional: Monitor changes in variables
-    // This helps in debugging and observing the behavior of the decoder under different enable signals
+    // This helps in debugging and observing the behavior of the decoder under different enabled signals
     initial begin
         $monitor("Time = %t, Enable: G1=%b, G2A_n=%b, G2B_n=%b, Input x = %b, Output y = %b", $time, g1, g2a_n, g2b_n, x, y);
     end
@@ -281,7 +282,7 @@ always@(*)
     begin
      case (inputs)
           // Check for encoder being disabled or no input active
-            9'b1xxxxxxxx: // If enable is high (active low logic), encoder is disabled
+            9'b1xxxxxxxx: // If enable is high (active low logic), the encoder is disabled
                         begin
                             y = 3'b111;
                             en_out = 1;
@@ -361,17 +362,17 @@ endmodule
 
 ## Read-Only Memories
 Read-only memories (ROM) consist of interconnected arrays to store an array of binary information. Once
-the binary information is stored it can be read any time but cannot be altered. Large ROMs are typically used to store programs and/or data which will not change by the other circuitry in the system. Small ROMs can be used to implement combinatorial circuits. A ROM uses a decoder, similar to one designed in 1-1 earlier, to address a particular location. 
+the binary information is stored, it can be read at any time but cannot be altered. Large ROMs are typically used to store programs and/or data that will not change by the other circuitry in the system. Small ROMs can be used to implement combinatorial circuits. A ROM uses a decoder, similar to one designed in 1-1 earlier, to address a particular location. 
 
-A ROM will have m address input pins and n information output pins to store 2^m words information, each word being n bit in length. The content is accessed by placing an address and the content of the corresponding word is read at the output pins.
+A ROM will have m address input pins and n information output pins to store 2^m words information, each word being n bit in length. The content is accessed by placing an address, and the content of the corresponding word is read at the output pins.
 
-In Verilog HDL, memories can be defined as a two dimensional array using **reg** data type, as illustrated below: 
+In Verilog HDL, memories can be defined as a two-dimensional array using **reg** data type, as illustrated below: 
 ```verilog
 reg [3:0] MY_ROM [15:0]; 
 
 ```
 
-where **reg** is data type, MY_ROM is a 16x4 memory with 16 locations each location being 4-bit wide. If the memory is to be modeled as read only then two things must happen: (i) memory should only be read and not written into, and (ii) memory should somehow be initialized with the desired content. Verilog HDL provides a system task, called **$readmemb**, to initialize memory with a content. Following is an example of definition and usage of 4x2 ROM.
+where **reg** is data type, MY_ROM is a 16x4 memory with 16 locations each location being 4-bit wide. If the memory is to be modeled as read-only then two things must happen: (i) memory should only be read and not written into, and (ii) memory should somehow be initialized with the desired content. Verilog HDL provides a system task, called **$readmemb**, to initialize memory with content. Following is an example of the definition and usage of 4x2 ROM.
 
 ```verilog
 
@@ -397,8 +398,8 @@ defined (since no directory path is given), and may have 8 or less lines such as
 
 Note that if the number of lines is less than the size of the ROM, the unspecified locations will be initialized with 0s. Also, note that there is another system task available, called $readmembh, which allows the data file to be written using hexadecimal symbols. 
 
-For adding text file: Select "Add sources" from the Project Navigator > Add or create Design sources > Add files
-In the Add source file window select "File of type" as "All files".
+For adding text files: Select "Add sources" from the Project Navigator > Add or create Design sources > Add files
+In the Add source file window, select "File of type" as "All files".
 
 
 For the example, we can also run a simulation to verify.
@@ -422,7 +423,7 @@ module ROM_4x2_tb;
     initial begin
         // Initialize ROM address
         ROM_addr = 2'd0; 
-        #10; // Wait for 10 time units
+        #10; // Wait for ten time units
         
         // Apply different addresses and observe the data
         ROM_addr = 2'd1; 
@@ -446,7 +447,6 @@ module ROM_4x2_tb;
     end
 
 endmodule
-
 ```
 
 The result is shown below:
@@ -459,7 +459,7 @@ The result is shown below:
 
 Design a 2-bit comparator that compares two 2-bit numbers and asserts
 outputs indicating whether the decimal equivalent of word A is less than,
-greater than, or equal to that of word B. You will model ROM and use $readmemb task. 
+greater than, or equal to that of word B. You will model ROM and use the $readmemb task. 
 
 Create and add the Verilog module with two inputs (a, b) and three outputs (lt, gt, and eq) using ROM and $readmemb system task.
 
@@ -513,7 +513,7 @@ endmodule
 
 
 
-Create and add a text file that describes design output.
+Create and add a text file that describes the design output.
 
 <div align=center><img src="imgs/v1/7.png" alt="drawing" width="800"/></div>
 
@@ -541,11 +541,11 @@ a and b are concatenated to form a 4-bit address (addr), which is used to access
 
 ```
 
-Create the logic in a document and save as .**txt** file. Then click on **Add Sources** under the Flow
+Create the logic in a document and save it as a .**txt** file. Then click on **Add Sources** under the Flow
 Navigator. Select the **Add or create design sources** and click **next**. Click the **green plus** button
-and add file. Add the .txt file and click **finish**.
+and add the file. Add the .txt file and click **finish**.
 
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run Simulation to check the code by clicking the Run Simulation under SIMULATION and choosing the first Run Behavioral Simulation.
 
 **ROM_comparator_tb.v**
 ```verilog
@@ -561,7 +561,7 @@ module ROM_comparator_tb;
     wire Eq; // Output indicating whether a == b
     wire Gt; // Output indicating whether a > b
 
-    // Instantiate the Device Under Test (DUT) with named port mapping
+    // Instantiate the Device Under Test (DUT) with the named port mapping
     lab3_3_2 DUT(
         .a(a), 
         .b(b),
@@ -603,11 +603,11 @@ The simulation result is shown below:
 
 <div align=center><img src="imgs/v1/11.png" alt="drawing" width="900"/></div>
 
-If we want to implement it on the board, we need to change the code and add one another IP like belo：
+If we want to implement it on the board, we need to change the code and add one another IP like below：
 
 <div align=center><img src="imgs/v1/14.png" alt="drawing" width="900"/></div>
 
-Double click on and have a setting like below:
+Double-click on and have a setting like the below:
 
 <div align=center><img src="imgs/v1/15.png" alt="drawing" width="900"/></div>
 
@@ -617,7 +617,7 @@ Double click on and have a setting like below:
 
 <div align=center><img src="imgs/v1/18.png" alt="drawing" width="900"/></div>
 
-And then we can find the IP instantiation template like below:
+And then we can find the IP instantiation template below:
 
 <div align=center><img src="imgs/v1/19.png" alt="drawing" width="900"/></div>
 
@@ -637,7 +637,7 @@ module lab3_3_1(
     // Combined address for ROM: concatenates inputs 'a' and 'b'
     wire [3:0] addr_reg; // Combines 'a' and 'b' to form the ROM address
 
-    // Output from ROM, stores comparison result based on 'a' and 'b'
+    // Output from ROM, stores comparison results based on 'a' and 'b'
     wire [2:0] douta;    // Data output from ROM based on address 'addr_reg'
 
     // Instance of ROM block
@@ -704,8 +704,6 @@ memory_initialization_vector=
 001;
 
 ```
-
-
 **tb.v**
 ```verilog
 
@@ -730,7 +728,7 @@ module lab3_3_1_tb;
     // Clock generation process
     initial begin
         clk = 1;                     // Initialize the clock signal
-        forever #5 clk = ~clk;       // Toggle the clock every 5 time units to generate a periodic signal
+        forever #5 clk = ~clk;       // Toggle the clock every 5-time units to generate a periodic signal
     end
 
     // Test sequence process
@@ -755,17 +753,17 @@ endmodule
 
 ```
 
-We can also run simulation and see the result like below:
+We can also run the simulation and see the result below:
 
 <div align=center><img src="imgs/v1/13.png" alt="drawing" width="900"/></div>
 
-Then we can click on the Run synthesis under the SYNTHESIS and Run implementation under the IMPLEMENTATION. And we should add the appropriate board related master XDC file to the project and edit it to include the related pins like below:
+Then we can click on the Run synthesis under the SYNTHESIS and Run implementation under the IMPLEMENTATION. We should add the appropriate board-related master XDC file to the project and edit it to include the related pins like the below:
 
 <div align=center><img src="imgs/v1/12.png" alt="drawing" width="1200"/></div>
 
 Generate the bitstream and program device like [Lab1](https://uri-nextlab.github.io/ParallelProgammingLabs/Verilog_Labs/Lab1_Modeling_Concepts.html).
 
-Then you can press the button of the board and you can see the LED is on like below:
+Then you can press the button on the board, and you can see the LED is on like below:
 
 <div align=center><img src="imgs/v1/20.jpg" alt="drawing" width="200"/></div>
 
@@ -775,10 +773,10 @@ Then you can press the button of the board and you can see the LED is on like be
 
 ### Part3-3-2
 
-Implement 2-bit by 2-bit multiplier using a ROM. Output the product in
+Implement a 2-bit by 2-bit multiplier using a ROM. Output the product in
 binary on four LEDs.
 
-Create and add the Verilog module with two 2-bit inputs (a, b), a 4-bit product output using ROM
+Create and add the Verilog module with two 2-bit inputs (a, b), and a 4-bit product output using ROM
 and $readmemb system task.
 
 **lab3_3_2.v**
@@ -789,7 +787,7 @@ module lab3_3_2(
     output [3:0] product
 );
 
-    // Calculate address for ROM based on inputs 'a' and 'b'
+    // Calculate the address for ROM based on inputs 'a' and 'b'
     wire [3:0] address;
     assign address = {a, b};
 
@@ -901,11 +899,11 @@ endmodule
 
 ```
 
-We can also run simulation and see the result like below:
+We can also run the simulation and see the result below:
 
 <div align=center><img src="imgs/v1/20.png" alt="drawing" width="900"/></div>
 
-Add the appropriate board related master XDC file to the project and edit it to include the related
+Add the appropriate board-related master XDC file to the project and edit it to include the related
 pins, assigning a to btn3-btn2, b to btn1-btn0, and product to LED3-LED0, you can refer to the ```Part-3-3-1```
 
 ## Conclusion

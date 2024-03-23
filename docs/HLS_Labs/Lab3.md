@@ -128,7 +128,6 @@ void dut(int a[128], int b[128], int tmp3[128]) {
     double_pass(b, tmp2, tmp1, tmp4);
     add_kernel(tmp4, tmp2, tmp3);
 }
-
 ```
 
 The dataflow view is shown below. We can see that the input data labeled as ```a``` in a top-level function is passed to the ```pass_u0``` function, and the input data labeled as ```b``` in the same top-level function is passed to the ```double_pass_u0``` function where the input arguments bypass the first function which causes performance degradation in the DATAFLOW pipeline.
@@ -173,8 +172,6 @@ void dut(int a[128], int b[128], int tmp3[128]) {
     Double_pass(tmp2, tmp1, tmp4, tmp5);
     add_kernel(tmp4, tmp5, tmp3);
 }
-
-
 ```
 
 The dataflow view is shown below. The top-level function reads both input data labeled as ```a``` and ```b``` and passes them to the ```pass_2_u0``` function.
@@ -224,7 +221,6 @@ void dut(int a[128], int b[128], int tmp3[128]) {
     pass(tmp2, tmp4);
     bypass(tmp1, tmp4, tmp3);
 }
-
 ```
 
 This is a common DATAFLOW issue, where the channels inside the ```DATAFLOW``` are not feed-forward and bypass the tasks which causes a degradation in performance. This example shows both the problem and the solution. The dataflow view is shown below. 
@@ -273,7 +269,6 @@ void dut(int a[128], int b[128], int tmp3[128]) {
     pass(tmp2, tmp4, tmp1, tmp5);
     bypass(tmp5, tmp4, tmp3);
 }
-
 ```
 The dataflow view is shown below. 
 
@@ -309,7 +304,6 @@ void dut(int a[128], int b[128], int tmp2[128]) {
     split(a, tmp1, tmp2);
     pass(tmp1, b);
 }
-
 ```
 This is a common DATAFLOW issue, where the channels inside the ```DATAFLOW``` does not follow the feed-forward which causes degradation in performance. This example shows both the problem and solution 
 
@@ -408,7 +402,6 @@ void dut(hls::stream<int>& in1, hls::stream<int>& out1, hls::stream<int>& out2,
          hls::stream<int>& out3, hls::stream<int>& out4);
 
 #endif
-
 ```
 
 
@@ -472,7 +465,6 @@ void dut(hls::stream<int>& in1, hls::stream<int>& out1, hls::stream<int>& out2,
     producer4(s.in[3], out4);
     consumer1(s.out, in1);
 }
-
 ```
 The dataflow view is shown below.
 
@@ -523,8 +515,6 @@ int main() {
 
     return 0;
 }
-
-
 ```
 
 The result of the C simulation is shown below.
@@ -558,7 +548,6 @@ void dut(hls::stream<int>& in1, hls::stream<int>& out1, hls::stream<int>& out2,
     producer4(s.in[3], out4);
     consumer1(s.out, in1);
 }
-
 ```
 
 The dataflow view is shown below.
@@ -590,10 +579,7 @@ hls::split::load_balancing<DATATYPE, NUM_PORTS[, DEPTH, N_PORT_DEPTH]> name;
 void dut(hls::stream<int>& in1, hls::stream<ap_uint<32>>& out1,
          hls::stream<ap_uint<32>>& out2, hls::stream<ap_uint<32>>& out3,
          hls::stream<ap_uint<32>>& out4);
-
 #endif
-
-
 ```
 **test.cpp**
 ```c++
@@ -696,8 +682,6 @@ int main() {
 
     return 0;
 }
-
-
 ```
 
 The result of the C simulation is shown below.
@@ -713,7 +697,6 @@ hls::split::round_robin<DATATYPE, NUM_PORTS[, DEPTH]> name
 ```
 
 ```c++
-
 void dut(hls::stream<int>& in1, hls::stream<ap_uint<32>>& out1,
          hls::stream<ap_uint<32>>& out2, hls::stream<ap_uint<32>>& out3,
          hls::stream<ap_uint<32>>& out4) {
@@ -727,9 +710,6 @@ void dut(hls::stream<int>& in1, hls::stream<ap_uint<32>>& out1,
     consumer3(s.out[2], out3);
     consumer4(s.out[3], out4);
 }
-
-
-
 ```
 The dataflow view is shown below.
 

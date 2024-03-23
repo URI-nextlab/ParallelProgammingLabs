@@ -6,18 +6,17 @@ sort: 9
 
 ## Lab Overview
 
-The purpose of this lab is to implement a simple, 4-instruction processor in Verilog. The top-level entity should be a structural design, and all lower-level components should be kept completely modular and use Verilog parameters. The processor should be tested in Vivado Simulator with appropriate testbench(es) that test for many cases (+/- and varying ranges).
+This lab aims to implement a simple, 4-instruction processor in Verilog. The top-level entity should be a structural design, and all lower-level components should be kept completely modular and use Verilog parameters. The processor should be tested in Vivado Simulator with appropriate testbench(es) that test for many cases (+/- and varying ranges).
 
 ## Background
 
 ### Design Overview:
 
-Figure 1 shows the layout of the processor you will design, The processor has 4 inputs: **DIN**, **CLK**,**RUN** and **RSTn**. **DIN** is the main data input of the processor; it is an N-bit input that can be changed during synthesis of the
-processor according. We will discuss how to enable this later. Internally it utilizes 4 distinct subcomponents: N-Bit
-Registers, an Adder, a Multiplexer, and an FSM. The registers can be broken up into three groups: the instruction
-register, 8 data registers, and 2 temporary registers. The blue line represents “data-paths.” There are two outputs for
-this processor: **BUS** and **DNE**. **BUS** holds the output of the Multiplexer, which should be visible externally and fed
-back as input to the circuit’s internals. Note that the figure shows a 16-bit version of the processor but you will need
+Figure 1 shows the layout of the processor you will design. The processor has four inputs: **DIN**, **CLK**,**RUN** and **RSTn**. **DIN** is the main data input of the processor; it is an N-bit input that can be changed during the 
+processor synthesis accordingly. We will discuss how to enable this later. Internally, it utilizes four distinct subcomponents: N-Bit
+Registers, an Adder, a Multiplexer, and an FSM. The registers can be divided into three groups: the instruction
+register, 8 data registers, and two temporary registers. The blue line represents “data-paths.” This processor has two outputs: **BUS** and **DNE**. **BUS** holds the output of the Multiplexer, which should be visible externally and fed
+back as input to the circuit’s internals. Note that the figure shows a 16-bit version of the processor, but you will need
 to implement it using a variable bit width.
 
 
@@ -29,10 +28,10 @@ This processor will:
 
 * 1) wait for and read an instruction off DIN 
 
-* 2) perform the instruction. The processor will begin in an idle state where it waits for an instruction to be supplied by the user. To do this the user will write the instruction to **DIN** and then activate the **RUN** signal. Upon the next rising edge of **CLK** the instruction will be saved. 
+* 2) perform the instruction. The processor will begin idle, waiting for the user to supply instructions. To do this, the user will write the instructions to **DIN** and then activate the **RUN** signal. The instruction will be saved upon the next rising edge of **CLK**. 
 
-* 3) Then, the processor will execute that instruction. Upon finishing the instruction, the processor will activate the **DNE** signal for
-one **CLK** cycle. The processor will not accept another instruction until after the **DNE** signal is activated.
+* 3) Then, the processor will execute that instruction. After the instruction, the processor will activate the **DNE** signal for
+one **CLK** cycle. The processor will not accept another instruction until the **DNE** signal is activated.
 
 The instructions will be encoded as the 8-bit value: **IIXXXYYY**, where **II** represents one of the four instructions,
 **XXX** is a binary number that represents the Xth-data register: **RX**, and **YYY** represents the Yth- data register: **RY**.
@@ -41,57 +40,56 @@ Table 1 shows the 4 instructions you must implement.
 <div align=center><img src="imgs/v2/7.png" alt="drawing" width="300"/></div>
 
 Take a second to understand what these instructions do. The operation ***mvi*** is the Move-Into instruction. It will move
-a value, #D, from **DIN** to **RX**. Since the instruction is being passed in through **DIN** as well this requires you to update
+a value, #D, from **DIN** to **RX**. Since the instruction is being passed in through **DIN** as well, this requires you to update
 **DIN** with the saved value after the instruction is read. For the ***mvi*** instruction, the three least significant bits of the
-instruction, **YYY**, will simply be discarded. The ***cpy*** operation will *copy* the data in **RY** to **RX**. The add and sub
-operations are straight forward. They will *Add* **RX** and **RY** or *Subtract* **RY** from RX then store the result in **RX**,
-respectively. Notice that all of these operations are destructive operations and will erase the data currently in contained
+instruction, **YYY**, will simply be discarded. The ***cpy*** operation will *copy* the data in **RY** to **RX**. The add and sub-operations are straightforward. They will *Add* **RX** and **RY** or *Subtract* **RY** from RX and then store the result in **RX**,
+respectively. Notice that all these operations are destructive and will erase the data currently contained
 in **RX**. 
 
 ### The Control Unit:
 
-The purpose of the control unit it to orchestrate the functionality of the other sub-components so the perform the
-intended operations. It does this by configuring control signals at the proper times using an FSM. In this system, we
-have a lot of control signals that can be grouped into three main categories: *Register Select Lines*, *Multiplexer Select Lines*, and a *Computation Select Signal*.
+The purpose of the control unit is to orchestrate the functionality of the other sub-components so that the
+intended operations are performed. It does this by configuring control signals at the proper times using an FSM. In this system, we
+They have a lot of control signals that can be grouped into three main categories: *Register Select Lines*, *Multiplexer Select Lines*, and a *Computation Select Signal*.
 
 The *AddSub* signal is only one signal from the controller designed to select which type of mathematical computation
-the processor is conducting. Its purpose is to tell the adder whether it is performing addition or subtraction. 
+the processor is conducting. It aims to tell the adder whether it is performing addition or subtraction. 
 
 There are 11 register select lines coming from the controller, one for each register in the system. One of these lines is
 fed in as an enable signal to each of the registers in the processor. Notice that we do not want all registers to save their
 inputs on each clock pulse. As such, it will be the responsibility of the control unit to coordinate when each register
 saves by driving these lines when appropriate.
 
-Finally, there are 10 multiplexer select lines, 1 for **DIN**, 1 for **G** and 8 for the data registers. These lines will determine
-which of the 10 multiplexer inputs are fed to the data **BUS**. Different from the previous multiplexers you’ve designed,
+Finally, there are 10 multiplexer select lines: 1 for **DIN**, 1 for **G** and 8 for the data registers. These lines will determine
+which of the 10 multiplexer inputs are fed to the data **BUS**. Unlike the previous multiplexers you’ve designed,
 we will use a 1-hot encoding for this system to simplify the controller design.
 
-A major source of error in this lab is this control unit. As you’re designing the FSM approach it from the perspective
-that it is setting up the control signals for the next **CLK** edge, rather than for the current state.
+A major source of error in this lab is this control unit. As you’re designing the FSM, approach it from the perspective.
+It sets up the control signals for the next **CLK** edge rather than the current state.
 
 ### Routing Data through the system:
 
 The multiplexer decides what data (**DIN**, **RX**/**RY**, **G**) is chosen to be on the **BUS**. **DIN** should be the default output
-selected by the multiplexer when idle. The **BUS** will transfer data to **RX**/**RY**, **A**, the adders second input, and the
-output. You will be able to observe the data transfers on the output as execution of an operation occurs. Then upon
-completion of the operation the result will be visible on the output and **Done** will be asserted for one clock cycle.
+Selected by the multiplexer when idle. The **BUS** will transfer data to **RX**/**RY**, **A**, the adder's second input, and the
+output. You will be able to observe the data transfers on the output as the execution of an operation occurs. Then, upon
+completion of the operation, the result will be visible on the output, and **Done** will be asserted for one clock cycle.
 
 The control unit will receive the instruction and drive the *Register Select Lines*, *Multiplexer Select Lines*, and a
 *Computation Select Signal* to perform the appropriate operation. It will do this through the use of an FSM. You must design a **Mealy** state machine to control these internal signals.
 
-The processor will start in an idle state, waiting for the **RUN** signal to be asserted externally. On the first rising
-clock edge observed while the **RUN** signal is active the least significant 8-bits of **DIN** will be saved to the
+The processor will start idle, waiting for the **RUN** signal to be asserted externally. On the first rising
+clock edge observed while the **RUN** signal is active, the least significant 8-bits of **DIN** will be saved to the
 instruction register, **IR**. This register should not be updated again until the next instruction is loaded. The control
 unit will then progress through the steps required to compute the operation specified by the instruction. Not all
-instructions will require the same number of clock cycles to execute, see the Figure below for details.
+instructions will require the same number of clock cycles to execute. See the Figure below for details.
 
-As an example, the execution of the ***mvi*** operation is fairly straight forward. After accepting the instruction, it should
+As an example, the execution of the ***mvi*** operation is fairly straightforward. After accepting the instruction, it should
 select **DIN** to be output to the **BUS** using the *Multiplexer Select Line* and activate the *Register Select Line* for **RX**.
-This will setup the processor such that the next clock pulse **DIN** will be save to **RX**. Note that this requires two
-clock pulses, the first to the save the instruction and the second to save **DIN** to **RX**. Between these clock pulses **DIN**
+This will set up the processor so that the next clock pulse **DIN** will be saved to **RX**. Note that this requires two
+clock pulses, the first to save the instruction and the second to save **DIN** to **RX**. Between these clock pulses **DIN**
 should be updated with the value to be saved.
 
-We leave it to you to figure out the exact functionality of the design while performing the other operations but
+We leave it to you to figure out the exact functionality of the design while performing the other operations, but
 provide the following figure as a guide.
 
 <div align=center><img src="imgs/v2/8.png" alt="drawing" width="600"/></div>
@@ -99,7 +97,7 @@ provide the following figure as a guide.
 
 ## Verilog Implementation:
 
-From the Figure 1 and Figure 2, we can design some subcomponents like: registers_enabled, add_sub, Mux_hot and CTRL_unit.
+From Figure 1 and Figure 2, we can design some subcomponents like registers_enabled, add_sub, Mux_hot and CTRL_unit.
 
 ### Add the source file
 **reg_enabled.v**
@@ -107,7 +105,7 @@ From the Figure 1 and Figure 2, we can design some subcomponents like: registers
 // Define a parameterized register module with enable control.
 // This module can be used for registers of any size as specified by the parameter N.
 module reg_enabled #(
-    parameter N=8  // Parameter N defines the width of the data input and output. Default is 8 bits.
+    parameter N=8  // Parameter N defines the width of the data input and output. The default is 8 bits.
 )(
     input clk,          // Clock input: Used to synchronize the data transfer on the rising edge.
     input rst,          // Reset input: When high (positive edge detected), it resets the output to 0.
@@ -439,7 +437,7 @@ endmodule
 
 ```
 
-And the system processor unit contains the above the modules.
+The system processor unit contains the above modules.
 **system_processor.v**
 ```verilog
 
@@ -519,7 +517,7 @@ endmodule
 
 
 ```
-We will map ```clk``` port to button, so we also need the debouncing module like below:
+We will map ```clk``` port to the button, so we also need the debouncing module like below:
 
 **btn_run.v**
 ```verilog
@@ -544,7 +542,7 @@ module btn_run #(
     // Internal signal declarations for debouncing logic.
     wire      key_pulse;        // Pulse signal generated after key debounce.
  
-    reg [7:0] key_buffer;       // Buffer to store state of key for debouncing.
+    reg [7:0] key_buffer;       // Buffer to store the state of the key for debouncing.
     reg key_reg;                // Register to hold the debounced key value.
     
     // Debounce logic for the key input.
@@ -553,9 +551,9 @@ module btn_run #(
             key_reg <= 1'd0;  // Reset the key register.
         else begin
             if (key == 1'd1)
-                key_reg <= 1'd1;  // Set the key register if key input is high.
+                key_reg <= 1'd1;  // Set the key register if the key input is high.
             else 
-                key_reg <= 1'd0;  // Clear the key register if key input is low.
+                key_reg <= 1'd0;  // Clear the key register if the key input is low.
         end       
     end
 
@@ -570,7 +568,7 @@ integer i;
                 if (key_reg == 1'd1)
                     key_buffer[i] <= 1'd1;  // Set buffer bits if key is pressed.
                 else
-                    key_buffer[i] <= 1'd0;  // Clear buffer bits if key is not pressed.
+                    key_buffer[i] <= 1'd0;  // Clear buffer bits if the key is not pressed.
             end            
         end  
     end
@@ -748,7 +746,7 @@ initial begin
 
 ```
 
-And we can run Simulation to check the code by clicking the ```Run Simulation``` under the ```SIMULATION``` and choose the first ```Run Behavioral Simulation```. Here, the function of the ```clk``` is the same as the ```submit``` of the lab8.
+We can run a Simulation to check the code by clicking the ```Run Simulation``` under ```SIMULATION``` and choosing the first ```Run Behavioral Simulation```. Here, the function of the ```clk``` is the same as the ```submit``` of the lab8.
 
 <div align=center><img src="imgs/v2/11.png" alt="drawing" width="1000"/></div>
 
@@ -924,7 +922,7 @@ We will see the value of the ```reg2```:
 
 <div align=center><img src="imgs/v2/15.png" alt="drawing" width="400"/></div>
 
-Then we will try to ```add``` and ```sub``` instruction.
+Then we will try to ```add``` and ```sub```instructions.
 
 ```python
 DATA_OFFSET = 0X0
@@ -933,7 +931,7 @@ din_write.write(DATA_OFFSET,DATA)
 run.write(DATA_OFFSET,1)
 
 ```
-Becasue for the add/sub operation, the porcessor will go through all states, so we need to press the ```key``` button more times until you can see the  LED is on, then press the button and you can see it is off.
+Because for the add/sub-operation, the processor will go through all states, we need to press the ```key``` button more times until you can see the  LED is on, then press the button and you can see it is off.
 
 And you will see:
 

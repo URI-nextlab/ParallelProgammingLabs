@@ -138,13 +138,9 @@ int main() {
         for (int i = 0; i < N; i++) {
             cout << "Series " << iter;
             cout << " Outcome: " << (int)outcome[i] << endl;
-
         }
-
     }
-
 }
-
 ```
 
 The following waveform shows the execution profile of this design without the dataflow model. There are three calls to the function diamond from the test bench. ```funcB```, ```funcC```, and ```funcD``` are executed in sequential order. Each call to diamond, therefore, takes 475 cycles in total as shown in the following figure.
@@ -280,8 +276,6 @@ Loop_St:
         out[i] = in.read();
     }
 }
-
-
 ```
 
 The dataflow view is shown below. We can see the channel is ```FIFO```. We can see that the interface of the function is streaming with ```hls::stream```.
@@ -440,14 +434,12 @@ void top(...) {
   producer(b, ...);
   consumer(b, ...);
 }
-
 ```
 This can unnecessarily limit throughput and/or increase resources if the producer generates data for the consumer in smaller blocks, for example by writing one row of the buffer output inside a nested loop, and the consumer uses the data in smaller blocks by reading one row of the buffer input inside a nested loop, as the example above does. In this example, due to the non-sequential buffer column access in the inner loop, you cannot simply stream the array b. However, the row access in the outer loop is sequential thus supporting ```hls::stream_of_blocks``` communication where each block is a 1-dimensional array of size N.
 
 The main purpose of the ```hls::stream_of_blocks``` feature is to provide PIPO-like functionality but with user-managed explicit synchronization, accesses, and a better coding style. Stream-of-blocks lets you avoid the use of dataflow in a loop containing the producer and consumer, which would have been a way to optimize the example above. However, in this case, the use of the dataflow loop containing the producer and consumer requires the use of a ```PIPO``` buffer (2xN) as shown in the following example:
 
 ```c++
-
 void producer (int b[N], ...) {
   for (int j = 0; j < N; j++)
     b[f(j)] = ...;
@@ -506,7 +498,6 @@ void top(...) {
   producer(b, ...);
   consumer(b, ...);
 }
-
 ```
 
 This example uses the same design as using_pipos and using_fifos designs to illustrate how the same design can be converted to use stream of blocks (SOB) as the channel type.
@@ -536,7 +527,6 @@ void funcC(hls::stream_of_blocks<block_data_t>& in,
            hls::stream_of_blocks<block_data_t>& out);
 void funcD(hls::stream_of_blocks<block_data_t>& in1,
            hls::stream_of_blocks<block_data_t>& in2, hls::stream<data_t>& out);
-
 ```
 
 **diamond.cpp**
@@ -629,7 +619,6 @@ Loop0:
             out.write(in1L[j] + in2L[j] * 2);
     }
 }
-
 ```
 
 And we can see the dataflow view is shown below. This example divides 100 pieces of data into 10 stream_blocks and each stream_block contains 10 pieces of data. However, the input and output of the top-level function are read into and written out of ```hls::stream``` for data. And comparing with the previous example using PIPOs, we can see that although both are dataflow, the words contained in each ```PIPO``` channel are different. This is because the stream_block divides the entire 100 pieces of data into 10 blocks. From the dataflow view of the channel, we can see the words are different.
@@ -642,7 +631,6 @@ But the initial interval(II) of the ```funcA``` is 10 not 1 because the number o
 
 **diamond_test.cpp**
 ```c++
-
 #include "diamond.h"
 #include <fstream>
 #include <iostream>
@@ -670,13 +658,10 @@ int main() {
         for (int i = 0; i < N; i++) {
             data_t outp = outcome.read();
             cout << "Series " << iter;
-            cout << " Outcome: " << (int)outp << endl;
-           
+            cout << " Outcome: " << (int)outp << endl;           
         }
     }
-
 }
-
 ```
 ## Demonstrate 
 Please find the differences between the use of the fifos and pipos and the difference between the stream and stream_of_blocks.

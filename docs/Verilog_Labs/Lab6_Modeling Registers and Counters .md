@@ -6,15 +6,15 @@ sort: 6
 
 ## Introduction
 
-When several flip-flops are grouped together, with a common clock, to hold related information the resulting
+When several flip-flops are grouped, with a common clock to hold related information, the resulting
 circuit is called a register. Just like flip-flops, registers may also have other control signals. You will
-understand the behavior of a register with additional control signals. Counters are widely used sequential
-circuits. In this lab you will model several ways of modeling registers and counters.
+understand the behavior of a register with additional control signals. Counters are widely used in sequential
+circuits. In this lab, you will model registers and counters in several ways.
 
 ## Registers
 
-In a computer system, related information is often stored at the same time. A **register** stores bits of
-information in such a way that systems can write to or read out all the bits simultaneously. Examples of
+In a computer system, related information is often stored simultaneously. A **register** stores bits of
+information so that systems can write to or read out all the bits simultaneously. Examples of
 registers include data, address, control, and status. Simple registers will have separate data input and
 output pins but clocked with the same clock source. A simple register model is shown below. 
 
@@ -24,13 +24,13 @@ module Register (input [3:0] D, input Clk, output reg [3:0] Q);
  Q <= D;
 endmodule 
 ```
-Notice that this is similar to a simple D Flip-flop with multiple data port.
+Notice that this is similar to a simple D Flip-flop with multiple data ports.
 
 The simple register will work where the information needs to be registered every clock cycle. However,
-there are situations where the register content should be updated only when certain condition occurs. For
+there are situations where the registered content should be updated only when a certain condition occurs. For
 example, a status register in a computer system gets updated only when certain instructions are
-executed. In such case, a register clocking should be controlled using a control signal. Such registers will
-have a clock enable pin. A model of such register is given below. 
+executed. In such a case, a register clocking should be controlled using a control signal. Such registers will
+have a clock-enabled pin. A model of such a register is given below. 
 
 ```verilog
 
@@ -42,8 +42,8 @@ load, output reg [3:0] Q);
 endmodule 
 ```
 
-Another desired behavior of registers is to reset the content when certain condition occurs. A simple
-model of a register with synchronous reset and load (reset has a higher priority over load) is shown below 
+Another desired behavior of registers is to reset the content when a certain condition occurs. A simple
+model of a register with synchronous reset and load (reset has a higher priority overload) is shown below 
 
 ```verilog
 module Register_with_synch_reset_load_behavior(input [3:0] D, input Clk,
@@ -61,8 +61,7 @@ endmodule
 
 ### Part6-1-1
 
-Model a 4-bit register with synchronous reset and load using the model
-provided above. Develop a testbench and simulate the design. Assign Clk,
+Model a 4-bit register with synchronous reset and load using the abovementioned model. Develop a testbench and simulate the design. Assign Clk,
 D input, reset, load, and output Q. 
 
 **lab6_1_1.v**
@@ -82,7 +81,7 @@ endmodule
 
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/1.png" alt="drawing" width="600"/></div>
 
@@ -240,22 +239,22 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/4.png" alt="drawing" width="600"/></div>
 
 ### Part6-1-3
 
-The above registers are categorized as parallel registers. There are another kind of registers called shift
-registers. A shift register is a register in which binary data can be stored and then shifted left or right when
-the control signal is asserted. Shift registers can further be sub-categorized into parallel load serial out,
-serial load parallel out, or serial load serial out shift registers. They may or may not have reset signals. 
+The above registers are categorized as parallel registers. There are other kinds of registers called shift
+registers. A shift register is where binary data can be stored and then shifted left or right when
+the control signal is asserted. Shift registers can be sub-categorized into parallel load serial out,
+serial load parallel out, or serial load serial-out shift registers. They may or may not have reset signals. 
 
-In Xilinx FPGA, LUT can be used as a serial shift register with one bit input and one bit output using one
-LUT as SRL32 providing efficient design (instead of cascading up to 32 flip-flops) provided the code is
-written properly. It may or may not have enable signal. When the enable signal is asserted, the internal
-content gets shifted by one bit position and a new bit value is shifted in. Here is a model for a simple onebit serial shift in and shift out register without enable signal. It is modeled to shift for 32 clock cycles
-before the shifted bit brought out. This model can be used to implement a delay line. 
+In Xilinx FPGA, LUT can be used as a serial shift register with one-bit input and one-bit output using one
+LUT as SRL32 provides efficient design (instead of cascading up to 32 flip-flops), provided the code is
+written properly. It may or may not have enabled a signal. When the enable signal is asserted, the internal
+content is shifted by a one-bit position and a new bit value is shifted. Here is a model for a simple one-bit serial shift in and shift out register without enabling signal. It is modeled to shift for 32 cycles
+before the shifted bit is brought out. This model can be used to implement a delay line. 
 
 ```verilog
 module simple_one_bit_serial_shift_register_behavior(input Clk, input
@@ -268,7 +267,7 @@ ShiftIn, output ShiftOut);
 endmodule 
 ```
 
-The above model can be modified if we want to implement a delay line less than 32 clocks. Here is the
+The above model can be modified if we want to implement a delay line of less than 32 clocks. Here is the
 model for the delay line of 3 clocks. 
 
 ```verilog
@@ -296,7 +295,7 @@ endmodule
 
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/5.png" alt="drawing" width="600"/></div>
 
@@ -341,7 +340,7 @@ end
 
 endmodule
 ```
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/6.png" alt="drawing" width="600"/></div>
 
@@ -363,7 +362,7 @@ always @(posedge Clk)
 endmodule 
 ```
 
-Model a 4-bit parallel in left shift register using the above code. Develop a
+Model a 4-bit parallel in the left shift register using the above code. Develop a
 testbench and simulate the design using the stimuli provided below. 
 
 <div align=center><img src="imgs/v2/7.png" alt="drawing" width="600"/></div>
@@ -384,7 +383,7 @@ always @(posedge Clk)
 endmodule 
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/8.png" alt="drawing" width="600"/></div>
 
@@ -442,7 +441,7 @@ end
 
 endmodule
 ```
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/9.png" alt="drawing" width="600"/></div>
 
@@ -474,7 +473,7 @@ endmodule
 
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/10.png" alt="drawing" width="600"/></div>
 
@@ -531,29 +530,29 @@ end
 endmodule
 
 ```
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/12.png" alt="drawing" width="800"/></div>
 
 
 ## Counters
 Counters can be asynchronous or synchronous. Asynchronous counters count the number of events
-solely using an event signal. Synchronous counters, on the other hand, use a common clock signal so
+solely using an event signal. On the other hand, synchronous counters use a common clock signal so
 that when several flip-flops must change state, the state changes occur simultaneously. 
 
-A binary counter is a simple counter which counts values up when an enable signal is asserted and will
+A binary counter is a simple counter that counts values up when an enable signal is asserted and will
 reset when the reset control signal is asserted. Of course, a clear signal will have a higher priority over 
-the enable signal. The following diagram shows such a counter. Note that clear is an asynchronous
-negative logic signal whereas Enable is synchronous positive logic signal. 
+the enabled signal. The following diagram shows such a counter. Clear is an asynchronous
+negative logic signal, whereas Enable is the synchronous positive logic signal. 
 
 <div align=center><img src="imgs/v2/13.png" alt="drawing" width="600"/></div>
 
 
 ### Part6-2-1
 
-Design a 8-bit counter using T flip-flops, extending the above structure to
+Design an 8-bit counter using T flip-flops, extending the above structure to
 8-bits. Your design needs to be hierarchical, using a T flip-flop in
-behavioral modeling, and rest either in dataflow or gate-level modeling.
+behavioral modeling, and the rest should be either in dataflow or gate-level modeling.
 Develop a testbench and validate the design. Assign Clock input, Clear_n,
 Enable, and Q. 
 
@@ -607,7 +606,7 @@ module t_counter_8bit(
 endmodule
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/15.png" alt="drawing" width="400"/></div>
 
@@ -656,7 +655,7 @@ module tb_t_counter_8bit;
 endmodule
 
 ```
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/14.png" alt="drawing" width="600"/></div>
 
@@ -670,7 +669,7 @@ Modify the 8-bit counter using D flip-flops. The design should be
 hierarchical, defining D flip-flop in behavioral modeling, creating T flip-flop
 from the D flip-flop, implementing additional functionality using dataflow
 modeling. Assign Clock input, Clear_n, Enable, and Q. Implement the
-design and verify the functionality in hardware.
+design and verify the functionality of the hardware.
 
 **lab6_2_2.v**
 ```verilog
@@ -743,7 +742,7 @@ endmodule
 
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/17.png" alt="drawing" width="600"/></div>
 
@@ -751,11 +750,11 @@ endmodule
 ### Part6-2-3
 
 Other types of binary counters include (i) up, (ii) down, and (iii) up-down. Each one of them may have
-count enable and reset as control signals. There may be situation where you may want to start the count
+count enabled and reset as control signals. There may be a situation where you may want to start the count
 up/down from some non-zero value and stop when some other desired value is reached. Here is an
-example of a 4-bit counter which starts with a value 10 and counts down to 0. When the count value 0 is
+example of a 4-bit counter which starts with a value of 10 and counts down to 0. When the count value 0 is
 reached, it will re-initialize the count to 10. At any time, if the enable signal is negated, the counter
-pauses counting until the signal is asserted back. It assumes that load signal is asserted to load the predefined value before counting has begun. 
+pauses counting until the signal is asserted back. It assumes that the load signal is asserted to load the predefined value before counting has begun. 
 
 ```verilog
 reg [3:0] count;
@@ -775,7 +774,7 @@ reg [3:0] count;
 
 Model a 4-bit down-counter with synchronous load, enable, and clear as
 given in the code above. Develop a testbench (similar to the waveform
-shown below) and verify the design works. Assign Clock input, Clear,
+below) and verify the design works. Assign Clock input, Clear,
 Enable, Load, and Q. 
 
 <div align=center><img src="imgs/v2/18.png" alt="drawing" width="600"/></div>
@@ -803,10 +802,10 @@ module down_counter_4_bit (
     // Synchronous logic block, sensitive to the positive edge of the clock
     always @(posedge clk) begin
         if (clear) begin
-            count <= 0; // If clear is asserted, reset count to 0
+            count <= 0; // If clear is asserted, reset the count to 0
         end else if (enable) begin // Proceed if the counter is enabled
             if (load | cnt_done) begin
-                count <= 4'b1010; // If load is asserted or count has reached 0, preload count with 10 (4'b1010)
+                count <= 4'b1010; // If the load is asserted or count has reached 0, preload count with 10 (4'b1010)
             end else begin
                 count <= count - 1; // If not loading and not done, decrement the count by 1
             end

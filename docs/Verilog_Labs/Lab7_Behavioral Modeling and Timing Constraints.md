@@ -7,18 +7,18 @@ sort: 7
 ## Introduction
 
 Behavioral modeling was introduced in Lab 1 as one of three widely used modeling styles. Additional
-capabilities with respect to testbenches were further introduced in Lab 4. However, there more constructs
-available in this modeling style which are particularly useful for complex sequential digital circuits design.
-Sequential circuits require clocking, and with clocking there is always a frequency or speed involved at
-which the circuit can be run. The expected speed can be communicated to the tools through specific
-timing constraints via the XDC file. In this lab you will learn more language constructs and timing
-constraints concepts.
+capabilities concerning testbenches were further introduced in Lab 4. However, more constructs are
+available in this modeling style that are particularly useful for complex sequential digital circuit design.
+Sequential circuits require clocking, and with clocking, there is always a frequency or speed involved at
+which the circuit can be run. The tools can communicate the expected speed through specific
+timing constraints via the XDC file. In this lab, you will learn more about language constructs and timing
+constraint concepts.
 
 ## Behavioral Modeling 
 As mentioned in previous labs, the primary mechanisms through which the behavior of a design can be
-modeled are: ```initial``` and ```always``` statements. .The ```initial``` statement is mainly used in testbenches
+modeled are: ```initial``` and ```always``` statements. The ```initial``` statement is mainly used in testbenches
 to generate inputs at a desired time, whereas the ```always``` statement is mainly used to describe the
-functionality of the circuit. Both the ```initial``` and ```always``` statements may have simple or block of
+circuit's functionality. Both the ```initial``` and ```always``` statements may have simple or block of
 (having enclosed between begin … end) procedural statement(s). 
 
 A procedural statement is one of
@@ -39,17 +39,17 @@ A procedural statement is one of
 
 * task (user or system) 
 
-When multiple procedural statements are enclosed between begin … end, they execute sequentially.
+When multiple procedural statements are enclosed between begin and end, they execute sequentially.
 Since an ```always``` statement executes continuously, they are typically controlled using either delay control
-or event control mechanisms. Here is an example of a delay controlled procedural statement: 
+or event control mechanisms. Here is an example of a delay-controlled procedural statement: 
 
 ```verilog
 always
  #5 CLK = ~CLK;
 ```
 
-In the above example, the statement will execute after every 5 units of time specified in the Verilog code,
-inverting the signal value every time it executes, thus generating a clock of 10 units period. The``` #5 CLK= ~CLK``` statement is considered a delay control, meaning the time delay between the statement encountered and actually executed is 5 time units. When the delay appears on the left side (as in above case), it is also considered as an inter-statement delay where the statement is blocked for that much time then gets evaluated and the result is assigned to the target. Below is the example that illustrates the effect of the inter-statement delay: 
+In the above example, the statement will execute after every five units specified in the Verilog code,
+inverting the signal value every time it executes, thus generating a clock of 10 units. The ``` #5 CLK= ~CLK``` statement is a delay control, meaning the time delay between the statement encountered and executed is five time units. When the delay appears on the left side (as in the above case), it is also considered an inter-statement delay where the statement is blocked for that much time, then gets evaluated, and the result is assigned to the target. Below is an example that illustrates the effect of the inter-statement delay: 
 
 ```verilog
 initial
@@ -59,7 +59,7 @@ begin
  #2 SIG1 = 4;
 end  
 ```
-The SIG1 signal will get the value of 3 at 5, value of 7 at 9, and value of 4 at 11 time units. 
+The SIG1 signal will get a value of 3 at 5, a value of 7 at 9, and a value of 4 at 11 time units. 
 
 ```verilog
 wire test;
@@ -68,9 +68,9 @@ begin
  #5 CLK = ~CLK;
 end 
 ```
-The above ```always``` statement will execute only when there is a change in value (an event) on a wire test.
+The above ```always``` statement will execute only when a change in value (an event) occurs on a wire test.
 The change in value can be 0 -> 1, 1 -> 0, 0 -> x, x->1, x -> 0, 1 -> z, z -> 0, 0 -> z, z -> 1 or 1->x. When
-the event occurs, the logical value of CLK will be flipped after 5 time units. 
+the event occurs, the logical value of CLK will be flipped after five time units. 
 
 ```verilog
 wire test;
@@ -83,7 +83,7 @@ end
 The above ```always``` statement will execute only when there is a rising edge change (0 -> 1, 0 -> x, 0 -> z,
 z->1, x->1) in value on a wire test. When the event occurs, the logical value of CLK will be flipped after 5
 time units. Such events are called edge-triggered events. In contrast to edge-triggered events, there can
-be another type of event called a level-sensitive event control. 
+be another type called level-sensitive event control. 
 
 ```verilog
 wait (SUM > 22)
@@ -94,8 +94,8 @@ wait (DATA_READY)
 In the above examples, SUM is assigned 0 only when SUM is greater than 22, and DATA is assigned
 whatever the value is on BUS when DATA_READY is asserted. 
 
-Until now, we have been dealing with the inter-statement delay which helps to model an inertial delay in
-the behavior of the code. There is another kind of delay, called an intra-statement, which is used to
+Until now, we have dealt with the inter-statement delay, which helps model an inertial delay in
+the code's behavior. Another kind of delay, an intra-statement, is used to
 model the transport delay using the assignment statement. Here is an example of it: 
 
 ```verilog
@@ -103,7 +103,7 @@ DONE = #5 1’b1:
 ```
 
 In this statement, the intra-statement delay value is mentioned on the right side of the assignment
-operator. The right hand side expression is evaluated when encountered, but the result of the expression
+operator. The right-hand side expression is evaluated when encountered, but the result of the expression
 is only assigned after the stated delay. 
 
 ### Part7-1-1
@@ -125,7 +125,7 @@ module tb_port_a;
         #5 PORT_A = 8'hF2; // At time = 5ns, PORT_A = 'hF2
         #5 PORT_A = 8'h41; // At time = 10ns, PORT_A = 'h41
         #5 PORT_A = 8'h0A; // At time = 15ns, PORT_A = 'h0A
-        #5; // Wait for 5 ns to observe the last value in the simulation
+        #5; // Wait for five ns to observe the last value in the simulation
     end
 
     // Monitor changes to PORT_A and display time and value
@@ -136,7 +136,7 @@ module tb_port_a;
 endmodule
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/23.png" alt="drawing" width="800"/></div>
 
@@ -159,10 +159,10 @@ end
 ```
 <div align=center><img src="imgs/v2/24.png" alt="drawing" width="800"/></div>
 
-Another kind of assignment operator, where the assignment operator “<=” used is called non-blocking.
-The statement that uses the non-blocking operator does not block the execution; however the assignment
+Another kind of assignment operator, where the assignment operator “<=” is used, is called non-blocking.
+The statement that uses the non-blocking operator does not block the execution; however, the assignment
 is scheduled to occur in the future. When the non-blocking assignment is executed, the right-hand side
-expression is evaluated at that time and its value is scheduled to be assigned to the left-hand side target
+expression is evaluated at that time. Its value is scheduled to be assigned to the left-hand side target
 and the execution continues with the next statement. The non-blocking statements are widely used for
 content transfer across multiple registers (often in parallel) when a desired clock event occurs
 
@@ -176,8 +176,8 @@ end
 
 ```
 In this example, when the positive edge event on the CLK occurs, A, B, and CIN values are noted
-(captured), and then T1 gets an updated value after a 5 time units delay, T2 gets updated after a 8 time
-units delay, and T3 gets updated after a 2 time units delay all after the same rising edge of the CLK
+(captured). Then T1 gets an updated value after a 5-time units delay, T2 gets updated after an 8-time
+units delay, and T3 gets updated after a 2-time units delay all after the same rising edge of the CLK
 signal. Here is another example that generates the output shown in the waveform diagram. 
 
 ```verilog
@@ -232,13 +232,13 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/28.png" alt="drawing" width="800"/></div>
 
 ### Part7-1-3
 
-So far we have seen constructs which allow generation of stimulus unconditionally. However, many times
+So far we have seen constructs that allow generation of stimulus unconditionally. However, many times
 we like to have different stimulus generation upon certain conditions. Verilog HDL provides control
 altering statements such as **if**, **if … else**, and **if … else** if. The general syntax of an **if**
 statement is:
@@ -336,7 +336,7 @@ module tb_mux4to1;
 endmodule
 
 ```
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/29.png" alt="drawing" width="600"/></div>
 
@@ -358,9 +358,9 @@ The case_expression is evaluated first (whenever there is an event on it), and t
 the case_item_expr in the order they are listed. When the match occurs, the corresponding
 procedural_statement is executed. The procedural_statement, if it consists of multiple statements, is
 enclosed in a begin … end block. The ```default``` case covers all values that are not covered by any of the
-case_item_expr. In the case_expression, the x and z (if present) is compared literally in case_item_expr.
-That is they are not considered don’t case. If you want to consider them as don’t care than you can use
-casex or casez statement instead of case. In the **casez** statement, the value **z** that appears in the
+case_item_expr. In the case_expression, the x and z (if present) are compared literally in case_item_expr.
+That is they are not considered don’t case. If you want to consider them as don’t care then you can use
+casex or casez statement instead of the case. In the **casez** statement, the value **z** that appears in the
 case_expression and case_item_expr is considered as don’t care. In the **casex** statement, both the
 values x and z are considered as don’t care 
 
@@ -424,7 +424,7 @@ begin
 
 ```
 
-The ```repeat``` loop statement is used when the procedural statement(s) need to be executed for a
+The ```repeat``` loop statement is used when the procedural statement(s) need to be executed a
 specified number of times. Note: if the loop count expression is an x or a z, then the loop count is treated
 as a 0.
 
@@ -443,7 +443,7 @@ while (COUNT < COUNT_LIMIT)
  SUM = SUM +5; 
 
 ```
-The ```for``` loop statement is used when the procedural statement(s) need to be executed for a specified
+The ```for``` loop statement is used when the procedural statement(s) need to be executed a specified
 number of times. Unlike the ```repeat``` statement, an index variable is used which can be initialized to any
 desired value, it can be further updated by whatever value is required, and a condition can be given to
 terminate the loop statement. The loop index variable is normally defined as an integer type. Here is an
@@ -542,7 +542,7 @@ endmodule
 
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/30.png" alt="drawing" width="600"/></div>
 
@@ -552,42 +552,41 @@ In combinatorial logic design, delays through the circuits will depend on the nu
 fan-out (number of gate inputs a net drives) on each net, and the capacitive loading on the output nets.
 When such circuits are placed between flip-flops or registers, they affect the clock speeds at which
 sequential designs can be operated. The synthesis and implementation tools will pack the design in LUT,
-flip-flops, and registers, as well as place them appropriately if the expected performance is communicated
-to them via timing constraints. Timing constraints can be categorized into global timing or path specific
-constraints. The path specific constraints have higher priority over global timing constraints, and the
-components which are used in those specific paths are placed and routed first.
+flip-flops, and registers and place them appropriately if the expected performance is communicated
+to them via timing constraints. Timing constraints can be categorized into global timing or path-specific
+constraints. The path-specific constraints have higher priority than global timing constraints, and the
+components used in those specific paths are placed and routed first.
 
 The global timing constraints cover most of the design with very few lines of instructions. In any pure
-combinatorial design, the path-to-path constraint is used to describe the delay the circuit can tolerate. In
-sequential circuits, period, input delay, and output delay constraints are used. All four kinds of the timing
+combinatorial design, the path-to-path constraint describes the delay the circuit can tolerate. Period, input delay, and output delay constraints are used in sequential circuits. All four kinds of timing
 constraints are shown in the figure below. 
 
 <div align=center><img src="imgs/v2/27.png" alt="drawing" width="600"/></div>
 
-In the above figure, the paths which are covered between ADATA input and D port of FLOP1, BUS input
+In the above figure, the paths covered between ADATA input and D port of FLOP1, BUS input
 and D port of FLOP4 can be constrained by a constraint called SET_INPUT_DELAY command. The
-set_input_delay command indicates how much time is spent between the Q output of a FF in the
-upstream device, the routing delay in the upstream device as well as the board delay. The tools will
+set_input_delay command indicates how much time is spent between the Q output of an FF in the
+upstream device, the routing delay in the upstream device, and the board delay. The tools will
 subtract that delay from the clock period of the clock signal listed in the command and will use the
 resulting delay to place and route the path between the input and the D input of FF. It will also consider
-delay experienced by the clock arriving to the clock port of the destination FF (e.g. FLOP1 in the above
+the delay experienced by the clock arriving at the clock port of the destination FF (e.g. FLOP1 in the above
 diagram). The max and min qualifiers are used for the setup and hold checks. 
 
 
 The paths between the port Q of FLOP3 and output OUT1, Q port of FLOP5 and OUT1, Q port of FLOP5
 and OUT2 can be constrained by SET_OUTPUT_DELAY command. Again, the delay mentioned
-indicates how much delay is spent in the board delay, routing delay and the setup delay of the FF in the
+indicates how much is spent on the board delay, routing delay and the setup delay of the FF in the
 downstream device.
 
 The paths between CDATA and OUT2 can be constrained by the SET_MAX_DELAY constraint. 
 
-The paths between Q port of FLOP1 and D port of FLOP2, Q port of FLOP2 and D port of FLOP3, Q port
+The paths between the Q port of FLOP1 and D port of FLOP2, Q port of FLOP2 and D port of FLOP3, Q port
 of FLOP4 and D port of FLOP5 can be constrained by the period constraint. The period constraint is
-created using the create_clock command. The create_clock command may refer ot a pin of the FPGA
-design or may not refer any pins. When the clock pin is not referred, a virtual clock will be created. When
-the pin is referred, the period parameter indicates rising to rising edge delay and waveform option
-indicates when the rising edge occurs and the second number indicates when the falling edge occurs.
-The waveform option can be used to create clocks of non-50% duty cycle and/or phase delayed clock
+created using the create_clock command. The create_clock command may refer to a pin of the FPGA
+design or may not refer to any pins. A virtual clock will be created when the clock pin is not referred to. When
+the pin is referred to, the period parameter indicates rising to rising edge delay, and the waveform option
+indicates when the rising edge occurs. The second number indicates when the falling edge occurs.
+The waveform option can create clocks of a non-50% duty cycle and/or phase-delayed clock
 signal. 
 
 ```verilog
@@ -599,12 +598,11 @@ set_max_delay 5.0 –from [get_ports CDATA] –to [get_ports OUT2]
 ```
 
 Note that the clock period is defined at 10 ns. This is applied throughout the example for consistency.
-Further details on the syntax of each constraint type can be found in UG903, the Vivado Using
-Constraints Guide. 
+Further details on the syntax of each constraint type can be found in UG903, the Vivado Using Constraints Guide. 
 
 ## Conclusion 
 
-In this lab you learned about various constructs available in behavioral modeling. You also learned about
-blocking and non-blocking operators as well as concepts and the need of timing constraints. Providing
-the timing constraints to the implementation tools the generated output can be made to meet the design’s
+In this lab, you learned about various constructs that are available in behavioral modeling. You also learned about
+blocking and non-blocking operators, concepts, and the need for timing constraints. Providing
+the timing constraints to the implementation tools, the generated output can be made to meet the design’s
 timing specifications. 

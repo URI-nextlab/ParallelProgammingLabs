@@ -6,21 +6,21 @@ sort: 9
 
 ## Introduction
 
-In the previous lab, you learned how the Architectural Wizard can be used to generate a desired clock
-frequency and how the IP Catalog can be used to generate various cores including counters. These two
+In the previous lab, you learned how the Architectural Wizard could be used to generate a desired clock
+frequency and how the IP Catalog can be used to generate various cores, including counters. These two
 functional circuits are fundamental circuits used in creating timers and real-time clocks. In this lab, you will
 generate several kinds of counters, timers, and real-time clocks.
 
 ## Parameter and defparam Statements 
-The Verilog HDL language supports model parameterization, i.e. write a model in HDL and reuse the
-same model number of times by passing different parameter values (typically widths and delays). Use
-the ```parameter``` construct to define a parameterize-able model. There are two ways to change the values:
+The Verilog HDL language supports model parameterization, i.e., writing a model in HDL and reusing the
+same model a number of times by passing different parameter values (typically widths and delays). Use
+the ```parameter``` construct to define a parameterizeable model. There are two ways to change the values:
 (i) during the instantiation of the module (shown in the example below), and (ii) using a ```defparam```
 statement. Here is an example of defining a width as a parameter with a default value of 4.
 
 **parameter** ```WIDTH = 4```; 
 
-The parameter (WIDTH) must be defined before it can be used in the model. Here is an example, in
+The parameter (WIDTH) must be defined before it can be used in the model. Here is an example: in
 Verilog-2001 standard, of a dataflow model of ```reduction-or``` functionality. 
 
 ```verilog
@@ -39,9 +39,9 @@ reduction_or #(10) U3 (in3, result3); // use value of 10
 endmodule 
 
 ```
-Note that the parameter WIDTH is defined before it is used. In case of multiple parameter definitions, the
-values listed during instantiation maps to the order in which the parameters are defined. In Verilog-2001
-standard, all parameters values must be defined, even when some of the values are default values, in
+Note that the parameter WIDTH is defined before it is used. In the case of multiple parameter definitions, the
+values listed during instantiation map to the order in which the parameters are defined. In Verilog-2001
+standard, all parameter values must be defined, even when some are default values, in
 case of multiple parameters. 
 
 For example,
@@ -53,11 +53,11 @@ parameter AND_DELAY=2, XOR_DELAY=3;
 endmodule
 module FA2BIT( ports listing);
 FA #(4,5) f1(ports connections); // AND_DELAY will be 4 and XOR_DELAY will be 5
-FA #(1,2) f2(ports conenctions); // AND_DELAY will be 1 and XOR_DELAY will be 2
+FA #(1,2) f2(ports connections); // AND_DELAY will be 1 and XOR_DELAY will be 2
 endmodule 
 ```
 
-The ```defparam``` statement can also be used to change the parameters value from a higher level module
+The ```defparam``` statement can also be used to change the value of the parameter from a higher level module
 by referencing the module instantiation. For example, 
 
 ```verilog
@@ -76,7 +76,7 @@ Let us define the following parameter in a file called header.v
 
 ```parameter WIDTH = 4;```
 
-Then to use it in a file where reduction_or and test_reduction_or_tb modules are defined, use the
+Then, to use it in a file where reduction_or and test_reduction_or_tb modules are defined, use the
 following line at the beginning of the file. 
 
 ```verlog
@@ -87,10 +87,10 @@ in some other directory path
 ### Part9-1-1
 
 Design a carry-look-ahead adder similar to that you designed in Part 4-1 of
-Lab 2 but using gate-level modeling. Define 2 units delay for each kind of
-gate that you use in the full-adder circuit using the parameter statements.
-When creating hierarchical models, use 1 unit delay for inverters, 3 units
-delay for and and or gates, and 4 units delay for xor gates. Use the module
+Lab 2 but using gate-level modeling. Define two units of delay for each kind of
+gate you use in the full-adder circuit using the parameter statements.
+When creating hierarchical models, use 1 unit delay for inverters, three units
+delay for and or gates, and four units delay for xor gates. Use the module
 instance parameter value assignment statement method. Develop a
 testbench to verify the functionality and to see the delays propagated
 through the hierarchy. 
@@ -151,7 +151,7 @@ endmodule
 
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/40.png" alt="drawing" width="1000"/></div>
 
@@ -182,13 +182,13 @@ module tb_carry_look_ahead_adder;
 endmodule
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/39.png" alt="drawing" width="600"/></div>
 
 ### Part9-1-2
 
-Modify the carry-look-ahead adder of 1-1 using the defparam statements,
+Modify the carry-look-ahead adder of 1-1 using the ```defparam``` statements,
 changing the values of the delays from the testbench. Perform the
 behavioral modeling simulation and observe the delays propagated
 through the hierarchy.
@@ -252,7 +252,7 @@ module carry_look_ahead_adder2(
 endmodule
 ```
 
-* view the schematic of the synthesized design
+* View the schematic of the synthesized design
 
 <div align=center><img src="imgs/v2/40.png" alt="drawing" width="1000"/></div>
 
@@ -289,7 +289,7 @@ module tb_carry_look_ahead_adder;
 endmodule
 ```
 
-We can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v2/41.png" alt="drawing" width="600"/></div>
 
@@ -297,17 +297,17 @@ We can run Simulation to check the code by clicking the Run Simulation under the
 ## Counters and Used Resources 
 
 Counters are fundamental circuits used in measuring events. They may be classified as simple freerunning binary up counting, up/down counting, modulo-k counting, Johnson counting, gray-code counting,
-and special sequence counting. In a given design or set of designs, designer use counters of different
-widths a number of times. The parameter and defparam statements covered in Part 1 are used to obtain
+and special sequence counting. In a given design or set of designs, the designer use counters of different
+widths several times. The parameter and defparam statements covered in Part 1 are used to obtain
 different widths.
 
-Counters normally use adder and subtractor circuits which can be implemented in the Xilinx FPGA either
-using LUTs and/or FFs, or DSP48 slices. You can control the type of resources to be used by using the
-synthesis attribute, called USE_DSP48 with a value of “yes” or “no”, in the Verilog code. USE_DSP48
-instructs the synthesis tool how to deal with synthesis arithmetic structures. By default, mults, mult-add,
-mult-sub, mult-accumulate type structures go into DSP48 blocks. Adders, subtractors, and accumulators
+Counters normally use adder and subtractor circuits, which can be implemented in the Xilinx FPGA 
+using LUTs and/or FFs or DSP48 slices. You can control the type of resources used by using the
+synthesis attribute, called USE_DSP48, with a value of “yes” or “no” in the Verilog code. USE_DSP48
+instructs the synthesis tool on how to deal with synthesis arithmetic structures. By default, mults, mult-add,
+mult-sub, and mult-accumulate type structures go into DSP48 blocks. Adders, subtractors, and accumulators
 can also go into these blocks but by default, are implemented with the fabric instead of with DSP48
-blocks. The USE_DSP48 attribute overrides the default behavior and force these structures into DSP48
+blocks. The USE_DSP48 attribute overrides the default behavior and forces these structures into DSP48
 blocks. The attribute can be placed in the RTL on signals and modules. 
 
 For example, 
@@ -328,10 +328,10 @@ endmodule
 
 ### Part9-2-1
 
-Design an 2-Bit up/down counter using behavioral modeling. Your model
+Design a 2-bit up/down counter using behavioral modeling. Your model
 should define COUNT_SIZE as a parameter and use it in the model. The
 counter will use the on-board 100 MHz clock source. Define the synthesis attribute to not
-to use the DSP48 slices. Go through the design flow, generate the bitstream and fill out the following information after reviewing the Project Summary tab.
+use the DSP48 slices. Go through the design flow, generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
 
 
@@ -365,11 +365,11 @@ endmodule
 
 ```
 
-Add the appropriate board related master XDC file to the project and edit it to include the related pins like below:
+Add the appropriate board-related master XDC file to the project and edit it to include the related pins like below:
 
 <div align=center><img src="imgs/v2/42.png" alt="drawing" width="600"/></div>
 
-And then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
+Then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
 1. Number of BUFG/BUFGCTRL _______________
 
@@ -388,7 +388,7 @@ Click the ```Reports``` and click on the first ```Utilization - Synth Design``` 
 
 ### Part9-2-2
 
-Use the 2-Bit up/down counter design from 2-1. Set the synthesis attribute
+Use the 2-bit up/down counter design from 2-1. Set the synthesis attribute
 to force the use of the DSP48 slices. Go through the design flow, generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
 
@@ -423,11 +423,11 @@ endmodule
 
 ```
 
-Add the appropriate board related master XDC file to the project and edit it to include the related pins like below:
+Add the appropriate board-related master XDC file to the project and edit it to include the related pins like below:
 
 <div align=center><img src="imgs/v2/42.png" alt="drawing" width="600"/></div>
 
-And then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
+Then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
 1. Number of BUFG/BUFGCTRL _______________
 
@@ -445,7 +445,7 @@ Click the ```Reports``` and click on the first ```Utilization - Synth Design``` 
 
 ### Part9-2-3
 
-Design an 2-Bit up/down counter using the 2-Bit core generated using the
+Design a 2-Bit up/down counter using the 2-Bit core generated using the
 IP Catalog. When generating the core, set the setting to use the fabric
 resource. Go through the design flow, generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
@@ -473,11 +473,11 @@ c_counter_binary_0 your_instance_name (
 
 ```
 
-Add the appropriate board related master XDC file to the project and edit it to include the related pins like below:
+Add the appropriate board-related master XDC file to the project and edit it to include the related pins like below:
 
 <div align=center><img src="imgs/v2/47.png" alt="drawing" width="600"/></div>
 
-And then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
+Then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
 1. Number of BUFG/BUFGCTRL _______________
 
@@ -495,18 +495,18 @@ Click the ```Reports``` and click on the first ```Utilization - Synth Design``` 
 
 ### Part9-2-4
 
-Use the 2-Bit up/down counter design from 2-1. Set the synthesis attribute
+Use the 2-bit up/down counter design from 2-1. Set the synthesis attribute
 to force the use of the DSP48 slices. Go through the design flow, generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
 Double click on the ```c_counter_binary_0``` and have a change like below:
 
 <div align=center><img src="imgs/v2/49.png" alt="drawing" width="600"/></div>
 
-Add the appropriate board related master XDC file to the project and edit it to include the related pins like below:
+Add the appropriate board-related master XDC file to the project and edit it to include the related pins like below:
 
 <div align=center><img src="imgs/v2/47.png" alt="drawing" width="600"/></div>
 
-And then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
+Then generate the bitstream and fill out the following information after reviewing the Project Summary tab.
 
 1. Number of BUFG/BUFGCTRL _______________
 
@@ -524,14 +524,14 @@ Click the ```Reports``` and click on the first ```Utilization - Synth Design``` 
 
 ## Timers and Real-Time Clock 
 
-Timers and real-time clock are natural applications of counters. The timers include a stop-watch timer and
-a lapse timer. The real-time clocks are used in a day to day life for keeping track of the time of the day. 
+Timers and real-time clocks are natural applications of counters. The timers include a stop-watch timer and
+a lapse timer. Real-time clocks are used in day-to-day life to keep track of the time of the day. 
 
 ### Part9-3-1
 
 Design a stop-watch timer using the IP Catalog to generate an appropriate
 sized (precision) counter core with the desired input control signals to
-measure a time up to five minutes at a resolution of one-tenth of a second. 
+measure up to five minutes at a resolution of one-tenth of a second. 
 
 
 1. Resolution: One-tenth of a second means the stopwatch should be capable of incrementing every 0.1 seconds (100 milliseconds).
@@ -563,13 +563,13 @@ module up_five_minutes #(
     input reset,            // Asynchronous reset input to reset the counter
     input enable,           // Enable signal for the counter, when high, the counter counts
     output wire [COUNT_SIZE-1:0] counter, // The 12-bit counter output
-    output wire THRESH0     // Threshold output, goes high when counter reaches set value
+    output wire THRESH0     // Threshold output goes high when the counter reaches the set value
 );
 
-// Intermediate signal declaration for the one-tenth second pulse
+// Intermediate signal declaration for the one-tenth-second pulse
 wire one_tenth;
 
-// Instantiation of module generating one-tenth second clock pulses
+// Instantiation of module generating one-tenth-second clock pulses
 top_module one_tenth_clk(
     .clk_in1(clk),
     .reset(reset),
@@ -578,7 +578,7 @@ top_module one_tenth_clk(
     
 // Counter module instantiation to count up to five minutes
 c_counter_binary_0 counter_FIVE(
-    .CLK(one_tenth),        // Connects the one-tenth second pulse as clock input
+    .CLK(one_tenth),        // Connects the one-tenth second pulse as the clock input
     .CE(enable),            // Connect enable signal to Counter Enable input
     .THRESH0(THRESH0),      // Output goes high when the counter reaches a threshold
     .Q(counter)            // The actual count value
@@ -702,12 +702,12 @@ end
 endmodule
 
 ```
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation. We need to change the simulation time to 500ms.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation. We need to change the simulation time to 500ms.
 
 <div align=center><img src="imgs/v2/53.png" alt="drawing" width="900"/></div>
 
 ## Conclusion
 
 In this lab, you learned how to parameterize models so they can be used in subsequent designs. You
-also designed and compared the resources usage of counters modeled behaviorally and using the IP
+also designed and compared the resource usage of counters modeled behaviorally and using the IP
 Catalog. You also designed clocking applications using the counters. 

@@ -161,10 +161,6 @@ typedef ap_uint<512> uint512_t;
 typedef float DataType;
 
 typedef hls::vector<DataType,16> float16;
-
-
-
-
 const int DataTypeSize = sizeof(DataType) * 8;
 
 typedef ap_uint<DataTypeSize> DataTypeInt;
@@ -173,7 +169,6 @@ typedef union converter {
   DataType d;
   uint32_t i;
 } converter_t;
-
 
 template <typename T> void kernel_mmult(T a[N2], T b[N2], T c[N2]);
 
@@ -240,7 +235,6 @@ int main(void)
 
   return err;
 }
-
 ```
 
 **matmult_tb2.cpp**
@@ -277,9 +271,6 @@ int main(void)
   axis_t valuein;
   axis_t valueout;
 
-
-
-
   /** Matrix Initiation */
   for (i = 0; i < 2*N; i++)
   {
@@ -308,9 +299,7 @@ int main(void)
   {
 	  valueout=dataout.read();
   }
-
 }
-
 ```
 
 ## Create the Vivado project
@@ -319,6 +308,10 @@ The configure block design can use reference materials [here](https://uri-nextla
 
 <div align=center><img src="Images/17/7.png" alt="drawing" width="1000"/></div>
 
+Here, we need to change the data width of the AXI DMA ip, because the data width of the ```matmult_accel``` IP's interface is 512 bits, so they need to keep the same.
+
+<div align=center><img src="Images/21/14.png" alt="drawing" width="1000"/></div>
+
 ## Run synthesis,  Implementation, and generate bitstream
 
 It may show some errors about I/O Ports. Please fix them.
@@ -326,7 +319,6 @@ It may show some errors about I/O Ports. Please fix them.
 ## Download the bitstream file to PYNQ
 
 <div align=center><img src="Images/8_16.png" alt="drawing" width="800"/></div>
-
 
 ```python
 from pynq import (allocate, Overlay)
@@ -348,11 +340,8 @@ out_buffer = allocate(shape=(DIM, DIM), dtype=np.float32, cacheable=False)
 
 A = np.random.rand(DIM, DIM).astype(dtype=np.float32)
 B = np.random.rand(DIM, DIM).astype(dtype=np.float32)
-
-
 in_buffer[:] = np.stack((A, B))
 ```
-
 
 ```python 
 #begin the DMA transfer
@@ -361,19 +350,15 @@ def run_kernel():
     dma.recvchannel.transfer(out_buffer)
     dma.sendchannel.wait()
     dma.recvchannel.wait()
-
 #Times an entire code cell.
 %%timeit
 run_kernel()
-
 ```
 ```python
 print(out_buffer)
-
 ```
 ```python
 %timeit A @ B
-
 np.array_equal(A @ B, out_buffer)
 ```
 

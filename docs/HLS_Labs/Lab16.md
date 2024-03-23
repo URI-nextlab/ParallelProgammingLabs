@@ -79,7 +79,6 @@ void example(stream<int>& in, stream<int>& out) {
     proc<1>(inter[1], mux_in[1]);
     mux(mux_in, out);
 }
-
 ```
 **example.h**
 ```c++
@@ -89,7 +88,6 @@ using namespace hls;
 
 #include <iostream>
 using namespace std;
-
 ```
 The synthesis report is shown below:
 
@@ -148,16 +146,13 @@ import numpy as np
 import pynq
 from pynq import MMIO
 hw = pynq.Overlay('design_1.bit')
-
 ```
 
 
 
 ```python
-
 s2mm = hw.axi_dma_0.sendchannel
 mm2s = hw.axi_dma_0.recvchannel
-
 ```
 
 #### Allocate DMA memory address size
@@ -177,14 +172,11 @@ s2mm.transfer(iBuf_0)
 mm2s.transfer(oBuf_0)
 s2mm.wait()
 mm2s.wait()
-
 ```
 
 We will see:
 
 <div align=center><img src="Images/16/7 .png" alt="drawing" width="200"/></div>
-
-
 
 ## using_C++_templates
 
@@ -233,7 +225,6 @@ template <> struct fibon_s<1> {
 void cpp_template(data_t a, data_t b, data_t& dout) {
     dout = fibon_s<FIB_N>::fibon_f(a, b);
 }
-
 ```
 
 **cpp_template_test.cpp**
@@ -255,7 +246,6 @@ int main() {
 
 
 }
-
 ```
 ## using_C++_templates_for_multiple_instances
 
@@ -283,7 +273,6 @@ void cpp_template(int inp, int* out) {
 
     *out += out0 + out1 + out2 + out3 + out4;
 }
-
 ```
 
 **cpp_template.h**
@@ -331,7 +320,6 @@ int main() {
     // Return 0 if the test passed
     return retval;
 }
-
 ```
 
 
@@ -352,7 +340,6 @@ This example illustrates defining arbitrary precision variables through the ap_i
 
 **cpp_ap_int_arith.h**
 ```c++
-
 #ifndef _CPP_AP_INT_ARITH_H_
 #define _CPP_AP_INT_ARITH_H_
 
@@ -386,13 +373,10 @@ void cpp_ap_int_arith(dinA_t inA, dinB_t inB, dinC_t inC, dinD_t inD,
                       dout4_t* out4);
 
 #endif
-
 ```
 
 **cpp_ap_int_arith.cpp**
 ```c++
-
-
 #include "cpp_ap_int_arith.h"
 
 void cpp_ap_int_arith(dinA_t inA, dinB_t inB, dinC_t inC, dinD_t inD,
@@ -405,12 +389,10 @@ void cpp_ap_int_arith(dinA_t inA, dinB_t inB, dinC_t inC, dinD_t inD,
     *out3 = inC / inA;
     *out4 = inD % inA;
 }
-
 ```
 
 **cpp_ap_int_arith_test.cpp**
 ```c++
-
 #include "cpp_ap_int_arith.h"
 
 int main() {
@@ -439,7 +421,6 @@ int main() {
     }
 
 }
-
 ```
 ## using_arbitrary_precision_casting
 
@@ -453,7 +434,6 @@ dout_t arbitrary_precision_casting(din_t a, din_t b) {
 
     return (dout_t)a * (dout_t)b;
 }
-
 ```
 
 **arbitrary_precision_casting.h**
@@ -473,7 +453,6 @@ typedef ap_int<36> dout_t;
 dout_t arbitrary_precision_casting(din_t a, din_t b);
 
 #endif
-
 ```
 
 **arbitrary_precision_casting_test.cpp**
@@ -495,8 +474,6 @@ int main() {
         B = B - 2047;
         printf("RES is %u\r\n",RES);
     }
-
-
 }
 ```
 
@@ -532,7 +509,6 @@ typedef ap_fixed<36, 30> dout_t;
 dout_t cpp_ap_fixed(din1_t d_in1, din2_t d_in2);
 
 #endif
-
 ```
 
 **cpp_ap_fixed.cpp**
@@ -545,7 +521,6 @@ dout_t cpp_ap_fixed(din1_t d_in1, din2_t d_in2) {
     sum = +d_in1;
     return sum * d_in2;
 }
-
 ```
 
 **cpp_ap_fixed_test.cpp**
@@ -566,9 +541,7 @@ int main() {
         in1 = in1 + din1_t(0.25);
         in2 = in2 - din2_t(0.125);
     }
-
 }
-
 ```
 <div align=center><img src="Images/16/6.png" alt="drawing" width="400"/></div>
 
@@ -781,7 +754,6 @@ hls::vector<int, 4> x; // uninitialized
 hls::vector<int, 4> y = 10; // scalar initialized: all elements set to 10
 hls::vector<int, 4> z = {0, 1, 2, 3}; // initializer list (must have 4 elements)
 hls::vector<ap_int, 4> a; // uninitialized arbitrary precision data type
-
 ```
 * Access:
 
@@ -796,7 +768,6 @@ This example illustrates using Load-Compute-Store using a vector datatype.
 
 **example.h**
 ```c++
-
 #ifndef __EXAMPLE_H__
 #define __EXAMPLE_H__
 
@@ -810,14 +781,10 @@ typedef hls::vector<float, 16> float16;
 
 extern "C" void example(float16* res, const float16* lhs, const float16* rhs,
                         int n);
-
 #endif
-
-
 ```
 **example.cpp**
 ```c++
-
 #include "example.h"
 #include <iostream>
 
@@ -865,7 +832,6 @@ extern "C" void example(float16* res, const float16* lhs, const float16* rhs,
         store(res, res_buf);
     }
 }
-
 ```
 The synthesis report is shown below:
 
@@ -910,8 +876,6 @@ int main(int, char**) {
 
     return 0;
 }
-
-
 ```
 This function ```example``` is to add the array ```lhs``` and ```rhs```.
 You can see the result is right by running ```C simulation``` like below:
@@ -932,7 +896,6 @@ It may show some errors about I/O Ports, please fix them.
 
 <div align=center><img src="Images/8_16.png" alt="drawing" width="800"/></div>
 
-
 ```python
 import numpy as np
 import pynq
@@ -945,7 +908,6 @@ overlay = pynq.Overlay('design_1.bit')
 ```python
 top_ip = overlay.example_0
 top_ip.signature
-
 a_buffer = pynq.allocate((16), np.float32)
 b_buffer = pynq.allocate((16), np.float32)
 sum_buffer = pynq.allocate((16), np.float32)
@@ -956,7 +918,6 @@ tmp2 = [9.2, 8.1, 9.1, 6.1, 5.3, 3.2, 5.9, 3.8,3.9, 9.1, 3.3, 4.5, 9.9, 2.1, 2.7
 for i in range(0,16):
     a_buffer[i]=tmp1[i]
     b_buffer[i]=tmp2[i]
-
 ```
 
 
@@ -1009,9 +970,7 @@ typedef ap_uint<6> dsel_t;
 dout_t loop_var(din_t A[N], dsel_t width);
 dout_t loop_max_bounds(din_t A[N], dsel_t width);
 
-
 #endif
-
 ```
 
 **loop_var.cpp**
@@ -1044,10 +1003,8 @@ dout_t loop_max_bounds(din_t A[N], dsel_t width) {
   out_accum += A[x];
  }
  }
-
  return out_accum;
 }
-
 ```
 
 Attempting to optimize the design (```loop_var```) in the example above reveals the issues created by variable loop bounds. The first issue with variable loop bounds is that they prevent Vitis HLS from determining the latency of the loop. Vitis HLS can determine the latency to complete one iteration of the loop. Still, because it cannot statically determine the exact variable ```width```, it does not know how many iterations are performed and thus cannot report the loop latency (the number of cycles to execute all iterations of the loop completely).
@@ -1070,24 +1027,16 @@ int main() {
     din_t A[N];
     dsel_t x = 16;
     dout_t accum;
-
     int i= 0;
-
-
     for (i = 0; i < N; ++i) {
         A[i] = i;
     }
-
-
     // Call the function
     for (i = 0; i < N; ++i) {
 //        x = i;
         accum = loop_max_bounds(A, x);
         printf("accum is %d\r\n",accum);
-
     }
-
-
 }
 ```
 

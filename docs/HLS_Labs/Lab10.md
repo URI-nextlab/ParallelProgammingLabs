@@ -48,7 +48,6 @@ constexpr uint64_t MAXWBW = 256;
 void example(int a[N], int b[N]);
 
 #endif
-
 ```
 
 **example.cpp**
@@ -72,7 +71,6 @@ void example(int a[N], int b[N]) {
         b[i] = buff[i];
     }
 }
-
 ```
 The synthesis report is shown below.
 
@@ -112,7 +110,6 @@ int main() {
     cout << "Test passed.\n";
     return EXIT_SUCCESS;
 }
-
 ```
 
 #### Create the Vivado project
@@ -155,7 +152,6 @@ b_buffer = pynq.allocate((64), np.int32)
 # initialize input
 for i in range (0, 64):
     a_buffer[i] = i+1
-
 ```
 
 
@@ -175,7 +171,6 @@ top_ip.write(0x10, aptr)
 top_ip.write(0x1C, bptr)
 # start the HLS kernel
 top_ip.write(0x00, 1)
-
 ```
 
 We will see:
@@ -299,7 +294,6 @@ int main() {
     printf("sum is  %d\r\n",sum);
 
 }
-
 ```
 
 ## ram_uram
@@ -395,8 +389,6 @@ typedef ap_uint<ADDRBITS> addr_t;
 
 void resource_uram(bool wren, bool rden, addr_t addrW, data_t datain,
                    addr_t AddrR, data_t* dataout);
-
-
 ```
 
 **resource_uram.cpp**
@@ -423,8 +415,6 @@ void resource_uram(bool wren, bool rden, addr_t addrW, data_t datain,
     if (wren)
         buffer[addrW] = datain;
 }
-
-
 ```
 The synthesis report is shown below.
 
@@ -444,8 +434,6 @@ int main() {
     data_t data, dataout;
     int i, j, retval = 0, errors = 0;
 
-
-
     // Write data (square of the address)
     for (i = 0; i < 10; i++) {
         resource_uram(1, 0, i, i * i, addrread, &dataout);
@@ -461,10 +449,7 @@ int main() {
 
         errors += dataout != j * j;
     }
-
-
 }
-
 ```
 ## Demonstrate
 You need to finish the example for the ```max_widen_port_width``` and implement it on the PYNQ-Z2 board.

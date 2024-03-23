@@ -51,20 +51,16 @@ In this example, we use the function which takes two parameters (operands) and r
 
 **example.h**
 ```c++
-
 #include <fstream>
 #include <iostream>
 using namespace std;
 
 void top(char inval1, char inval2, char inval3, char* outval1, char* outval2,
          char* outval3);
-
 ```
 
 **example.cpp**
 ```c++
-
-
 //This function is to implement the addition operation and return the result of adding inval and incr
 char foo(char inval, char incr) {
 #pragma HLS INLINE OFF
@@ -72,21 +68,16 @@ char foo(char inval, char incr) {
     return inval + incr;
 }
 
-
-
 void top(char inval1, char inval2, char inval3, char* outval1, char* outval2,
          char* outval3) {
     *outval1 = foo(inval1, 0);
     *outval2 = foo(inval2, 1);
     *outval3 = foo(inval3, 100);
 }
-
-
 ```
 
 **example_tb.h**
 ```c++
-
 #include "example.h"
 
 int main() {
@@ -100,10 +91,7 @@ int main() {
         top(i, i, i, &a, &b, &c);
         cout << (int)a << " " << (int)b << " " << (int)c << endl;
     }
-
-
 }
-
 ```
 And the result of C simulation is as shown in below.
 
@@ -123,7 +111,6 @@ Pipelining loops permits starting the next iteration of a loop before the previo
 vadd: for(int i = 0; i < len; i++) { 
    c[i] = a[i] + b[i];
 }
-
 ```
 Pipelining the loop allows subsequent iterations of the loop to overlap and run concurrently. Pipelining a loop can be enabled by adding the PIPELINE pragma or directive inside the body of the loop as shown below:
 
@@ -132,7 +119,6 @@ vadd: for(int i = 0; i < len; i++) {
 #pragma HLS PIPELINE 
 c[i] = a[i] + b[i];
 }
-
 ```
 
 The number of cycles it takes to start the next iteration of a loop is called the Initiation Interval (II) of the pipelined loop. So II = 2 means the next iteration of a loop starts two cycles after the current iteration. An II = 1 is the ideal case, where each iteration of the loop starts in the very next cycle. When you use pragma HLS pipeline, you can specify the II for the compiler to achieve. If a target II is not specified, the compiler can try to achieve II=1 by default.
@@ -147,7 +133,6 @@ In the pipelined version of the loop shown in (B), a new input sample is read ev
 
 **loop_imperfect.h**
 ```c++
-
 #ifndef _LOOP_IMPERFECT_H_
 #define _LOOP_IMPERFECT_H_
 
@@ -166,7 +151,6 @@ void loop_imperfect(din_t A[N], dout_t B[N]);
 void loop_perfect(din_t A[N], dout_t B[N]);
 
 #endif
-
 ```
 
 
@@ -227,7 +211,6 @@ LOOP_I:
         }
     }
 }
-
 ```
 The loop_perfect function contains two nested for loops (LOOP_I and LOOP_J) that iterate from 0 to 19.
 Inside the inner loop (```LOOP_J```), there is an accumulator variable ```acc``` that accumulates the product of ```A[j]``` and j for each iteration of the inner loop.
@@ -242,7 +225,6 @@ The result of the C Synthesis is as shown in the below.
 
 **loop_imperfect_test.cpp**
 ```c++
-
 #include "loop_imperfect.h"
 
 int main() {
@@ -261,11 +243,8 @@ int main() {
     //loop_perfec(A,B)
     for (i = 0; i < N; ++i) {
         cout << B[i] << endl;
-    }
-    
+    }   
 }
-
-
 ```
 
 The result of the C Simulation is the same. This example shows that the different loop structures can significantly affect the final optimization results. For the imperfect loop, inside the outer loop (```LOOP_I```), the accumulator variable ```acc``` is initialized to 0 for each iteration. This initialization should ideally occur once before entering the inner loop to avoid unnecessary reset operations. And the code has a conditional assignment to ```B[i]``` based on whether the index i is even or odd (if (i % 2 == 0)). This conditional assignment introduces branching in the code, which may impact performance and efficiency during hardware synthesis. For the perfect loop, the code contains a simple accumulation operation (```acc += A[j] * j```) and conditional statements to handle specific conditions (if (j == 0) and if (j == 19)). The straightforward logic and absence of complex dependencies make optimizing and flattening the code easier for the synthesis tool.
@@ -281,7 +260,6 @@ If the top-level function is pipelined, both loops must be unrolled: 400 multipl
 
 **loop_pipeline.h**
 ```c++
-
 #ifndef _LOOP_PIPELINE_H_
 #define _LOOP_PIPELINE_H_
 
@@ -299,13 +277,10 @@ typedef int dout_t;
 int loop_pipeline(din_t A[N]);
 
 #endif
-
-
 ```
 
 **loop_pipeline.cpp**
 ```c++
-
 #include "loop_pipeline.h"
 
 int loop_pipeline(din_t A[N]) {
@@ -347,11 +322,7 @@ int main() {
         accum = loop_pipeline(A);
         cout << accum << endl;
     }
-
 }
-
-
-
 ```
 
 The concept to appreciate when selecting at which level of the hierarchy to pipeline is to understand that pipelining the innermost loop gives the smallest hardware with generally acceptable throughput for most applications. Pipelining the upper levels of the hierarchy unrolls all sub-loops and can create many more operations to schedule (which could impact compile time and memory capacity), but typically gives the highest performance design in terms of throughput and latency. The data access bandwidth must be matched to the requirements of the operations that are expected to be executed in parallel. This implies that you might need to partition array ```A``` in order to make this work.
@@ -374,8 +345,6 @@ LOOP_I:
 
     return acc;
 }
-
-
 ```
 
 * Pipeline ```LOOP_J```: Latency is approximately 25 cycles (5x5) and requires less than 250 LUTs and registers (the I/O control and FSM are always present).
@@ -401,11 +370,8 @@ LOOP_I:
             acc += A[j] * i;
         }
     }
-
     return acc;
 }
-
-
 ```
 * Pipeline ```LOOP_I```: Latency is 13 cycles but requires a few hundred LUTs and registers. About twice the logic as the first option, minus any logic optimizations that can be made.
 
@@ -434,8 +400,6 @@ LOOP_I:
 
     return acc;
 }
-
-
 ```
 * Pipeline ```function loop_pipeline```: Latency is now only 3 cycles (due to 20 parallel register accesses) but requires almost twice the logic as the second option (and about 4 times the logic of the first option), minus any optimizations that can be made.
 
@@ -469,18 +433,13 @@ using namespace hls;
 typedef hls::axis<int,0,0,0> data_t_pack;
 typedef hls::stream<data_t_pack> d_stream;
 
-
-
-
 void add_frp( d_stream& strm, d_stream &out);
-
 ```
 
 **free_pipe_mult.cpp**
 ```c++
 #include <iostream>
 #include "free_pipe_mult.h"
-
 
 void add_frp( d_stream& strm,d_stream &out) {
 #pragma HLS INTERFACE ap_ctrl_none port=return
@@ -511,7 +470,6 @@ void add_frp( d_stream& strm,d_stream &out) {
 	result.data=temp.data;
 	out.write(result);
 }
-
 ```
 
 **free_pipe_mult_tb.cpp**
@@ -524,8 +482,6 @@ void add_frp( d_stream& strm,d_stream &out) {
 using namespace std;
 
 int main() {
-
-
 	d_stream strm;
 	d_stream out;
 
@@ -538,10 +494,7 @@ int main() {
 		   strm.write(temp);
 		   add_frp(strm, out);
 	}
-
     // Save the results to a file
-
-
     for(int j=0;j<10;j++)
     {
     	 result=out.read();
@@ -549,12 +502,7 @@ int main() {
     // Save output data
     cout << "Result: " << result.data << endl;
     }
-
-
 }
-
-
-
 ```
 
 **Flushable Pipeline (FLP)**  
@@ -615,8 +563,6 @@ from pynq import Overlay
 from pynq import allocate
 import numpy as np
 import time
-
-
 ```
 
 ### Create DMA instances
@@ -624,11 +570,9 @@ import time
 We can create three DMA objects using the labels for the DMAs listed above.
 
 ```python
-
 hw = Overlay('design_flp.bit')
 mm2s = hw.axi_dma_0.sendchannel
 s2mm = hw.axi_dma_0.recvchannel
-
 ```
 
 ### Read DMA
@@ -642,18 +586,15 @@ oBuf = allocate(shape=(N,), dtype = np.int32)
 for i in range(N):
     oBuf[i]= i
     print(oBuf[i])
-
 ```
 <div align=center><img src="Images/2_27_2.png" alt="drawing" width="200"/></div>
 
 
 ```python
-
 mm2s.transfer(oBuf)
 s2mm.transfer(iBuf)
 mm2s.wait()
 s2mm.wait()
-
 ```
 
 

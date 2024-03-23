@@ -32,7 +32,6 @@ INPUT_DATA_ARRAY,
 OUTPUT_DATA_ARRAY, 
 OUTPUT_STATUS, 
 INPUT_RUN_TIME_CONFIGURATION);
-
 ```
 The ```STATIC_PARAM``` is the static parameterization struct that defines the static parameters for the FFT.
 
@@ -43,7 +42,6 @@ The data types for the arrays can be ```float``` or ```ap_fixed```.
 typedef float data_t;
 complex<data_t> in_fft[FFT_LENGTH];
 complex<data_t> out_fft[FFT_LENGTH];
-
 ```
 **fft_top.cpp**
 ```c++
@@ -94,8 +92,6 @@ void fft_top(bool direction, complex<data_in_t> in[FFT_LENGTH],
 
     outputdatamover(&fft_status, ovflo, xk, out);
 }
-
-
 ```
 **fft_top.h**
 ```c++
@@ -134,8 +130,6 @@ void dummy_proc_be(status_t* status_in, bool* ovflo, cmpxDataOut in[FFT_LENGTH],
 
 void fft_top(bool direction, cmpxDataIn in[FFT_LENGTH],
              cmpxDataOut out[FFT_LENGTH], bool* ovflo);
-
-
 ```
 The synthesis report is shown below:
 
@@ -152,7 +146,6 @@ The FFT function with streaming interfaces is defined in the HLS namespace simil
            hls::stream<complex<float or ap_fixed >> &xk_s,
            hls::stream<ip_fft::status_t<CONFIG_T>> &status_s,
            hls::stream<ip_fft::config_t<CONFIG_T>> &config_s);
-
 ```
 and can be called as follows:
 
@@ -162,7 +155,6 @@ INPUT_DATA_STREAM,
 OUTPUT_DATA_STREAM,
 OUTPUT_STATUS_STREAM,
 INPUT_RUN_TIME_CONFIGURATION_STREAM);
-
 ```
 The STATIC_PARAM is the static parameterization struct that defines the static parameters for the FFT.
 
@@ -256,7 +248,6 @@ void fft_top(bool direction, hls::stream<cmpxDataIn>& in,
 
     outputdatamover(fft_status, ovflo, xk, out);
 }
-
 ```
 The synthesis report is shown below:
 
@@ -307,7 +298,6 @@ Place the pragma in the C source within the boundaries of the variable life cycl
 
 ```c++
 #pragma HLS reset variable=<a> off
-
 ```
 
 Where:
@@ -324,7 +314,6 @@ This example shows how global arrays are mapped to RAMs with different implement
 #include <ap_int.h>
 
 int test(int i);
-
 ```
 
 
@@ -347,7 +336,6 @@ int test(int i) {
     int result = (A[i] + B[i] + C[i]).to_int();
     return result;
 }
-
 ```
 
 The synthesis report is shown below:
@@ -381,7 +369,6 @@ This example shows how static arrays are mapped to RAMs with different implement
 #include <ap_int.h>
 
 int test(int i);
-
 ```
 
 **test.cpp**
@@ -440,7 +427,6 @@ int test(int i) {
     int result = (A[i] + B[i] + C[i]).to_int();
     return result;
 }
-
 ```
 
  When the reset directive/pragma is applied to the static arrays (A/B/C), you will see that in the generated RTL, both a ROM and a RAM are used to implement each memory. The initial value is loaded to the ROM only (as in solution_A). But each time after the reset signal is asserted, if an address is not written, the value read from the address is from the ROM, otherwise it is read from the RAM. That means the memory is reset back to the initialized value after each reset. The same structure below can be seen for all three arrays A/B/C.
@@ -468,7 +454,6 @@ int main() {
     }
     return result;
 }
-
 ```
 ### static_array_ROM
 This example shows how static arrays are mapped to ROMs with different implementations and how they are initialized.
@@ -535,7 +520,6 @@ template <int N> struct TestStruct {
 };
 
 int test(int i);
-
 ```
 
 **test.cpp**
@@ -551,11 +535,8 @@ int test(int i) {
     int ts3[10]={0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     int ts4[10]={9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
     int ts5[10]={9, 9, 8, 6, 5, 4, 3, 2, 1, 0};
- 
 
     static TestStruct<10> ts[2];
-
-
 	   for(int j=0;j<10;j++)
 	   {
 		  ts[0].A[j] = ts0[j];
@@ -567,11 +548,6 @@ int test(int i) {
 		  ts[1].C[j] = ts5[j];
 
 	   }
-
-
-
-
-
 #pragma HLS BIND_STORAGE variable = ts type = RAM_2P impl = BRAM
     // #pragma HLS BIND_STORAGE variable=ts type=RAM_2P impl=LUTRAM
     // URAMs are not supported for global/static arrays
@@ -585,7 +561,6 @@ int test(int i) {
     int result = (ts[ind].A[i] + ts[ind].B[i] + ts[ind].C[i]);
     return result;
 }
-
 ```
 The synthesis report is shown below:
 
@@ -617,7 +592,6 @@ int main() {
 
 This example shows how static arrays are mapped to RAMs with different implementations and how they are initialized as well as how they are reset.
 
-
 **test.h**
 ```c++
 #include <ap_int.h>
@@ -647,8 +621,6 @@ int test(int i) {
 			  ts.A[j] = ts0[j];
 			  ts.B[j] = ts1[j];
 			  ts.C[j] = ts2[j];
-
-
 		   }
 
 
@@ -720,11 +692,7 @@ int test(int i) {
 			  ts.A[j] = ts0[j];
 			  ts.B[j] = ts1[j];
 			  ts.C[j] = ts2[j];
-
-
 		   }
-
-
 #pragma HLS BIND_STORAGE variable = ts.A type = RAM_2P impl = BRAM
 #pragma HLS BIND_STORAGE variable = ts.B type = RAM_2P impl = LUTRAM
 
@@ -788,7 +756,6 @@ typedef int dsel_t;
 dout_t malloc_removed(din_t din[N], dsel_t width);
 
 #endif
-
 ```
 
 **malloc_removed.cpp**
@@ -846,16 +813,12 @@ int main() {
   for (i = 0; i < N; ++i) {
     A[i] = i + 200;
   }
-
   // Call the function
   for (i = 0; i < N; ++i) {
     accum = malloc_removed(A, i);
     printf("accum is %lld\n",(long long)accum);
-
   }
-
 }
-
 ```
 ## rtl_as_blackbox
 This examaple uses the RTL blackbox feature. The RTL blackbox enables the use of existing RTL IP in an HLS project. This lets you add RTL code to your C/C++ code for synthesis of the project by Vitis HLS.
@@ -877,7 +840,6 @@ void example(data_t a1, data_t a2, data_t a3, data_t a4, data_t b1, data_t b2,
              data_t b3, data_t b4, data_t& sigma);
 
 #endif
-
 ```
 
 **example.cpp**
@@ -904,7 +866,6 @@ void example(data_t a1, data_t a2, data_t a3, data_t a4, data_t b1, data_t b2,
     rtl_model(a1, a2, a3, a4, b1, b2, b3, b4, tmp1, tmp2, tmp3, tmp4);
     sigma = tmp1 + tmp2 + tmp3 + tmp4;
 }
-
 ```
 
 **example_tb.cpp**
@@ -945,7 +906,6 @@ int main() {
 
 
 }
-
 ```
 
 **rtl_model.v**
@@ -1011,7 +971,6 @@ module rtl_model (input            ap_clk, ap_rst, ap_ce, ap_start, ap_continue,
    assign ap_idle   = ~ap_start;
       
 endmodule // rtl_model
-
 ```
 
 ## Demonstrate

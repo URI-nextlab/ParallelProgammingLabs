@@ -6,53 +6,52 @@ sort: 11
 
 ## Introduction
 
-Control unit designs may range from simple to highly complex. There are number of methods to design
+Control unit designs may range from simple to highly complex. There are a number of methods to design
 and realize control units. Simple control units can be designed using state graphs and state table
-methods. Complex control units may be designed using algorithmic charts just like flowcharts are used in
-software development. In this lab, you will be introduced to the Algorithmic State Machine (ASM) chart
-technique.
+methods. Complex control units may be designed using algorithmic charts like flowcharts in
+software development. You will be introduced to the Algorithmic State Machine (ASM) chart
+technique in this lab.
 
 ## ASM Charts
 
 Just as flowcharts are useful in software design, special flowcharts called Algorithmic State Machines
 (ASM) are useful in digital systems hardware design. Digital systems typically consist of datapath
-processing and the control path. The control path is implemented using state machines which can be
+processing and the control path. The control path is implemented using state machines, which can be
 realized using state graphs. As the control path (behavior) of the system becomes complex, it becomes
 increasingly difficult to design the control path using the state graph technique. The ASM charts technique
 becomes useful and handy in designing complex and algorithmic circuits. The following diagram shows a
-complex digital system, partitioned into a controller (to generate the control signals) and the controlled
+complex digital system partitioned into a controller (to generate the control signals) and the controlled
 architecture (data processor). 
 
 <div align=center><img src="imgs/v4/1.png" alt="drawing" width="400"/></div>
 
-The model of the Controller (ASM) block in the above figure can be viewed as the combination of Mealy and Moore machines as shown below.
+The model of the Controller (ASM) block in the above figure can be viewed as the combination of Mealy and Moore machines, as shown below.
 
 <div align=center><img src="imgs/v4/2.png" alt="drawing" width="400"/></div>
 
-The ASM chart differs from an ordinary flowchart in that specific rules must be followed in constructing the
+The ASM chart differs from an ordinary flowchart in that specific rules must be followed when constructing the
 chart. When these rules are followed, the ASM chart is equivalent to a state graph, and it leads directly to
 a hardware realization. The following diagram shows the three main components of an ASM chart. 
 
 <div align=center><img src="imgs/v4/3.png" alt="drawing" width="400"/></div>
 
 
-The state of the system is represented by a state box. The state box contains a state name, and it may
+A state box represents the state of the system. The state box contains a state name and may
 contain an output list (just like in a state graph of the Moore machine). A state code may be placed
 outside the box at the top (if you want to assign a state code). A decision box always has true and false
 branches. The condition placed in the decision box must be a Boolean expression that is evaluated to
 determine which branch to take. The conditional output box contains a conditional output list. The
-conditional outputs depend on both the state of the system and the inputs (just like in the Mealy machine). 
+conditional outputs depend on the system's state and the inputs (just like in the Mealy machine). 
 
-The ASM chart is constructed from SM blocks. Each SM block contains exactly one state box together
-with decision boxes and conditional output boxes associated with that state as shown below. An SM
-block has exactly one entrance path and one or more exit paths. Each SM block describes the machine
+The ASM chart is constructed from SM blocks. Each SM block contains exactly one state box, decision boxes, and conditional output boxes associated with that state, as shown below. An SM
+block has exactly one entrance path and one or more exit paths. Each SM block describes the machine's
 operation during the time that the machine is in that state. A path through an SM block from entrance to
-exit is referred to as a link path. 
+exit is called a link path. 
 
 <div align=center><img src="imgs/v4/4.png" alt="drawing" width="400"/></div>
 
-Let us consider an example of a state graph of a sequential network shown below. This state graph has both Mealy and Moore outputs. The outputs Y1 and Y2 are the Mealy outputs and so should be conditional outputs. The Ya, Yb, and Yc are the Moore outputs so they should be part of state box. Input
-X can either be “0” or “1” and hence it should be part of the decision box. 
+Let us consider an example of a state graph of a sequential network, shown below. This state graph has both Mealy and Moore outputs. The outputs Y1 and Y2 are the Mealy outputs and should be conditional outputs. The Ya, Yb, and Yc are the Moore outputs, so they should be part of the state box. Input
+X can either be “0” or “1”; hence, it should be part of the decision box. 
 
 <div align=center><img src="imgs/v4/5.png" alt="drawing" width="400"/></div>
 
@@ -60,7 +59,7 @@ The ASM chart of the above state graph is as shown below.
 
 <div align=center><img src="imgs/v4/6.png" alt="drawing" width="400"/></div>
 
-Once the ASM chart is determined, the conversion to HDL is straight forward. A ```case``` statement can be used to specify what happens in each state. Each condition box corresponds directly to an if statement (or an else if). The following code represents the functionality of the above ASM chart.
+Once the ASM chart is determined, the conversion to HDL is straightforward. A ```case``` statement can specify what happens in each state. Each condition box corresponds directly to an if statement (or an else if). The following code represents the functionality of the above ASM chart.
 
 ```verilog
 module asm_chart(input clk, input x, output reg ya, output reg yb, output reg yc, output reg y1, output reg y2);
@@ -110,9 +109,9 @@ The following behavioral simulation result shows the above model functionality.
 
 ### Part11-1-1
 
-Design a 3-Bit x 3-Bit binary multiplier. The multiplier will output 6-Bit
-product. The data processor unit will consist of a 3-Bit accumulator, a 3-Bit
-multiplier register, a 3-Bit adder, a counter, and a 3-bit shifter. The control
+Design a 3-bit x 3-Bit binary multiplier. The multiplier will output 6-bit
+product. The data processor unit will consist of a 3-bit accumulator, a 3-bit
+multiplier register, a 3-bit adder, a counter, and a 3-bit shifter. The control
 unit will consist of a least-significant-bit (lsb) of the multiplier, a start
 signal, a cnt_done signal, and clk as an input. It will generate start, shift,
 add, and done signals. Develop an ASM chart for the control unit. Develop
@@ -140,7 +139,7 @@ module ControlUnit(
     reg [2:0] state, next_state;
 
     // Sequential logic to update the current state on every positive edge of the clock or when reset.
-    // If reset is active, state is set to IDLE. Else, move to next state based on current state logic.
+    // If reset is active, the state is set to IDLE. Else, move to the next state based on the current state logic.
     always @(posedge clk or posedge reset) begin
         if (reset) 
             state <= IDLE; // Reset the state to IDLE.
@@ -171,7 +170,7 @@ module ControlUnit(
                 end
             default: 
                 begin
-                    done <= 0; // In default case, ensure 'done' is not high.
+                    done <= 0; // In the default case, ensure 'done' is not high.
                     next_state = IDLE; // Revert to IDLE to handle unexpected states.
                 end
         endcase
@@ -199,7 +198,7 @@ module DataProcessor(
     reg [2:0] internal_multiplier; // Holds the current value of the multiplier for manipulation.
     reg [3:0] accumulator; // Accumulates partial products.
     reg [2:0] counter; // Counts the number of shifts (equivalent to multiplication steps).
-    wire shift, add; // Signals from control unit for shifting and adding.
+    wire shift, add; // Signals from the control unit for shifting and adding.
     reg cnt_done; // Indicates whether all multiplication steps are completed.
     wire lsb; // Least significant bit of the multiplier for decision-making in ControlUnit.
     reg cnt_done;
@@ -322,13 +321,13 @@ The following behavioral simulation result shows the above model functionality.
 <div align=center><img src="imgs/v4/9.png" alt="drawing" width="1000"/></div>
 
 ## Sequential System Design Using ASM Chart
-We saw how the ASM chart technique can be used in designing control units of sequential machine. Now
+We saw how the ASM chart technique can be used in designing control units of sequential machines. Now
 we will use the ASM chart technique along with the sequential design principles to design complex
 systems. 
 
 ### Part11-2-1
-Modify the design of 1-1 to perform 4-Bit x 4-Bit unsigned multiplication.
-You will store the 4-Bit multiplicand and multipliers in 32x4 ROM (first 16
+Modify the design of 1-1 to perform 4-bit x 4-Bit unsigned multiplication.
+You will store the 4-bit multiplicand and multipliers in 32x4 ROM (first 16
 locations holding multiplicands and the other 16 locations holding
 multipliers).
 
@@ -381,7 +380,7 @@ ROM_4bit multiplier_rom(.address(address+16), .data(multiplier));
     reg [3:0] internal_multiplier; // Holds the current value of the multiplier for manipulation.
     reg [4:0] accumulator; // Accumulates partial products.
     reg [3:0] counter; // Counts the number of shifts (equivalent to multiplication steps).
-    wire shift, add; // Signals from control unit for shifting and adding.
+    wire shift, add; // Signals from the control unit for shifting and adding.
     reg cnt_done; // Indicates whether all multiplication steps are completed.
     wire lsb; // Least significant bit of the multiplier for decision-making in ControlUnit.
     reg cnt_done;
@@ -502,7 +501,7 @@ The following behavioral simulation result shows the above model functionality.
 
 In this lab, you learned how ASM charts can be used to design complex control units. You also designed
 digital system to perform binary multiplication using the ASM chart technique to develop the control unit
-which interfaced to the datapath processing unit. 
+which interfaced with the datapath processing unit. 
 
 
 ## Solution

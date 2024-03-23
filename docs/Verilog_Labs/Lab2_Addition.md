@@ -6,24 +6,24 @@ sort: 2
 
 ## Instroduction
 
-Verilog HDL modeling language allows numbers being represented in several radix systems. The
-underlying circuit processes the number in binary, however, input into and output from such circuits is
-typically done using decimal numbers. In this lab you will learn various representations and methods for
+Verilog HDL modeling language allows numbers to be represented in several radix systems. The
+underlying circuit processes the number in binary. However, input into and output from such circuits is
+typically done using decimal numbers. In this lab, you will learn various representations and methods for
 converting numbers from one representation into another.
 ## Performing Addition
-When two one-bit numbers are added, they may produce two bits output. For example, 1 + 1 = 10 (all in
-binary). When you add three one- bit numbers the result will still be two bits, e.g. 1 + 1 + 1 = 11. This
-simple operation can be viewed as adding two bits with carry in from the lower significant operation,
-resulting into sum and carry out- the left bit is carry out and the right bit is sum. Figure below shows a 4-
-bit adder. Since the carry is rippled from least significant bit position (cin) to the most significant position
-(cout), such adder is called ripple carry adder.
+When two one-bit numbers are added, they may produce two-bit output. For example, 1 + 1 = 10 (all in
+binary). When you add three one-bit numbers, the result will still be two bits, e.g. 1 + 1 + 1 = 11. This
+simple operation can be viewed as adding two bits with carry-in from the lower significant operation,
+resulting in sum, and the left bit is carried out, and the right bit is sum. The figure below shows a 4-
+bit adder. Since the carry is rippled from the least significant bit position (cin) to the most significant position
+(cout), such an adder is called a ripple carry adder.
 
 <div align=center><img src="imgs/v3/15.png" alt="drawing" width="700"/></div>
 
 ### Part 2-3-1
 
 Create and add the Verilog module named fulladder_dataflow with three inputs (a, b, cin) and two
-outputs (s and cout) using dataflow modeling. All inputs and outputs should be one-bit wide.
+outputs (s and cout) using dataflow modeling. All inputs and outputs should be one bit wide.
 
 **lab2_3_1.v**
 ```verilog
@@ -38,10 +38,10 @@ module lab2_3_1(
 );
 
     // Implement the sum and carry using dataflow modeling expressions.
-    // In this case, we are using arithmetic addition to determine the sum and carry.
+    // In this case, we use arithmetic addition to determine the sum and carry.
     // The arithmetic addition of 'a', 'b', and 'cin' results in a 2-bit number.
     // The least significant bit of this result is used as the sum ('s'),
-    // and the most significant bit is used as the carry out ('count').
+    // and the most significant bit is used as the carry-out ('count').
     // This is a compact way to express the functionality of a full adder without explicitly 
     // detailing the logic operations usually seen in a full adder.
     assign {count, s} = a + b + cin; // Concatenation of carry and sum, {carry, sum} = a + b + cin
@@ -56,7 +56,7 @@ Then we can run Simulation to check the code of the lab2_3_1 module.
 
 **tb.v**
 ```verilog
-// Define the testbench module with no ports as it's a top-level entity
+// Define the testbench module with no ports, as it's a top-level entity
 module fulladder_dataflow_tb();
     
     // Declare input signals as reg type so they can be driven by procedural assignments
@@ -64,7 +64,7 @@ module fulladder_dataflow_tb();
     // Declare output signals as wire since they will be driven by the instance of DUT (Device Under Test)
     wire cout, s;
     
-    // Instantiate the Device Under Test (DUT) with named port mapping
+    // Instantiate the Device Under Test (DUT) with the named port mapping
     lab2_3_1 DUT (.a(a), .b(b), .cin(cin), .cout(cout), .s(s));
     
     // Initial block starts at time 0 and executes sequentially
@@ -81,29 +81,29 @@ module fulladder_dataflow_tb();
       #10 a = 1;                    // Test with a=1, b=0, cin=1
       #10 b = 1; a = 0;             // Test with a=0, b=1, cin=1
       #10 a = 1;                    // Test with a=1, b=1, cin=1
-      #10;                          // Wait 10 time units before ending simulation
+      #10;                          // Wait ten time units before ending the simulation
     end
 
 endmodule
 ```
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v3/20.png" alt="drawing" width="700"/></div>
 
-Then we can click on the Run synthesis under the SYNTHESIS and Run implementation under the IMPLEMENTATION. And we should add the appropriate board related master XDC file to the project and edit it to include the related pins like below:
+Then, we can click on the Run synthesis under the SYNTHESIS and Run implementation under the IMPLEMENTATION. We should add the appropriate board-related master XDC file to the project and edit it to include the related pins like the below:
 
 <div align=center><img src="imgs/v3/28.png" alt="drawing" width="700"/></div>
 
 Generate the bitstream and program device like [Lab1](https://uri-nextlab.github.io/ParallelProgammingLabs/Verilog_Labs/Lab1_Modeling_Concepts.html).
 
-Then you can press the button of the board and you can see the LED is on like below:
+Then you can press the button on the board, and you can see the LED is on like below:
 
 <div align=center><img src="imgs/v3/29.jpg" alt="drawing" width="400"/></div>
 
 ### Part lab2-3-2
 
  Create and add the Verilog module (called rca_dataflow) to the project with three inputs (a, b, cin)
-and two outputs (cout and s) instantiating full adder (FA) four times and connecting them as
+and two outputs (cout and s), instantiating full adder (FA) four times and connecting them as
 necessary. The a, b, and s should be a 4-bit vector and cin and cout should each be one-bit wide.
 
 **lab2_3_1_rca_dataflow.v**
@@ -152,7 +152,7 @@ module lab2_3_1_rca_dataflow(
         .b(b[3]),
         .cin(c_temp[2]), // Carry-in from the previous less significant adder
         .s(s[3]),        // Sum bit for the most significant position
-        .count(count)    // Final carry-out which is the carry-out of the entire 4-bit addition
+        .count(count)    // Final carry-out, which is the carry-out of the entire 4-bit addition
     );
 
 endmodule
@@ -168,26 +168,26 @@ Now we can see the ```Schematic``` under the RTL ANALYSIS part like below:
 ## Improving Addition Speed
 
 The ripple-carry adders take a longer time to compute when two large numbers (e.g. 8, 16, 32 bits) are
-added. To reduce the computation time, another structure, called carry-lookahead adders (see figure
-below), can be used. It works by creating two signals (P and G) for each bit position, based on whether a
+added. Another structure, called carry-lookahead adders (see figure
+below), can be used to reduce the computation time. It works by creating two signals (P and G) for each bit position, based on whether a
 carry is propagated through a less significant bit position (at least one input is a '1'), generated in that bit
 position (both inputs are '1'), or killed in that bit position (both inputs are '0'). After P and G are generated
 the carries for every bit position are created.
 
 <div align=center><img src="imgs/v3/18.png" alt="drawing" width="700"/></div>
 
-Where Pi = Ai + Bi and Gi = AiBi. Within Carry Look Ahead unit, Ci+1 = Gi + PiCi. The speed-up is
-achieved through the fact that Ci being generated at the same time irrespective of ith position.
+Where Pi = Ai + Bi and Gi = AiBi. Within the Carry Look Ahead unit, Ci+1 = Gi + PiCi. The speed-up is
+achieved through the fact that Ci is being generated simultaneously, irrespective of its position.
 
 ### Part 2-4-1
 
-Create a carry-look ahead adder circuit by modifying the project of 3-1 and
+Create a carry-lookahead adder circuit by modifying the project of 3-1 and
 using dataflow modeling. 
 
-Modify the project of 3-1 as necessary to perform the addition of two four-bit numbers using the
-carry look-ahead structure and outputting the result on the LEDs. Provide carry-in through SW15.
-Hint: You will need to modify FA to output Pi and Gi, and then create and add another module
-CLA to perform the carry look ahead function.
+Modify the project of 3-1 to add two four-bit numbers using the
+carry look-ahead structure and output the result on the LEDs. Provide carry-in through SW15.
+Hint: You will need to modify FA to output Pi and Gi and then create and add another module
+CLA will perform the carry look ahead function.
 
 
 **lab2_4_1.v**
@@ -229,17 +229,17 @@ Now we can see the ```Schematic``` under the RTL ANALYSIS part like below:
 Then we can run Simulation to check the code of the lab2_3_1 module.
 **tb.v**
 ```verilog
-// Define the testbench module with no ports as it's a top-level entity
+// Define the testbench module with no ports, as it's a top-level entity
 module fulladder_dataflow_tb();
     
-    // Declare input signals as reg type so they can be driven by procedural assignments
+    // Declare input signals as reg type so procedural assignments can drive them
     reg [3:0] a, b;
     reg cin;
     // Declare output signals as wire since they will be driven by the instance of DUT (Device Under Test)
     wire [3:0] s;
 	wire cout;
     
-    // Instantiate the Device Under Test (DUT) with named port mapping
+    // Instantiate the Device Under Test (DUT) with the named port mapping
    lab2_4_1 DUT (.a(a), .b(b), .cin(cin), .cout(cout), .s(s));
     
  // Initial block to define the sequence of test cases
@@ -269,12 +269,12 @@ module fulladder_dataflow_tb();
 
 endmodule
 ```
-And we can run Simulation to check the code by clicking the Run Simulation under the SIMULATION and choose the first Run Behavioral Simulation.
+We can run a Simulation to check the code by clicking the Run Simulation under the SIMULATION and choosing the first Run Behavioral Simulation.
 
 <div align=center><img src="imgs/v3/21.png" alt="drawing" width="700"/></div>
 
 ## Conclusion 
 
-In this lab, you learned how to define numbers in various radix systems. You also designed various
-number conversion circuits using dataflow modeling. You also learned a technique of improving addition
+You learned how to define numbers in various radix systems in this lab. You also designed various
+number conversion circuits using dataflow modeling. You also learned a technique for improving addition
 speed. 

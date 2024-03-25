@@ -91,7 +91,7 @@ $$
 
 
 
-We can get the corresponding angles as $45&#xb0$, $26.57&#xb0$, $14.04&#xb0$, etc. It can be proved that any angle with $0\to90&#xb0$ can be represented as the sum of these angles, which means with enough $\phi_i$ summed up, we can calculate any $\cos$ and $\sin$ values.  
+We can get the corresponding angles as $$45\degree$$, $$26.57\degree$$, $$14.04\degree$$, etc. It can be proved that any angle with $$0\to90\degree$$ can be represented as the sum of these angles, which means with enough $\phi_i$ summed up, we can calculate any $\cos$ and $\sin$ values.  
 
 However, the multiplication with $\cos(\phi_i)$ hasn't been solved yet. Since
 
@@ -141,13 +141,13 @@ $$
 Then with circular rotation based Cordic, we have two modes: Rotation Mode and Vector Mode.
 
 ## Rotation Mode
-Rotation Mode is used to calculate $\sin$, $\cos$ and the related values such as $\tan$ of a given angle $\alpha$. Let's assume $0<\alpha\leq\pi$ here (if not, we can map the required angle to this domain as sinusoid functions are periodic). In Rotation Mode, we first initialize the initial vector $V_0$ with $x_0=K$ and $y_0=0$, which is a scaled vector pointing towards the positive $x$ axis direction, and its length is $K$. Then we rotate the vector towards the target $\alpha$. Let's assume the initial angle is $\beta_0=0$. The first rotation must be positive $\phi_0 = 45&#xb0$ (counterclockwise) as $\alpha > \beta_0$. Now, we have $\beta_1 = 45&#xb0$. The second rotation angle is $26.57&#xb0$, and we rotate counterclockwise if $\alpha > \beta_0$ or clockwise if $\alpha < \beta_0$. Continue this iteration typically 48 times; the final $\beta$ should be approximately equal to $\alpha$. And since the initial length of the vector is $K$, the final length of the vector is $1$, which means the final $y=\cos(\alpha)$ and final $x=\sin(\alpha)$.  
+Rotation Mode is used to calculate $\sin$, $\cos$ and the related values such as $\tan$ of a given angle $\alpha$. Let's assume $0<\alpha\leq\pi$ here (if not, we can map the required angle to this domain as sinusoid functions are periodic). In Rotation Mode, we first initialize the initial vector $V_0$ with $x_0=K$ and $y_0=0$, which is a scaled vector pointing towards the positive $x$ axis direction, and its length is $K$. Then we rotate the vector towards the target $\alpha$. Let's assume the initial angle is $\beta_0=0$. The first rotation must be positive $$\phi_0 = 45\degree$$ (counterclockwise) as $\alpha > \beta_0$. Now, we have $$\beta_1 = 45\degree$$. The second rotation angle is $$26.57\degree$$, and we rotate counterclockwise if $\alpha > \beta_0$ or clockwise if $\alpha < \beta_0$. Continue this iteration typically 48 times; the final $\beta$ should be approximately equal to $\alpha$. And since the initial length of the vector is $K$, the final length of the vector is $1$, which means the final $y=\cos(\alpha)$ and final $x=\sin(\alpha)$.  
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/CORDIC-illustration.png" alt="drawing" width="300"/>
 
 
 ## Vector Mode
-Vector mode is similar, while the initial vector is user-defined and the targeted angle is always $0&#xb0$. For example, if we initialize the $V_0$ with $x=x_0$ and $y=y_0$ with an initial angle of $arctan(\frac{y_0}{x_0})$, and rotate the angle towards $0&#xb0$, the final length of the vector is $A\times\lvert V_0\rvert=A\sqrt{x_0^2+y_0^2}$, which is exactly the final $x$ as the angle is rotated to $0&#xb0$. However, since the final value is not $\sqrt{x_0^2+y_0^2}$ directly, the division is required either for the final result or the initial value of $x,y$. Hence, the Vector Mode with trigonometric functions does not seem that useful. However, with hyperbolic functions to replace the $\sin$ and $\cos$ here, the square root of any given value can be calculated directly with Cordic ([Ref](https://www.youtube.com/watch?v=3g6bkSDvYQM)).  
+Vector mode is similar, while the initial vector is user-defined and the targeted angle is always $$0\degree$$. For example, if we initialize the $V_0$ with $x=x_0$ and $y=y_0$ with an initial angle of $arctan(\frac{y_0}{x_0})$, and rotate the angle towards $$0\degree$$, the final length of the vector is $A\times\lvert V_0\rvert=A\sqrt{x_0^2+y_0^2}$, which is exactly the final $x$ as the angle is rotated to $$0\degree$$. However, since the final value is not $\sqrt{x_0^2+y_0^2}$ directly, the division is required either for the final result or the initial value of $x,y$. Hence, the Vector Mode with trigonometric functions does not seem that useful. However, with hyperbolic functions to replace the $\sin$ and $\cos$ here, the square root of any given value can be calculated directly with Cordic ([Ref](https://www.youtube.com/watch?v=3g6bkSDvYQM)).  
 
 ## Cordic Implementation
 

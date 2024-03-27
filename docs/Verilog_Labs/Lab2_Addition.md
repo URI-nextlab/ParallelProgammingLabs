@@ -4,7 +4,7 @@ sort: 2
 
 # Lab2_Addition
 
-## Instroduction
+## Introduction
 
 Verilog HDL modeling language allows numbers to be represented in several radix systems. The
 underlying circuit processes the number in binary. However, input into and output from such circuits is

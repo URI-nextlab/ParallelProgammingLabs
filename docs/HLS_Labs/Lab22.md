@@ -101,7 +101,7 @@ As show above, the ```F0_F1``` are ```FIFO_0 FIFO_1``` and the ```fe0``` ```f1 f
 #ifndef _LINEBUFFER_0_H
 #define _LINEBUFFER_0_H
 
-
+#define k 1
 #define WIDTH 12
 #define HEIGHT 3
 
@@ -171,7 +171,6 @@ void jacobi5d_soda(Mat_stream &in0,Mat_stream &out0)
 	hls::stream<mat> fifo_edge("fifo_edge");
 	hls::stream<mat> fifo_edge1("fifo_edge1");
 //	hls::stream<mat> fifo_edge2("fifo_edge2");
-	int k1;
 
 	DO_PRAGMA(HLS stream depth=256 variable=fifo_edge)
 	DO_PRAGMA(HLS stream depth=256 variable=fifo_edge1)

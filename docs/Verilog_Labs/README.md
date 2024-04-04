@@ -3,7 +3,7 @@ sort: 2
 ---
 
 
-# Verilog Labs
+# Verilog Labs (Basics)
 
 <!-- {% include list.liquid %} -->
 

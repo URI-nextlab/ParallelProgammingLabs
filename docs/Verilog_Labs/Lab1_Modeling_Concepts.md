@@ -10,7 +10,7 @@ Verilog HDL modeling language supports three kinds of modeling styles: gate-leve
 behavioral. The gate-level and datafow modeling are used to model combinatorial circuits whereas the
 behavioral modeling is used for both combinatorial and sequential circuits.
 
-**IMPORTANT** If you are not familiar with Verilog, HDLBits [link](https://hdlbits.01xz.net/wiki/Main_Page) is a good resource to complete before this pactise. It is a collection of small circuit design exercises for practicing digital hardware design using Verilog Hardware Description Language (HDL). The earlier problems follow a tutorial style, while the later problems will increasingly challenge your circuit design skills. Each problem requires you to design a small circuit in Verilog, and HDLBits provides immediate feedback on the circuit module you submit to check for correctness.
+**IMPORTANT** If you are not familiar with Verilog, HDLBits [link](https://hdlbits.01xz.net/wiki/Main_Page) is an excellent resource to complete before this practice. It is a collection of small circuit design exercises for practicing digital hardware design using Verilog Hardware Description Language (HDL). The earlier problems follow a tutorial style, while the later problems will increasingly challenge your circuit design skills. Each problem requires you to design a small circuit in Verilog, and HDLBits provides immediate feedback on the circuit module you submit to check for correctness.
 
 ## Gate-level Modeling
 

@@ -14,7 +14,7 @@ This open-source site is designed to support the educational needs of students, 
 
 # Acknowledgement
 
-- This is effort is partially supported by Cadence Design System through Clemson Cadence Project [link](https://sites.google.com/g.clemson.edu/clemson-cadence-project/home).
+- This is effort is partially supported by *Cadence Design Systems* through Clemson Cadence Project [link](https://sites.google.com/g.clemson.edu/clemson-cadence-project/home).
 - NSF grants CNS-2027069 and CCF-2106750
 - Many Ugrad and Grad students from the University of Rhode Island (URI) and Clemson University.
 - Facutly members: Prof. Qing (Ken) Yang [link](https://www.ele.uri.edu/~qyang/) from URI and Prof. Tao Wei [link](https://sites.google.com/g.clemson.edu/nextlabdoc/home) from Clemson.

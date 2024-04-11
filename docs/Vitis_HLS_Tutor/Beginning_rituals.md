@@ -5,7 +5,7 @@ sort: 3
 
 # Beginning Rituals
 
-Note: This is for research ONLY.
+**Note: This page is for research ONLY (not for class or self-guided learning).**
 
 ## Ritual 1
 

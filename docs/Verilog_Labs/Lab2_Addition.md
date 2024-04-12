@@ -240,7 +240,7 @@ module fulladder_dataflow_tb();
 	wire cout;
     
     // Instantiate the Device Under Test (DUT) with the named port mapping
-   lab2_4_1 DUT (.a(a), .b(b), .cin(cin), .cout(cout), .s(s));
+   lab2_4_CLA_dataflow DUT (.a(a), .b(b), .cin(cin), .cout(cout), .s(s));
     
  // Initial block to define the sequence of test cases
     initial begin

@@ -47,7 +47,7 @@ notif1 #(2, 5, 4) A3(out3, in2, ctrl1); //the rise delay is 2, the fall delay is
 
 Gate-level modeling is useful when a circuit is a simple combination, such as a multiplexer.
 A multiplexer is a simple circuit which connects one of many inputs to an output. In this part, you will create
-a simple 2-to-1 multiplexer and extend the design to multiple bits. 
+a simple 2-to-1 multiplexer and extend the design to multiple bits. Here is some useful link for using the [vivado](https://www.xilinx.com/video/hardware/getting-started-with-the-vivado-ide.html) and [install vivado](https://eclipse.umbc.edu/robucci/cmpe415/hw1/vivado.html).
 
 ### Part 1-1-1
 

@@ -461,7 +461,8 @@ module tb();
       // Indicate completion of the simulation
       $display("Simulation Done");
     end
-    
+
+
 endmodule
 
 
@@ -557,7 +558,7 @@ module lab4_3_1(
     // Sum (s) is the XOR of the three inputs.
     assign #2 {cout,sum} = a + b + cin;
 
-
+endmodule
 ```
 
 
@@ -655,6 +656,8 @@ initial begin
     #20 G1 = 0; // At 120ns
     #20 G2 = 1; // At 140ns
 end
+
+endmodule
 ```
 
 **tb.v**
@@ -684,6 +687,7 @@ module waveform_generator_tb;
         // End simulation
         $finish;
     end
+
 endmodule
 
 ```

@@ -2,7 +2,7 @@
 sort: 9
 ---
 
-# Lab9_Simple_processor
+# Lab9_Simple_Processor
 
 ## Lab Overview
 

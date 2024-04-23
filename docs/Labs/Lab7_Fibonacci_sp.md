@@ -139,7 +139,7 @@ module fibonacci_checker(din, valid);
     reg [3:0] data;          // Temporary register to hold current Fibonacci number being checked
 
     // Local parameter array holding the first eight Fibonacci numbers (as 4-bit values)
-    localparam [3:0] dout[7] = {4'h0, 4'h1, 4'h2, 4'03, 4'h5, 4'h8, 4'hD}; 
+    localparam [3:0] dout[7] = {4'h0, 4'h1, 4'h2, 4'h3, 4'h5, 4'h8, 4'hD}; 
     integer i;               // Integer used for loop indexing
 
     // Always block to check if 'din' is a Fibonacci number

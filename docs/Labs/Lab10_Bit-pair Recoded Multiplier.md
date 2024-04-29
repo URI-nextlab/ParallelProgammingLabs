@@ -513,15 +513,15 @@ module Bitpair_Mult #(
     );
     
     // Adder for accumulating the multiplication results.
-    adder #(
-        .N(N + 1)
-    ) adder_inst (
-        .cin(code[2]),                        // Carry-in based on Booth code, affects addition.
-        .x0(multi_multiplican),               // First operand for addition.
-        .x1(product_1),                       // Second operand, accumulated product.
-        .y(partial)                           // Result of addition.
-    );
-
+adder #(
+		.N(N + 1)
+	) adder_inst (
+		.cin(code[2]),//+1
+		.extend(sign_extend),
+		.x0(multi_multiplican),
+		.x1(product_1),
+		.y(partial)
+	);
     // Reset block to clear or set the partial sum/product.
     RESET #(
         .N(N+1)
@@ -600,7 +600,7 @@ module btn_lab4 #(
     input rst,               // Global reset signal.
     input key,               // Input signal from a physical button.
     input start,             // Control signal to start the processor.
-    input [N-1:0] multiplicand,    // Data input port for the multiplicand.
+    input [N-1:0] multiplican,    // Data input port for the multiplicand.
     input [N-1:0] multiplier,       // Data input port for the multiplier.
     output [2*N-1:0] product,       // Output port for the product result.
     output Busy,                     // Processor's busy status output.

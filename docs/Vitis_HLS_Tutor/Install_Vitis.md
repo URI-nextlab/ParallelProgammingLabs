@@ -2,7 +2,7 @@
 sort: 1
 ---
 
-# Vitis Installation Guide
+# Board and Vitis Installation Guide
 
 Start here for courses.
 

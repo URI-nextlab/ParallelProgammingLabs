@@ -5,7 +5,7 @@ sort: 1
 # Preparation
 
 <!-- {% include list.liquid %} -->
-- [Install Vitis](https://uri-nextlab.github.io/ParallelProgammingLabs/Vitis_HLS_Tutor/Install_Vitis.html)
+- [Board and Install Vitis](https://uri-nextlab.github.io/ParallelProgammingLabs/Vitis_HLS_Tutor/Install_Vitis.html)
 - [Clemson Palmetto Server Introduction](https://uri-nextlab.github.io/ParallelProgammingLabs/Vitis_HLS_Tutor/Palmetto_Intro.html)
 - [Beginning Rituals](https://uri-nextlab.github.io/ParallelProgammingLabs/Vitis_HLS_Tutor/Beginning_rituals.html)
 - [Create Vitis HLS Project](https://uri-nextlab.github.io/ParallelProgammingLabs/Vitis_HLS_Tutor/Create_Vitis_HLS_Prj.html)
